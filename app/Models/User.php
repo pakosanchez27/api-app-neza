@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use App\Notifications\UserResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -83,5 +84,10 @@ class User extends Authenticatable
             'id',
             'id_documento'
         );
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new UserResetPasswordNotification($token, $this->email));
     }
 }

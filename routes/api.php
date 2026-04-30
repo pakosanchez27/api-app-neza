@@ -9,8 +9,10 @@ use App\Http\Controllers\Api\TimelineController;
 use App\Http\Controllers\Api\Auth\CommerceAdminAuthController;
 use App\Http\Controllers\Api\Auth\CommerceCouponController;
 use App\Http\Controllers\Api\Auth\CommerceGalleryController;
+use App\Http\Controllers\Api\Auth\CommercePasswordResetController;
 use App\Http\Controllers\Api\Auth\CommerceRegistrationController;
 use App\Http\Controllers\Api\Auth\UserAuthController;
+use App\Http\Controllers\Api\Auth\UserPasswordResetController;
 use App\Http\Controllers\Api\Auth\UserCouponController;
 use App\Http\Controllers\Api\EstablecimientoController;
 use App\Http\Controllers\Api\Integration\ApprovedPreregisterController;
@@ -46,6 +48,8 @@ Route::post('/integracion/preregistros/aprobar', [ApprovedPreregisterController:
 
 Route::prefix('auth/comercios')->group(function () {
     Route::post('/login', [CommerceAdminAuthController::class, 'login']);
+    Route::post('/forgot-password', [CommercePasswordResetController::class, 'sendResetLink']);
+    Route::post('/reset-password', [CommercePasswordResetController::class, 'resetPassword']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [CommerceAdminAuthController::class, 'me']);
@@ -68,6 +72,8 @@ Route::prefix('auth/comercios')->group(function () {
 // Registro de usuarios
 Route::prefix('auth/usuarios')->group(function () {
     Route::post('/login', [UserAuthController::class, 'login']);
+    Route::post('/forgot-password', [UserPasswordResetController::class, 'sendResetLink']);
+    Route::post('/reset-password', [UserPasswordResetController::class, 'resetPassword']);
     Route::post('/registro', [RegisterController::class, 'register']);
     Route::get('/activar/{token}', [RegisterController::class, 'activate']);
 

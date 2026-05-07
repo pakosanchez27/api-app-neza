@@ -103,10 +103,13 @@
                         </div>
                         <div
                             class="mt-3 overflow-hidden rounded-[16px] bg-white text-[#23171C] shadow-[0_16px_32px_rgba(35,23,28,0.16)]">
-                            <a href="#"
-                                class="block w-full px-4 py-3 text-left text-[14px] font-medium text-[#7a2144] transition hover:bg-[#fff5f8]">
-                                Cerrar sesion
-                            </a>
+                            <form method="POST" action="{{ route('admin.logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="block w-full px-4 py-3 text-left text-[14px] font-medium text-[#7a2144] transition hover:bg-[#fff5f8]">
+                                    Cerrar sesion
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -74,6 +74,11 @@ class User extends Authenticatable
         return $this->hasMany(UsuarioCupon::class, 'user_id', 'id');
     }
 
+    public function pasaportes(): HasMany
+    {
+        return $this->hasMany(PasaporteUsuario::class, 'user_id', 'id');
+    }
+
     public function documentos(): BelongsToMany
     {
         return $this->belongsToMany(

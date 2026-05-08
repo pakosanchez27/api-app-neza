@@ -5,11 +5,14 @@ use App\Http\Controllers\Api\CuponController;
 use App\Http\Controllers\Api\EventoController;
 use App\Http\Controllers\Api\HistoriaController;
 use App\Http\Controllers\Api\NoticiaController;
+use App\Http\Controllers\Api\RutaController;
 use App\Http\Controllers\Api\TimelineController;
 use App\Http\Controllers\Api\Auth\CommerceAdminAuthController;
 use App\Http\Controllers\Api\Auth\CommerceCouponController;
 use App\Http\Controllers\Api\Auth\CommerceGalleryController;
+use App\Http\Controllers\Api\Auth\CommercePassportController;
 use App\Http\Controllers\Api\Auth\CommercePasswordResetController;
+use App\Http\Controllers\Api\Auth\UserPassportController;
 use App\Http\Controllers\Api\Auth\CommerceRegistrationController;
 use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\Auth\UserPasswordResetController;
@@ -44,6 +47,8 @@ Route::get('/tipo-documentos', [TipoDocumentoController::class, 'index']);
 Route::get('/establecimientos', [EstablecimientoController::class, 'index']);
 Route::get('/establecimientos/ruta', [EstablecimientoController::class, 'route']);
 Route::get('/establecimientos/{id}', [EstablecimientoController::class, 'show']);
+Route::get('/rutas', [RutaController::class, 'index']);
+Route::get('/rutas/{ruta}/establecimientos', [RutaController::class, 'establecimientos']);
 Route::get('/cupones', [CuponController::class, 'index']);
 Route::post('/integracion/preregistros/aprobar', [ApprovedPreregisterController::class, 'store']);
 
@@ -59,6 +64,7 @@ Route::prefix('auth/comercios')->group(function () {
         Route::post('/user-profile', [CommerceAdminAuthController::class, 'updateUserProfile']);
         Route::put('/visibility', [CommerceAdminAuthController::class, 'updateVisibility']);
         Route::post('/registro-establecimiento', [CommerceRegistrationController::class, 'save']);
+        Route::get('/pasaporte/qr', [CommercePassportController::class, 'qr']);
         Route::get('/cupones', [CommerceCouponController::class, 'index']);
         Route::get('/cupones/{cuponId}/redenciones', [CommerceCouponController::class, 'redemptions']);
         Route::post('/cupones', [CommerceCouponController::class, 'store']);
@@ -84,6 +90,8 @@ Route::prefix('auth/usuarios')->group(function () {
         Route::post('/logout', [UserAuthController::class, 'logout']);
         Route::get('/cupones', [UserCouponController::class, 'index']);
         Route::post('/cupones/{cuponId}/guardar', [UserCouponController::class, 'store']);
+        Route::get('/rutas/{ruta}/pasaporte', [UserPassportController::class, 'show']);
+        Route::post('/rutas/{ruta}/pasaporte/sellar', [UserPassportController::class, 'seal']);
     });
 });
 

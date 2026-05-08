@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class Establecimiento extends Model
 {
@@ -28,6 +29,7 @@ class Establecimiento extends Model
         'is_visible',
         'estatus',
         'razon_social',
+        'qr_token',
     ];
 
     protected $casts = [
@@ -36,6 +38,17 @@ class Establecimiento extends Model
         'is_visible' => 'boolean',
         'aforo' => 'integer',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Establecimiento $establecimiento) {
+            if (!empty($establecimiento->qr_token)) {
+                return;
+            }
+
+            $establecimiento->qr_token = self::generateQrToken();
+        });
+    }
 
     public function user(): BelongsTo
     {
@@ -89,5 +102,31 @@ class Establecimiento extends Model
             'id_establecimiento',
             'id_documento'
         );
+    }
+
+    public function rutas(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Ruta::class,
+            'ruta_establecimiento',
+            'id_establecimiento',
+            'id_ruta',
+            'id_establecimiento',
+            'id_ruta'
+        )->withPivot(['orden'])->withTimestamps();
+    }
+
+    public function pasaporteSellos(): HasMany
+    {
+        return $this->hasMany(PasaporteSello::class, 'id_establecimiento', 'id_establecimiento');
+    }
+
+    private static function generateQrToken(): string
+    {
+        do {
+            $candidate = sprintf('NEZA-QR-%s', Str::upper(Str::random(20)));
+        } while (self::query()->where('qr_token', $candidate)->exists());
+
+        return $candidate;
     }
 }

@@ -24,7 +24,11 @@ class CommerceGalleryController extends Controller
 
         $validator = Validator::make(array_merge($request->all(), $request->allFiles()), [
             'galeria' => ['required', 'array', 'min:1', 'max:5'],
-            'galeria.*' => ['required', 'file', 'image', 'max:5120'],
+            'galeria.*' => ['required', 'file', 'image', 'max:10240'],
+        ], [
+            'galeria.*.uploaded' => 'Una de las imagenes no se pudo cargar. Revisa el tamano del archivo o la configuracion del servidor.',
+            'galeria.*.image' => 'Cada archivo debe ser una imagen valida.',
+            'galeria.*.max' => 'Cada imagen no debe pesar mas de 10 MB.',
         ]);
 
         $validator->after(function ($validator) use ($establecimiento, $request) {
@@ -72,7 +76,11 @@ class CommerceGalleryController extends Controller
         $documento = $this->resolveGalleryDocument($establecimiento, $documentoId);
 
         $validator = Validator::make(array_merge($request->all(), $request->allFiles()), [
-            'foto' => ['required', 'file', 'image', 'max:5120'],
+            'foto' => ['required', 'file', 'image', 'max:10240'],
+        ], [
+            'foto.uploaded' => 'La foto no se pudo cargar. Revisa el tamano del archivo o la configuracion del servidor.',
+            'foto.image' => 'La foto debe ser una imagen valida.',
+            'foto.max' => 'La foto no debe pesar mas de 10 MB.',
         ]);
 
         if ($validator->fails()) {

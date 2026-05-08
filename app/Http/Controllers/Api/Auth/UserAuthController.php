@@ -91,9 +91,13 @@ class UserAuthController extends Controller
                 Rule::unique('users', 'email')->ignore($user->id, 'id'),
             ],
             'telefono' => ['nullable', 'string', 'max:20'],
-            'foto_perfil' => ['nullable', 'image'],
+            'foto_perfil' => ['nullable', 'image', 'max:10240'],
             'current_password' => ['nullable', 'string'],
             'new_password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ], [
+            'foto_perfil.uploaded' => 'No se pudo cargar la foto de perfil. Revisa el tamano del archivo o la configuracion del servidor.',
+            'foto_perfil.image' => 'La foto de perfil debe ser una imagen valida.',
+            'foto_perfil.max' => 'La foto de perfil no debe pesar mas de 10 MB.',
         ]);
 
         if (!empty($validated['new_password'])) {

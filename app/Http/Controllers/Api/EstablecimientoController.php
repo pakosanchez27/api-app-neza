@@ -8,9 +8,9 @@ use Illuminate\Http\JsonResponse;
 
 class EstablecimientoController extends Controller
 {
-    public function index(): JsonResponse
+    private function baseQuery()
     {
-        $establecimientos = Establecimiento::query()
+        return Establecimiento::query()
             ->with([
                 'tipo',
                 'contacto',
@@ -18,7 +18,22 @@ class EstablecimientoController extends Controller
                 'horarios',
                 'amenidades',
                 'documentos.tipoDocumento',
-            ])
+            ]);
+    }
+
+    public function index(): JsonResponse
+    {
+        $establecimientos = $this->baseQuery()
+            ->orderBy('id_establecimiento')
+            ->get();
+
+        return response()->json($establecimientos);
+    }
+
+    public function route(): JsonResponse
+    {
+        $establecimientos = $this->baseQuery()
+            ->where('is_route', true)
             ->orderBy('id_establecimiento')
             ->get();
 
@@ -27,16 +42,8 @@ class EstablecimientoController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $establecimiento = Establecimiento::query()
-            ->with([
-                'tipo',
-                'contacto',
-                'domicilio',
-                'horarios',
-                'amenidades',
-                'documentos.tipoDocumento',
-                'user.role',
-            ])
+        $establecimiento = $this->baseQuery()
+            ->with('user.role')
             ->find($id);
 
         if (!$establecimiento) {

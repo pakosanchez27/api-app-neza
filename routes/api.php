@@ -42,6 +42,7 @@ Route::get('/timelines', [TimelineController::class, 'index']);
 Route::get('/timelines/{id}', [TimelineController::class, 'show']);
 Route::get('/tipo-documentos', [TipoDocumentoController::class, 'index']);
 Route::get('/establecimientos', [EstablecimientoController::class, 'index']);
+Route::get('/establecimientos/ruta', [EstablecimientoController::class, 'route']);
 Route::get('/establecimientos/{id}', [EstablecimientoController::class, 'show']);
 Route::get('/cupones', [CuponController::class, 'index']);
 Route::post('/integracion/preregistros/aprobar', [ApprovedPreregisterController::class, 'store']);

@@ -104,7 +104,7 @@ class UserPassportController extends Controller
         $pasaporte->loadMissing(['ruta', 'sellos']);
 
         $routeEstablishments = $this->eligibleEstablishmentsQuery($pasaporte->ruta)
-            ->orderBy('ruta_establecimiento.orden')
+            ->orderBy('id_establecimiento')
             ->get([
                 'establecimientos.id_establecimiento',
                 'establecimientos.nombre_est',
@@ -162,9 +162,10 @@ class UserPassportController extends Controller
 
     private function eligibleEstablishmentsQuery(Ruta $ruta)
     {
-        return $ruta->establecimientos()
-            ->where('establecimientos.estatus', true)
-            ->where('establecimientos.is_visible', true);
+        return Establecimiento::query()
+            ->where('is_route', true)
+            ->where('estatus', true)
+            ->where('is_visible', true);
     }
 
     private function resolveEstablishmentFromQrToken(Ruta $ruta, string $qrToken): ?Establecimiento
@@ -183,17 +184,19 @@ class UserPassportController extends Controller
                 return null;
             }
 
-            return $ruta->establecimientos()
-                ->where('establecimientos.id_establecimiento', $payloadEstablishmentId)
-                ->where('establecimientos.estatus', true)
-                ->where('establecimientos.is_visible', true)
+            return Establecimiento::query()
+                ->where('id_establecimiento', $payloadEstablishmentId)
+                ->where('is_route', true)
+                ->where('estatus', true)
+                ->where('is_visible', true)
                 ->first();
         }
 
-        return $ruta->establecimientos()
-            ->where('establecimientos.qr_token', $qrToken)
-            ->where('establecimientos.estatus', true)
-            ->where('establecimientos.is_visible', true)
+        return Establecimiento::query()
+            ->where('qr_token', $qrToken)
+            ->where('is_route', true)
+            ->where('estatus', true)
+            ->where('is_visible', true)
             ->first();
     }
 

@@ -17,7 +17,7 @@ class CommercePassportController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $establecimiento = $user->establecimientos()->with('rutas')->first();
+        $establecimiento = $user->establecimientos()->first();
 
         if (!$establecimiento) {
             return response()->json([
@@ -25,15 +25,21 @@ class CommercePassportController extends Controller
             ], 404);
         }
 
+        if (!$establecimiento->is_route) {
+            return response()->json([
+                'message' => 'Este establecimiento no esta habilitado para la ruta del pasaporte.',
+            ], 422);
+        }
+
         /** @var Ruta|null $ruta */
-        $ruta = $establecimiento->rutas()
-            ->where('rutas.is_active', true)
-            ->orderBy('rutas.id_ruta')
+        $ruta = Ruta::query()
+            ->where('is_active', true)
+            ->orderBy('id_ruta')
             ->first();
 
         if (!$ruta) {
             return response()->json([
-                'message' => 'Este establecimiento no pertenece a una ruta activa.',
+                'message' => 'No se encontro una ruta activa para generar el QR.',
             ], 422);
         }
 

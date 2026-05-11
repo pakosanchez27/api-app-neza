@@ -23,11 +23,12 @@ class AdminAuthController extends Controller
     {
         $credentials = $request->validated();
         $authApiUrl = (string) config('services.auth_api.url');
+        $systemKey = (string) config('services.auth_api.system_key');
 
         $loginResponse = Http::acceptJson()->post($authApiUrl.'/api/auth/login', [
             'email' => $credentials['email'],
             'password' => $credentials['password'],
-            'system_key' => 'So3yVCHK7xtqEBWmhtWU7BEY',
+            'system_key' => $systemKey,
         ]);
 
 

@@ -65,6 +65,7 @@ Route::prefix('auth/comercios')->group(function () {
         Route::put('/visibility', [CommerceAdminAuthController::class, 'updateVisibility']);
         Route::post('/registro-establecimiento', [CommerceRegistrationController::class, 'save']);
         Route::get('/pasaporte/qr', [CommercePassportController::class, 'qr']);
+        Route::get('/pasaporte/sellos', [CommercePassportController::class, 'stamps']);
         Route::get('/cupones', [CommerceCouponController::class, 'index']);
         Route::get('/cupones/{cuponId}/redenciones', [CommerceCouponController::class, 'redemptions']);
         Route::post('/cupones', [CommerceCouponController::class, 'store']);

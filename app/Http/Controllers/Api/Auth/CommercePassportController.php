@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\PasaporteSello;
 use App\Models\Ruta;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -15,9 +16,7 @@ class CommercePassportController extends Controller
 
     public function qr(Request $request): JsonResponse
     {
-        /** @var User $user */
-        $user = $request->user();
-        $establecimiento = $user->establecimientos()->first();
+        $establecimiento = $this->resolveCommerceEstablishment($request);
 
         if (!$establecimiento) {
             return response()->json([
@@ -69,6 +68,73 @@ class CommercePassportController extends Controller
                 'expires_at' => now()->addSeconds(self::QR_WINDOW_SECONDS)->toIso8601String(),
                 'expires_in_seconds' => self::QR_WINDOW_SECONDS,
             ],
+        ]);
+    }
+
+    public function stamps(Request $request): JsonResponse
+    {
+        $establecimiento = $this->resolveCommerceEstablishment($request);
+
+        if (!$establecimiento) {
+            return response()->json([
+                'message' => 'No se encontro un establecimiento asociado a la cuenta.',
+            ], 404);
+        }
+
+        $stamps = PasaporteSello::query()
+            ->with(['pasaporte.user', 'pasaporte.ruta'])
+            ->where('id_establecimiento', $establecimiento->id_establecimiento)
+            ->latest('sealed_at')
+            ->latest('id_pasaporte_sello')
+            ->get();
+
+        $activity = $stamps
+            ->map(function (PasaporteSello $seal) {
+                $passport = $seal->pasaporte;
+                $user = $passport?->user;
+                $route = $passport?->ruta;
+
+                return [
+                    'id' => $seal->id_pasaporte_sello,
+                    'stamped_at' => $seal->sealed_at?->toIso8601String(),
+                    'passport_code' => $seal->qr_token_usado,
+                    'completed' => $passport?->completed_at !== null,
+                    'completed_at' => $passport?->completed_at?->toIso8601String(),
+                    'user' => [
+                        'id' => $user?->id,
+                        'name' => $user?->nombre_p ?: $user?->name,
+                        'email' => $user?->email,
+                        'telefono' => $user?->telefono,
+                    ],
+                    'route' => [
+                        'id_ruta' => $route?->id_ruta,
+                        'nombre' => $route?->nombre,
+                        'slug' => $route?->slug,
+                    ],
+                ];
+            })
+            ->values();
+
+        $uniqueVisitors = $stamps
+            ->pluck('pasaporte.user_id')
+            ->filter()
+            ->unique()
+            ->count();
+
+        $completedPassports = $stamps
+            ->filter(fn (PasaporteSello $seal) => $seal->pasaporte?->completed_at !== null)
+            ->pluck('pasaporte.id_pasaporte')
+            ->filter()
+            ->unique()
+            ->count();
+
+        return response()->json([
+            'stats' => [
+                'total_stamps' => $stamps->count(),
+                'unique_visitors' => $uniqueVisitors,
+                'completed_passports' => $completedPassports,
+            ],
+            'sellos' => $activity,
         ]);
     }
 
@@ -161,5 +227,13 @@ class CommercePassportController extends Controller
         }
 
         return base64_decode(strtr($value, '-_', '+/'), true);
+    }
+
+    private function resolveCommerceEstablishment(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        return $user->establecimientos()->first();
     }
 }

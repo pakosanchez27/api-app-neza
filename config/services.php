@@ -37,6 +37,7 @@ return [
 
     'auth_api' => [
         'url' => rtrim((string) env('AUTH_API_URL', 'http://127.0.0.1:8000'), '/'),
+        'system_key' => (string) env('AUTH_API_SYSTEM_KEY', ''),
     ],
 
 ];

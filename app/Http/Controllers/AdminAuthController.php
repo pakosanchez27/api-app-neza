@@ -27,8 +27,10 @@ class AdminAuthController extends Controller
         $loginResponse = Http::acceptJson()->post($authApiUrl.'/api/auth/login', [
             'email' => $credentials['email'],
             'password' => $credentials['password'],
-            'system_key' => 'dgFU-L3XUn2q7cquGXZZ8c9k',
+            'system_key' => 'So3yVCHK7xtqEBWmhtWU7BEY',
         ]);
+
+
 
         if ($loginResponse->failed()) {
             return back()

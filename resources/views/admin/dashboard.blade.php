@@ -6,59 +6,93 @@
 
 @section('content')
     <div class="space-y-6">
-        <section class="overflow-hidden rounded-[30px] bg-[radial-gradient(circle_at_top_left,#c84d79_0%,#8d2048_38%,#63102a_70%,#3e0b1b_100%)] px-6 py-7 text-white shadow-[0_28px_70px_rgba(99,16,42,0.28)]">
-            <div class="grid gap-6 xl:grid-cols-[1.4fr,0.9fr]">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.26em] text-white/65">Visión general</p>
-                    <div class="mt-6 grid gap-4 md:grid-cols-3">
-                        <div class="rounded-[22px] border border-white/12 bg-white/10 px-4 py-4 backdrop-blur-sm">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">Usuarios totales</p>
-                            <p class="mt-2 text-3xl font-bold">{{ number_format($totalUsuarios) }}</p>
-                            <p class="mt-2 text-xs leading-5 text-white/70">Total acumulado de cuentas registradas en la plataforma.</p>
+        <section class="overflow-hidden rounded-[30px] bg-[linear-gradient(90deg,#4730d9_0%,#5a40f0_42%,#6d56ff_100%)] text-white shadow-[0_28px_70px_rgba(76,56,216,0.26)]">
+            <div class="px-6 py-6 sm:px-7">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-white/90">Resumen General</p>
+                        <p class="mt-1 max-w-2xl text-sm leading-6 text-white/72">
+                            Seguimiento rápido de crecimiento, comercios y actividad del pasaporte.
+                        </p>
+                    </div>
+
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <div class="rounded-[18px] border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/65">Usuarios nuevos</p>
+                            <p class="mt-2 text-2xl font-bold">{{ number_format($usuariosNuevosSemana) }}</p>
+                            <p class="mt-1 text-xs text-white/65">Semana actual</p>
                         </div>
-                        <div class="rounded-[22px] border border-white/12 bg-white/10 px-4 py-4 backdrop-blur-sm">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">Comercios totales</p>
-                            <p class="mt-2 text-3xl font-bold">{{ number_format($totalComercios) }}</p>
-                            <p class="mt-2 text-xs leading-5 text-white/70">Cantidad de establecimientos dados de alta en el sistema.</p>
-                        </div>
-                        <div class="rounded-[22px] border border-white/12 bg-white/10 px-4 py-4 backdrop-blur-sm">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">Sellos emitidos</p>
-                            <p class="mt-2 text-3xl font-bold">{{ number_format($totalSellos) }}</p>
-                            <p class="mt-2 text-xs leading-5 text-white/70">Número total de sellos registrados en los pasaportes.</p>
+                        <div class="rounded-[18px] border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/65">Pasaportes</p>
+                            <p class="mt-2 text-2xl font-bold">{{ number_format($pasaportesCompletados) }}</p>
+                            <p class="mt-1 text-xs text-white/65">Completados</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-                    <div class="rounded-[24px] border border-white/12 bg-white/10 p-5 backdrop-blur-sm">
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">Usuarios nuevos</p>
-                        <div class="mt-4 flex items-end justify-between gap-4">
+            <div class="bg-[#f8f6ff] px-4 pb-4 pt-1 sm:px-5 sm:pb-5">
+                <div class="-mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
+                        <div class="flex items-start justify-between gap-3">
                             <div>
-                                <p class="text-[13px] text-white/70">Esta semana</p>
-                                <p class="mt-1 text-4xl font-bold">{{ number_format($usuariosNuevosSemana) }}</p>
+                                <p class="text-sm font-medium text-[#5f5a78]">Usuarios</p>
+                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalUsuarios) }}</p>
                             </div>
-                            <div class="text-right">
-                                <p class="text-[13px] text-white/70">Este mes</p>
-                                <p class="mt-1 text-3xl font-bold">{{ number_format($usuariosNuevosMes) }}</p>
-                            </div>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0-3-.479c-1.067 0-2.092.18-3 .479m6 0a8.962 8.962 0 0 1-6 0m6 0a8.966 8.966 0 0 0 1.128-5.702 4.5 4.5 0 1 0-8.256 0A8.966 8.966 0 0 0 9 19.128" />
+                                </svg>
+                            </span>
                         </div>
-                        <p class="mt-3 text-xs leading-5 text-white/70">Compara la captación reciente de usuarios en ventana semanal y mensual.</p>
-                    </div>
+                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Total acumulado de cuentas registradas en la plataforma.</p>
+                    </article>
 
-                    <div class="rounded-[24px] border border-white/12 bg-white/10 p-5 backdrop-blur-sm">
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">Pasaporte</p>
-                        <div class="mt-4 flex items-end justify-between gap-4">
+                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
+                        <div class="flex items-start justify-between gap-3">
                             <div>
-                                <p class="text-[13px] text-white/70">Creados</p>
-                                <p class="mt-1 text-4xl font-bold">{{ number_format($totalPasaportes) }}</p>
+                                <p class="text-sm font-medium text-[#5f5a78]">Comercios</p>
+                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalComercios) }}</p>
                             </div>
-                            <div class="text-right">
-                                <p class="text-[13px] text-white/70">Completados</p>
-                                <p class="mt-1 text-3xl font-bold">{{ number_format($pasaportesCompletados) }}</p>
-                            </div>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15l-1.5 6h-12L4.5 3Zm0 0L3 9.75m15 0 1.5-6M6.75 9.75V21m10.5-11.25V21M9.75 13.5h4.5" />
+                                </svg>
+                            </span>
                         </div>
-                        <p class="mt-3 text-xs leading-5 text-white/70">Mide cuántos pasaportes se han iniciado y cuántos ya cerraron ciclo.</p>
-                    </div>
+                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Cantidad de establecimientos dados de alta en el sistema.</p>
+                    </article>
+
+                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-sm font-medium text-[#5f5a78]">Sellos</p>
+                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalSellos) }}</p>
+                            </div>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3.72c.992-.454 2.096-.454 3.088 0l5.134 2.35c1.243.569 1.243 2.331 0 2.9l-5.134 2.35a3.75 3.75 0 0 1-3.088 0L4.434 8.97c-1.243-.569-1.243-2.331 0-2.9l5.134-2.35Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 10.5 9.568 13.16c.992.454 2.096.454 3.088 0l5.844-2.67M3.75 15l5.818 2.66c.992.454 2.096.454 3.088 0L18.5 15" />
+                                </svg>
+                            </span>
+                        </div>
+                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Número total de sellos registrados en los pasaportes.</p>
+                    </article>
+
+                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-sm font-medium text-[#5f5a78]">Pasaportes</p>
+                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalPasaportes) }}</p>
+                            </div>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3.75h8.25A2.25 2.25 0 0 1 17.25 6v12.75a1.5 1.5 0 0 1-2.366 1.218L12 17.25l-2.884 1.968A1.5 1.5 0 0 1 6.75 18.75V3.75Z" />
+                                </svg>
+                            </span>
+                        </div>
+                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Pasaportes iniciados por usuarios dentro de las rutas activas.</p>
+                    </article>
                 </div>
             </div>
         </section>

@@ -9,8 +9,8 @@
 @endphp
 
 @section('title', 'Historia')
-@section('title-section', 'Editar Dato Historico')
-@section('description', 'Actualiza la informacion principal del dato historico, incluyendo portada, desarrollo, galeria y fuentes.')
+@section('title-section', '')
+@section('description', '')
 
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">

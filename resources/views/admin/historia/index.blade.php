@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Historia')
-@section('title-section', 'Administracion de Historia')
-@section('description', 'Administra la historia de Neza, consulta sus registros y gestiona activaciones, desactivaciones y vistas previas.')
+@section('title-section', '')
+@section('description', '')
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">

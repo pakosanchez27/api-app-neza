@@ -116,25 +116,7 @@
             </aside>
 
             <main class="min-w-0 pb-3 sm:pb-4">
-                <section
-                    class="rounded-[20px] border border-[rgba(99,16,42,0.10)] bg-[linear-gradient(180deg,#fffdfa_0%,#fff7ef_100%)] p-4 shadow-[0_18px_38px_rgba(99,16,42,0.08)] sm:rounded-[22px] sm:p-5 md:rounded-[24px]">
-                    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                        <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9d8b8f]">
-                                @yield('title')</p>
-                            <h1
-                                class="mt-2 text-[1.7rem] font-semibold tracking-tight text-[#201815] sm:text-[1.85rem] md:text-[2rem]">
-                                @yield('title-section')</h1>
-                            <p class="mt-2 max-w-2xl text-[15px] leading-7 text-[#7d6870]">
-                                @yield('description')
-                            </p>
-                        </div>
 
-                        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                            @yield('actions')
-                        </div>
-                    </div>
-                </section>
 
                 <div class="mt-4 sm:mt-5 md:mt-6">
                     @yield('content')

@@ -6,8 +6,8 @@
 @endphp
 
 @section('title', 'Historia')
-@section('title-section', 'Crear Dato Historico')
-@section('description', 'Captura la informacion principal del dato historico, incluyendo portada, contenido, galeria y fuentes de referencia.')
+@section('title-section', '')
+@section('description', '')
 
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">

@@ -87,11 +87,11 @@
                 <span class="{{ $navDotClasses($isTimeline) }}">•</span>
                 <span>Antes y Después</span>
             </a>
-            <a href="#"
+            {{-- <a href="#"
                 class="flex items-center gap-2.5 rounded-[14px] px-3.5 py-2 text-[13px] font-medium text-white/88 transition hover:bg-white/12 hover:text-white">
                 <span class="grid h-3.5 w-3.5 place-items-center rounded-full bg-white/30 text-[8px] text-transparent">•</span>
                 <span>Configuracion</span>
-            </a>
+            </a> --}}
         </nav>
 
         <div class="mt-auto pt-6">
@@ -142,12 +142,12 @@
                         <span>Antes y Después</span>
                     </a>
 
-                    <a href="#"
+                    {{-- <a href="#"
                         class="flex items-center gap-2.5 rounded-[14px] px-3.5 py-2 text-[13px] font-medium text-white/88 transition hover:bg-white/12 hover:text-white">
                         <span
                             class="grid h-3.5 w-3.5 place-items-center rounded-full bg-white/30 text-[8px] text-transparent">•</span>
                         <span>Configuracion</span>
-                    </a>
+                    </a> --}}
                 </nav>
 
                 <div class="mt-auto pt-6">

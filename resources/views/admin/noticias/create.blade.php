@@ -67,9 +67,9 @@
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                     <div id="portada-preview-wrapper"
-                        class="mt-4 flex min-h-[240px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4 {{ !empty($noticia->portada) ? '' : 'hidden' }}">
+                        class="mt-4 flex min-h-[280px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4 {{ !empty($noticia->portada) ? '' : 'hidden' }}">
                         <img id="portada-preview" src="{{ !empty($noticia->portada) ? \App\Support\ImageManager::publicUrl($noticia->portada) : '' }}"
-                            alt="Vista previa de portada" class="max-h-[320px] w-full object-contain">
+                            alt="Vista previa de portada" class="max-h-[420px] max-w-full object-contain">
                     </div>
                 </div>
 

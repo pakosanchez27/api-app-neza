@@ -52,10 +52,10 @@
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                     <div id="portada-preview-wrapper"
-                        class="mt-4 overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] {{ old('portada') || $evento->portada ? '' : 'hidden' }}">
+                        class="mt-4 min-h-[280px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4 {{ old('portada') || $evento->portada ? 'flex' : 'hidden' }}">
                         <img id="portada-preview"
                             src="{{ old('portada') ? '' : ($evento->portada ? \App\Support\ImageManager::publicUrl($evento->portada) : '') }}"
-                            alt="Vista previa de portada" class="h-[240px] w-full object-cover">
+                            alt="Vista previa de portada" class="max-h-[420px] max-w-full object-contain">
                     </div>
                     <p id="portada-preview-empty"
                         class="mt-3 text-[13px] leading-6 text-[#6f6166] {{ old('portada') || $evento->portada ? 'hidden' : '' }}">
@@ -528,6 +528,7 @@
                 if (!file) {
                     if (!portadaPreview.getAttribute('src')) {
                         portadaPreviewWrapper.classList.add('hidden');
+                        portadaPreviewWrapper.classList.remove('flex');
                         portadaPreviewEmpty.classList.remove('hidden');
                     }
                     return;
@@ -536,6 +537,7 @@
                 coverPreviewUrl = URL.createObjectURL(file);
                 portadaPreview.src = coverPreviewUrl;
                 portadaPreviewWrapper.classList.remove('hidden');
+                portadaPreviewWrapper.classList.add('flex');
                 portadaPreviewEmpty.classList.add('hidden');
             });
 

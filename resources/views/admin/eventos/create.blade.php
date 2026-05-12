@@ -51,9 +51,9 @@
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                     <div id="portada-preview-wrapper"
-                        class="mt-4 hidden overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc]">
+                        class="mt-4 hidden min-h-[280px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4">
                         <img id="portada-preview" src="" alt="Vista previa de portada"
-                            class="h-[240px] w-full object-cover">
+                            class="max-h-[420px] max-w-full object-contain">
                     </div>
                     <p id="portada-preview-empty" class="mt-3 text-[13px] leading-6 text-[#6f6166]">
                         Selecciona una imagen para ver la vista previa de la portada.
@@ -522,6 +522,7 @@
 
                 if (!file) {
                     portadaPreviewWrapper.classList.add('hidden');
+                    portadaPreviewWrapper.classList.remove('flex');
                     portadaPreviewEmpty.classList.remove('hidden');
                     portadaPreview.removeAttribute('src');
                     return;
@@ -530,6 +531,7 @@
                 coverPreviewUrl = URL.createObjectURL(file);
                 portadaPreview.src = coverPreviewUrl;
                 portadaPreviewWrapper.classList.remove('hidden');
+                portadaPreviewWrapper.classList.add('flex');
                 portadaPreviewEmpty.classList.add('hidden');
             });
 

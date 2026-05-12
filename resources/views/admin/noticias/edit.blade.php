@@ -35,9 +35,10 @@
                     @error('portada')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
-                    <div class="mt-4 overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc]">
+                    <div id="portada-preview-wrapper"
+                        class="mt-4 flex min-h-[280px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4">
                         <img id="portada-preview" src="{{ $noticia->portada ? \App\Support\ImageManager::publicUrl($noticia->portada) : '' }}" alt="Vista previa de portada"
-                            class="h-[240px] w-full object-cover {{ $noticia->portada ? '' : 'hidden' }}">
+                            class="max-h-[420px] max-w-full object-contain {{ $noticia->portada ? '' : 'hidden' }}">
                     </div>
                 </div>
 
@@ -147,6 +148,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const portadaInput = document.getElementById('portada');
             const portadaPreview = document.getElementById('portada-preview');
+            const portadaPreviewWrapper = document.getElementById('portada-preview-wrapper');
             const galeriaInput = document.getElementById('galeria');
             const galeriaStatus = document.getElementById('galeria-status');
             let coverPreviewUrl = null;
@@ -166,6 +168,7 @@
                 coverPreviewUrl = URL.createObjectURL(file);
                 portadaPreview.src = coverPreviewUrl;
                 portadaPreview.classList.remove('hidden');
+                portadaPreviewWrapper.classList.remove('hidden');
             });
 
             galeriaInput?.addEventListener('change', function(event) {

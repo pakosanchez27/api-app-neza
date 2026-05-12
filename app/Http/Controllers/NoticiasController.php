@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Noticia;
 use App\Support\ImageManager;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -89,6 +90,10 @@ class NoticiasController extends Controller
 
     private function persistNoticia(Request $request, Noticia $noticia, array $validatedData): void
     {
+        $validatedData['fecha_publicacion'] = $noticia->exists
+            ? $validatedData['fecha_publicacion']
+            : Carbon::today()->toDateString();
+
         $directorioNoticia = $this->resolveDirectory($noticia, $validatedData['titulo']);
 
         if ($request->hasFile('portada')) {

@@ -10,11 +10,11 @@
     $galleryDefaultMessage = $isEdit && $existingGallery->isNotEmpty()
         ? 'Si no seleccionas nuevas imagenes, se conservaran las ' . $existingGallery->count() . ' imagen(es) actuales de la galeria.'
         : 'Puedes seleccionar una o varias imagenes para la galeria.';
-    $fechaPublicacion = old('fecha_publicacion');
-
-    if ($fechaPublicacion === null && isset($noticia->fecha_publicacion) && $noticia->fecha_publicacion) {
-        $fechaPublicacion = \Illuminate\Support\Carbon::parse($noticia->fecha_publicacion)->format('Y-m-d');
-    }
+    $fechaPublicacion = $isEdit
+        ? old('fecha_publicacion', isset($noticia->fecha_publicacion) && $noticia->fecha_publicacion
+            ? \Illuminate\Support\Carbon::parse($noticia->fecha_publicacion)->format('Y-m-d')
+            : now()->format('Y-m-d'))
+        : now()->format('Y-m-d');
 @endphp
 
 @section('title', 'Noticias')
@@ -148,9 +148,15 @@
 
                 <div>
                     <label for="fecha_publicacion" class="mb-1 block text-sm font-medium text-[#3e2d31]">Fecha de publicacion</label>
-                    <input type="date" id="fecha_publicacion" name="fecha_publicacion"
-                        value="{{ $fechaPublicacion }}"
-                        class="w-full rounded-2xl border {{ $errors->has('fecha_publicacion') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    @if ($isEdit)
+                        <input type="date" id="fecha_publicacion" name="fecha_publicacion"
+                            value="{{ $fechaPublicacion }}"
+                            class="w-full rounded-2xl border {{ $errors->has('fecha_publicacion') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    @else
+                        <input type="hidden" name="fecha_publicacion" value="{{ $fechaPublicacion }}">
+                        <input type="date" id="fecha_publicacion" value="{{ $fechaPublicacion }}" disabled
+                            class="w-full cursor-not-allowed rounded-2xl border {{ $errors->has('fecha_publicacion') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-slate-100' }} px-4 py-3 text-sm text-[#201815] outline-none">
+                    @endif
                     @error('fecha_publicacion')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror

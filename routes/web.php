@@ -37,6 +37,8 @@ Route::middleware(['admin.app'])->group(function () {
     // Eventos
     Route::get('/admin/eventos', [EventosController::class, 'index'])->name('admin.eventos');
     Route::get('/admin/eventos/create', [EventosController::class, 'create'])->name('admin.eventos.create');
+    Route::get('/admin/eventos/catalogo/calles', [EventosController::class, 'callesCatalogo'])->name('admin.eventos.catalogo.calles');
+    Route::get('/admin/eventos/catalogo/direccion', [EventosController::class, 'buscarCoordenadasPorDireccion'])->name('admin.eventos.catalogo.direccion');
     Route::post('/admin/eventos/store', [EventosController::class, 'store'])->name('admin.eventos.store');
     Route::get('/admin/eventos/{evento}/edit', [EventosController::class, 'edit'])->name('admin.eventos.edit');
     Route::put('/admin/eventos/{evento}', [EventosController::class, 'update'])->name('admin.eventos.update');

@@ -82,6 +82,26 @@
                     @enderror
                 </div>
 
+                <div class="md:col-span-2">
+                    <label for="nom_lugar" class="mb-1 block text-sm font-medium text-[#3e2d31]">Recinto existente</label>
+                    <select id="nom_lugar" name="nom_lugar"
+                        class="w-full rounded-2xl border {{ $errors->has('nom_lugar') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                        <option value="">Selecciona un recinto</option>
+                        <option value="155499" @selected(old('nom_lugar') == '155499')>ESTADIO NEZA 86</option>
+                        <option value="19054" @selected(old('nom_lugar') == '19054')>EXPLANADA PALACIO MUNICIPAL</option>
+                        <option value="77543" @selected(old('nom_lugar') == '77543')>CENTRO PLURICULTURAL EMILIANO ZAPATA</option>
+                        <option value="79599" @selected(old('nom_lugar') == '79599')>PARQUE DEL PUEBLO</option>
+                        <option value="84429" @selected(old('nom_lugar') == '84429')>PLAZA CIUDAD JARDÍN</option>
+                        <option value="96940" @selected(old('nom_lugar') == '96940')>AUDITORIO ALFREDO DEL MAZO</option>
+                    </select>
+                    <p class="mt-1 text-[13px] leading-6 text-[#6f6166]">
+                        Si no aparece el recinto, deja este campo vacío y captura calle y número manualmente.
+                    </p>
+                    @error('nom_lugar')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div>
                     <label for="calle" class="mb-1 block text-sm font-medium text-[#3e2d31]">Calle</label>
                     <input type="text" id="calle" name="calle" list="calles-sugeridas"
@@ -220,13 +240,12 @@
 @push('scripts')
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.11.0/proj4.min.js"
-        integrity="sha512-gMZ92sl9n4l4aCqvPU4jMK8v6QNCj20lA4kHU9AEPBaclSJNfVx5A6MDE9K9oNw1b8NPks8v3nZSxv0ypUj4hw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const coordenadasUrl = @json(asset('data/coordenadas.json'));
+            const recintosEventosUrl = @json(asset('data/recintos-eventos.json'));
+            const callesUrl = @json(asset('data/calles-catalogo.json'));
+            const direccionesLookupUrl = @json(asset('data/direcciones-lookup.json'));
             const nezaCenter = [19.4006, -99.0148];
             const eventoDestacadoActual = @json($eventoDestacadoActual?->titulo);
             const formEditarEvento = document.getElementById('form-editar-evento');
@@ -236,6 +255,7 @@
             const portadaPreview = document.getElementById('portada-preview');
             const portadaPreviewWrapper = document.getElementById('portada-preview-wrapper');
             const portadaPreviewEmpty = document.getElementById('portada-preview-empty');
+            const nomLugarSelect = document.getElementById('nom_lugar');
             const calleInput = document.getElementById('calle');
             const numeroInput = document.getElementById('numero');
             const coloniaInput = document.getElementById('col');
@@ -247,9 +267,12 @@
             const mapElement = document.getElementById('mapa-evento');
 
             let coverPreviewUrl = null;
-            let coordinateIndex = null;
+            let callesLoaded = false;
+            let recintosById = null;
+            let direccionesLookup = null;
             let map = null;
             let marker = null;
+            let isApplyingRecintoSelection = false;
 
             const markerIcon = L.divIcon({
                 className: '',
@@ -267,12 +290,6 @@
                 iconAnchor: [12, 12],
             });
 
-            if (typeof proj4 !== 'undefined') {
-                proj4.defs('EPSG:6372',
-                    '+proj=lcc +lat_0=12 +lon_0=-102 +lat_1=17.5 +lat_2=29.5 +x_0=2500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
-                );
-            }
-
             function normalizeCoordinateKeyPart(value) {
                 return String(value ?? '')
                     .normalize('NFD')
@@ -280,15 +297,6 @@
                     .trim()
                     .replace(/\s+/g, ' ')
                     .toUpperCase();
-            }
-
-            function toCoordinateValue(value) {
-                if (value === null || value === undefined || value === '') {
-                    return '';
-                }
-
-                const parsed = Number(value);
-                return Number.isFinite(parsed) ? parsed : '';
             }
 
             function buildCoordinateLookupKey(street, exteriorNumber) {
@@ -299,53 +307,61 @@
                 return Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
             }
 
-            function resolveFeatureCoordinates(feature) {
-                const props = feature?.properties ?? {};
-                const geometryCoordinates = Array.isArray(feature?.geometry?.coordinates) ? feature.geometry.coordinates : [];
+            function decodeText(value) {
+                const text = String(value ?? '').trim();
 
-                const propertyLat = props.lattud ?? props.latitud ?? props.LATITUD ?? '';
-                const propertyLng = props.longitud ?? props.LONGITUD ?? '';
-                const geometryLng = geometryCoordinates[0] ?? '';
-                const geometryLat = geometryCoordinates[1] ?? '';
-
-                const latCandidate = toCoordinateValue(propertyLat);
-                const lngCandidate = toCoordinateValue(propertyLng);
-
-                if (isValidCoordinatePair(latCandidate, lngCandidate)) {
-                    return {
-                        latitud: latCandidate,
-                        longitud: lngCandidate,
-                    };
+                if (!text) {
+                    return '';
                 }
 
-                if (typeof proj4 !== 'undefined' && Number.isFinite(latCandidate) && Number.isFinite(lngCandidate)) {
-                    try {
-                        const [convertedLng, convertedLat] = proj4('EPSG:6372', 'EPSG:4326', [lngCandidate, latCandidate]);
+                try {
+                    return decodeURIComponent(escape(text));
+                } catch (error) {
+                    return text;
+                }
+            }
 
-                        if (isValidCoordinatePair(convertedLat, convertedLng)) {
-                            return {
-                                latitud: convertedLat,
-                                longitud: convertedLng,
-                            };
+            async function fetchJson(url) {
+                const response = await fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('No fue posible completar la solicitud.');
+                }
+
+                return response.json();
+            }
+
+            async function loadRecintosById() {
+                if (recintosById) {
+                    return recintosById;
+                }
+
+                const payload = await fetchJson(recintosEventosUrl);
+                recintosById = Array.isArray(payload)
+                    ? payload.reduce((index, item) => {
+                        if (item?.identifica) {
+                            index[String(item.identifica)] = item;
                         }
-                    } catch (error) {
-                    }
+                        return index;
+                    }, {})
+                    : {};
+
+                return recintosById;
+            }
+
+            async function loadDireccionesLookup() {
+                if (direccionesLookup) {
+                    return direccionesLookup;
                 }
 
-                const geometryLatCandidate = toCoordinateValue(geometryLat);
-                const geometryLngCandidate = toCoordinateValue(geometryLng);
+                const payload = await fetchJson(direccionesLookupUrl);
+                direccionesLookup = payload && typeof payload === 'object' ? payload : {};
 
-                if (isValidCoordinatePair(geometryLatCandidate, geometryLngCandidate)) {
-                    return {
-                        latitud: geometryLatCandidate,
-                        longitud: geometryLngCandidate,
-                    };
-                }
-
-                return {
-                    latitud: latCandidate,
-                    longitud: lngCandidate,
-                };
+                return direccionesLookup;
             }
 
             function ensureMap() {
@@ -405,55 +421,23 @@
                 updateMap(latitudInput.value, longitudInput.value);
             }
 
-            async function loadCoordinateDataset() {
-                const response = await fetch(coordenadasUrl);
-
-                if (!response.ok) {
-                    throw new Error('No fue posible cargar el archivo de coordenadas.');
-                }
-
-                return response.json();
+            function setLocationFields(match) {
+                calleInput.value = match?.calle != null ? String(match.calle) : '';
+                numeroInput.value = match?.numero != null ? String(match.numero) : '';
+                setCoordinateFields(match);
             }
 
-            async function loadCoordinateIndex() {
-                if (coordinateIndex) {
-                    return coordinateIndex;
+            async function loadStreetSuggestions() {
+                if (callesLoaded) {
+                    return;
                 }
 
-                const data = await loadCoordinateDataset();
-                const index = new Map();
-                const streets = new Set();
-
-                for (const feature of data?.features ?? []) {
-                    const props = feature?.properties ?? {};
-                    const street = String(props.NOMVIAL ?? '').trim();
-                    const number = String(props.NUMEXT ?? '').trim();
-                    const key = buildCoordinateLookupKey(street, number);
-                    const coordinates = resolveFeatureCoordinates(feature);
-
-                    if (street) {
-                        streets.add(street);
-                    }
-
-                    if (!key || key === '|') {
-                        continue;
-                    }
-
-                    if (!index.has(key)) {
-                        index.set(key, {
-                            colonia: props.NOMBRE_CUA ?? props.nombre_cua ?? '',
-                            latitud: coordinates.latitud,
-                            longitud: coordinates.longitud,
-                        });
-                    }
-                }
-
-                coordinateIndex = index;
-
-                const streetOptions = Array.from(streets).sort((a, b) => a.localeCompare(b, 'es'));
+                const payload = await fetchJson(callesUrl);
+                const streetOptions = Array.isArray(payload)
+                    ? payload
+                    : (Array.isArray(payload?.calles) ? payload.calles : []);
                 callesDatalist.innerHTML = streetOptions.map((street) => `<option value="${street.replace(/"/g, '&quot;')}"></option>`).join('');
-
-                return coordinateIndex;
+                callesLoaded = true;
             }
 
             async function resolveCoordinates() {
@@ -469,13 +453,24 @@
                 coordenadasStatus.textContent = 'Buscando coordenadas con la calle y el número...';
 
                 try {
-                    const index = await loadCoordinateIndex();
-                    const match = index.get(buildCoordinateLookupKey(street, number));
-
-                    setCoordinateFields(match);
+                    const direcciones = await loadDireccionesLookup();
+                    const lookupKey = buildCoordinateLookupKey(street, number);
+                    const match = direcciones[lookupKey] ?? null;
 
                     if (match) {
-                        coordenadasStatus.textContent = 'Coordenadas rellenadas automáticamente desde coordenadas.json.';
+                        setLocationFields({
+                            calle: decodeText(match.calle),
+                            numero: decodeText(match.numero),
+                            colonia: decodeText(match.colonia),
+                            latitud: match.latitud,
+                            longitud: match.longitud,
+                        });
+                    } else {
+                        setCoordinateFields(null);
+                    }
+
+                    if (match) {
+                        coordenadasStatus.textContent = 'Ubicación rellenada automáticamente desde coordenadas.json.';
                     } else {
                         coordenadasStatus.textContent = 'No se encontró una coincidencia para esa calle y número.';
                     }
@@ -483,6 +478,43 @@
                     setCoordinateFields(null);
                     coordenadasStatus.textContent = 'No fue posible cargar el catálogo de coordenadas.';
                 }
+            }
+
+            async function resolveCoordinatesFromRecinto() {
+                const recintoId = nomLugarSelect?.value?.trim() ?? '';
+
+                if (!recintoId) {
+                    resolveCoordinates();
+                    return;
+                }
+
+                coordenadasStatus.textContent = 'Buscando coordenadas del recinto seleccionado...';
+
+                try {
+                    const recintos = await loadRecintosById();
+                    const match = recintos[recintoId] ?? null;
+
+                    isApplyingRecintoSelection = true;
+                    setLocationFields(match);
+                    isApplyingRecintoSelection = false;
+
+                    if (match) {
+                        coordenadasStatus.textContent = 'Ubicación rellenada automáticamente desde el recinto seleccionado.';
+                    } else {
+                        coordenadasStatus.textContent = 'No se encontró una coincidencia para el recinto seleccionado.';
+                    }
+                } catch (error) {
+                    setCoordinateFields(null);
+                    coordenadasStatus.textContent = 'No fue posible cargar el catálogo de coordenadas.';
+                }
+            }
+
+            function handleManualLocationInput() {
+                if (!isApplyingRecintoSelection && nomLugarSelect?.value) {
+                    nomLugarSelect.value = '';
+                }
+
+                resolveCoordinates();
             }
 
             portadaInput?.addEventListener('change', function(event) {
@@ -507,8 +539,9 @@
                 portadaPreviewEmpty.classList.add('hidden');
             });
 
-            calleInput?.addEventListener('input', resolveCoordinates);
-            numeroInput?.addEventListener('input', resolveCoordinates);
+            calleInput?.addEventListener('input', handleManualLocationInput);
+            numeroInput?.addEventListener('input', handleManualLocationInput);
+            nomLugarSelect?.addEventListener('change', resolveCoordinatesFromRecinto);
 
             formEditarEvento?.addEventListener('submit', function(event) {
                 const debeConfirmarCambioDestacado = destacadoInput?.checked && eventoDestacadoActual && forceChangeDestacadoInput?.value !== '1';
@@ -538,9 +571,20 @@
                 });
             });
 
-            loadCoordinateIndex().catch(function() {
-                coordenadasStatus.textContent = 'No fue posible cargar el catálogo de coordenadas.';
-            });
+            Promise.all([
+                    loadStreetSuggestions(),
+                    loadDireccionesLookup(),
+                ])
+                .then(function() {
+                    if (nomLugarSelect?.value) {
+                        resolveCoordinatesFromRecinto();
+                    } else if (calleInput?.value.trim() && numeroInput?.value.trim()) {
+                        resolveCoordinates();
+                    }
+                })
+                .catch(function() {
+                    coordenadasStatus.textContent = 'No fue posible cargar el catálogo de coordenadas.';
+                });
 
             updateMap(latitudInput.value, longitudInput.value);
         });

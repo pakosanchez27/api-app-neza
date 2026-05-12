@@ -1,0 +1,56 @@
+[
+  {
+    "identifica": "155499",
+    "nom_lugar": "ESTADIO NEZA 86",
+    "calle": "LAZARO CARDENAS",
+    "numero": "SN",
+    "colonia": "BENITO JUAREZ III BACHILLERES",
+    "latitud": 19.406545,
+    "longitud": -98.988395
+  },
+  {
+    "identifica": "19054",
+    "nom_lugar": "EXPLANADA PALACIO MUNICIPAL",
+    "calle": "CHIMALHUACAN",
+    "numero": "SN",
+    "colonia": "BENITO JUAREZ I ORIENTE",
+    "latitud": 19.407782,
+    "longitud": -99.018684
+  },
+  {
+    "identifica": "77543",
+    "nom_lugar": "CENTRO PLURICULTURAL EMILIANO ZAPATA",
+    "calle": "AVENIDA SAN ANGEL",
+    "numero": "SN",
+    "colonia": "BENITO JUAREZ - VILLADA",
+    "latitud": 19.397929,
+    "longitud": -99.011287
+  },
+  {
+    "identifica": "79599",
+    "nom_lugar": "PARQUE DEL PUEBLO",
+    "calle": "SAN ESTEBAN",
+    "numero": "SN",
+    "colonia": "BENITO JUAREZ - AMP. VILLADA",
+    "latitud": 19.395078,
+    "longitud": -99.007221
+  },
+  {
+    "identifica": "84429",
+    "nom_lugar": "PLAZA CIUDAD JARDIN",
+    "calle": "BORDO DE XOCHIACA",
+    "numero": "SN",
+    "colonia": "LAS FLORES",
+    "latitud": 19.422808,
+    "longitud": -99.022845
+  },
+  {
+    "identifica": "96940",
+    "nom_lugar": "AUDITORIO ALFREDO DEL MAZO",
+    "calle": "TACUBAYA",
+    "numero": "SN",
+    "colonia": "METROPOLITANA 3A",
+    "latitud": 19.388077,
+    "longitud": -99.017751
+  }
+]

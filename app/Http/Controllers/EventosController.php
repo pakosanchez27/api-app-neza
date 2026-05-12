@@ -6,12 +6,16 @@ use App\Models\EventoCategoriasModel;
 use App\Models\EventoModel;
 use App\Support\ImageManager;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class EventosController extends Controller
 {
+    private const CALLES_CATALOGO_PATH = 'data/calles-catalogo.json';
+    private const DIRECCIONES_LOOKUP_PATH = 'data/direcciones-lookup.json';
+
     public function index()
     {
         EventoModel::whereDate('fecha', '<', Carbon::today())
@@ -55,6 +59,31 @@ class EventosController extends Controller
         $validatedData = $this->validateEvento($request);
 
         return $this->persistEvento($request, $evento, $validatedData, 'Evento actualizado exitosamente.');
+    }
+
+    public function callesCatalogo(): JsonResponse
+    {
+        return response()->json([
+            'calles' => $this->loadCallesCatalogo(),
+        ]);
+    }
+
+    public function buscarCoordenadasPorDireccion(Request $request): JsonResponse
+    {
+        $validatedData = $request->validate([
+            'calle' => 'required|string|max:255',
+            'numero' => 'required|string|max:30',
+        ]);
+
+        $catalog = $this->loadDireccionesLookup();
+        $match = $catalog[$this->buildCoordinateLookupKey(
+            $validatedData['calle'],
+            $validatedData['numero']
+        )] ?? null;
+
+        return response()->json([
+            'data' => $match,
+        ]);
     }
 
     public function destroy(EventoModel $evento)
@@ -151,4 +180,44 @@ class EventosController extends Controller
         $archivoPortada = $request->file('portada');
         return ImageManager::storePublicImage($archivoPortada, $directorioEvento, 'portada');
     }
+
+    private function loadCallesCatalogo(): array
+    {
+        return $this->readJsonCatalog(public_path(self::CALLES_CATALOGO_PATH), []);
+    }
+
+    private function loadDireccionesLookup(): array
+    {
+        return $this->readJsonCatalog(public_path(self::DIRECCIONES_LOOKUP_PATH), []);
+    }
+
+    private function readJsonCatalog(string $path, array $default = []): array
+    {
+        if (! File::exists($path)) {
+            return $default;
+        }
+
+        $payload = json_decode(File::get($path), true);
+
+        return is_array($payload) ? $payload : $default;
+    }
+
+    private function buildCoordinateLookupKey(string $street, string $number): string
+    {
+        return $this->normalizeCoordinateKeyPart($street) . '|' . $this->normalizeCoordinateKeyPart($number);
+    }
+
+    private function normalizeCoordinateKeyPart(string $value): string
+    {
+        $normalized = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+
+        if ($normalized === false) {
+            $normalized = $value;
+        }
+
+        $normalized = strtoupper(trim(preg_replace('/\s+/', ' ', $normalized) ?? ''));
+
+        return $normalized;
+    }
+
 }

@@ -10,25 +10,21 @@
             <div class="grid gap-6 xl:grid-cols-[1.4fr,0.9fr]">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.26em] text-white/65">Visión general</p>
-                    <h2 class="mt-3 max-w-3xl text-3xl font-bold leading-tight">
-                        El ecosistema NezaGo ya muestra señales claras de crecimiento y participación.
-                    </h2>
-                    <p class="mt-4 max-w-2xl text-sm leading-7 text-white/80">
-                        Este tablero junta captación de usuarios, estado del padrón comercial y desempeño del pasaporte para que podamos detectar rápido qué frente empujar después.
-                    </p>
-
                     <div class="mt-6 grid gap-4 md:grid-cols-3">
                         <div class="rounded-[22px] border border-white/12 bg-white/10 px-4 py-4 backdrop-blur-sm">
                             <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">Usuarios totales</p>
                             <p class="mt-2 text-3xl font-bold">{{ number_format($totalUsuarios) }}</p>
+                            <p class="mt-2 text-xs leading-5 text-white/70">Total acumulado de cuentas registradas en la plataforma.</p>
                         </div>
                         <div class="rounded-[22px] border border-white/12 bg-white/10 px-4 py-4 backdrop-blur-sm">
                             <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">Comercios totales</p>
                             <p class="mt-2 text-3xl font-bold">{{ number_format($totalComercios) }}</p>
+                            <p class="mt-2 text-xs leading-5 text-white/70">Cantidad de establecimientos dados de alta en el sistema.</p>
                         </div>
                         <div class="rounded-[22px] border border-white/12 bg-white/10 px-4 py-4 backdrop-blur-sm">
                             <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">Sellos emitidos</p>
                             <p class="mt-2 text-3xl font-bold">{{ number_format($totalSellos) }}</p>
+                            <p class="mt-2 text-xs leading-5 text-white/70">Número total de sellos registrados en los pasaportes.</p>
                         </div>
                     </div>
                 </div>
@@ -46,6 +42,7 @@
                                 <p class="mt-1 text-3xl font-bold">{{ number_format($usuariosNuevosMes) }}</p>
                             </div>
                         </div>
+                        <p class="mt-3 text-xs leading-5 text-white/70">Compara la captación reciente de usuarios en ventana semanal y mensual.</p>
                     </div>
 
                     <div class="rounded-[24px] border border-white/12 bg-white/10 p-5 backdrop-blur-sm">
@@ -60,6 +57,7 @@
                                 <p class="mt-1 text-3xl font-bold">{{ number_format($pasaportesCompletados) }}</p>
                             </div>
                         </div>
+                        <p class="mt-3 text-xs leading-5 text-white/70">Mide cuántos pasaportes se han iniciado y cuántos ya cerraron ciclo.</p>
                     </div>
                 </div>
             </div>
@@ -81,10 +79,12 @@
                     <div class="rounded-[22px] bg-[#fff7fa] p-5">
                         <p class="text-sm font-medium text-[#7c5d69]">Últimos 7 días</p>
                         <p class="mt-2 text-4xl font-bold text-[#63102a]">{{ number_format($usuariosNuevosSemana) }}</p>
+                        <p class="mt-2 text-xs leading-5 text-[#7c5d69]">Altas creadas desde el inicio de la semana actual.</p>
                     </div>
                     <div class="rounded-[22px] bg-[#f8f8ff] p-5">
                         <p class="text-sm font-medium text-[#6e6c8f]">Mes actual</p>
                         <p class="mt-2 text-4xl font-bold text-[#29338b]">{{ number_format($usuariosNuevosMes) }}</p>
+                        <p class="mt-2 text-xs leading-5 text-[#6e6c8f]">Altas registradas desde el primer día del mes.</p>
                     </div>
                 </div>
             </article>
@@ -101,10 +101,12 @@
                     <div class="rounded-[22px] bg-[#f2fbf4] p-5">
                         <p class="text-sm font-medium text-[#4c7b5d]">Visibles al público</p>
                         <p class="mt-2 text-4xl font-bold text-[#166534]">{{ number_format($comerciosVisibles) }}</p>
+                        <p class="mt-2 text-xs leading-5 text-[#4c7b5d]">Comercios activos y habilitados para mostrarse en la app.</p>
                     </div>
                     <div class="rounded-[22px] bg-[#fff7ed] p-5">
                         <p class="text-sm font-medium text-[#8a5a2d]">Aún incompletos</p>
                         <p class="mt-2 text-4xl font-bold text-[#c2410c]">{{ number_format($comerciosIncompletos) }}</p>
+                        <p class="mt-2 text-xs leading-5 text-[#8a5a2d]">Registros de comercio que todavía no terminan su proceso de alta.</p>
                     </div>
                 </div>
             </article>
@@ -121,10 +123,12 @@
                     <div class="rounded-[22px] bg-[#faf5ff] p-5">
                         <p class="text-sm font-medium text-[#74528a]">Rutas activas</p>
                         <p class="mt-2 text-4xl font-bold text-[#6b21a8]">{{ number_format($totalRutasActivas) }}</p>
+                        <p class="mt-2 text-xs leading-5 text-[#74528a]">Rutas disponibles actualmente para experiencia y pasaporte.</p>
                     </div>
                     <div class="rounded-[22px] bg-[#f0fdfa] p-5">
                         <p class="text-sm font-medium text-[#3f7770]">Sellos emitidos</p>
                         <p class="mt-2 text-4xl font-bold text-[#0f766e]">{{ number_format($totalSellos) }}</p>
+                        <p class="mt-2 text-xs leading-5 text-[#3f7770]">Interacciones efectivas de usuarios dentro del sistema de pasaporte.</p>
                     </div>
                 </div>
             </article>
@@ -213,6 +217,7 @@
                                     {{ $comercio['activo'] ? 'Activo' : 'Incompleto' }}
                                 </span>
                             </div>
+                            <p class="mt-3 text-xs leading-5 text-[#7d6870]">Este ranking muestra qué comercios generan más sellos dentro del pasaporte.</p>
                         </div>
                     @empty
                         <div class="rounded-[22px] border border-[#f0e6de] bg-[#fffdfa] px-4 py-8 text-center text-sm text-[#7d6870]">

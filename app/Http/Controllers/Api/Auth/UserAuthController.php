@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserLoginRequest;
 use App\Models\User;
+use App\Support\ImageManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -55,7 +56,7 @@ class UserAuthController extends Controller
                 'apm_p' => $user->apm_p,
                 'email' => $user->email,
                 'telefono' => $user->telefono,
-                'foto_perfil' => $user->foto_perfil,
+                'foto_perfil' => ImageManager::preferStoragePath($user->foto_perfil),
                 'role' => $user->role?->nombre,
             ],
         ]);
@@ -65,7 +66,7 @@ class UserAuthController extends Controller
     {
         $user = $request->user()->load('role');
 
-        return response()->json($user);
+        return response()->json($this->transformUserPayload($user));
     }
 
     public function logout(Request $request): JsonResponse
@@ -133,9 +134,9 @@ class UserAuthController extends Controller
                 Storage::disk('public')->delete($user->foto_perfil);
             }
 
-            $updates['foto_perfil'] = $request->file('foto_perfil')->store(
-                "user-profile/{$user->id}",
-                'public'
+            $updates['foto_perfil'] = ImageManager::storePublicDiskFile(
+                $request->file('foto_perfil'),
+                "user-profile/{$user->id}"
             );
         }
 
@@ -149,8 +150,16 @@ class UserAuthController extends Controller
 
         return response()->json([
             'message' => 'Perfil actualizado correctamente.',
-            'user' => $user,
+            'user' => $this->transformUserPayload($user),
         ]);
+    }
+
+    private function transformUserPayload(User $user): array
+    {
+        $payload = $user->toArray();
+        $payload['foto_perfil'] = ImageManager::preferStoragePath($user->foto_perfil);
+
+        return $payload;
     }
 
     private function splitFullName(string $fullName): array

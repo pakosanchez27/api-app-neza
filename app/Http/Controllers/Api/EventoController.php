@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EventoCategoriasModel;
 use App\Models\EventoInteresadoModel;
 use App\Models\EventoModel;
+use App\Support\ImageManager;
 use Illuminate\Http\Request;
 
 class EventoController extends Controller
@@ -67,8 +68,8 @@ class EventoController extends Controller
         return [
             'id' => $evento->id,
             'titulo' => $evento->titulo,
-            'portada' => $evento->portada,
-            'portada_url' => $evento->portada ? asset($evento->portada) : null,
+            'portada' => ImageManager::preferPublicPath($evento->portada),
+            'portada_url' => ImageManager::publicUrl($evento->portada),
             'fecha' => $evento->fecha,
             'hora' => $evento->hora,
             'calle' => $evento->calle,

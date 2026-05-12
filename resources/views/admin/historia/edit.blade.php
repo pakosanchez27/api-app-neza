@@ -47,7 +47,7 @@
                     <div id="portada-preview-wrapper"
                         class="mt-4 {{ $historia->portada ? 'flex' : 'hidden' }} min-h-[240px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4">
                         <img id="portada-preview"
-                            src="{{ $historia->portada ? asset($historia->portada) : '' }}"
+                            src="{{ $historia->portada ? \App\Support\ImageManager::publicUrl($historia->portada) : '' }}"
                             alt="Vista previa de portada" class="max-h-[320px] w-full object-contain">
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                     <div id="galeria-preview" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($historia->galeria as $imagen)
                             <div class="overflow-hidden rounded-[20px] border border-[#eadde2] bg-[#fffafc]">
-                                <img src="{{ asset($imagen->imagen) }}" alt="Imagen actual de galeria" class="h-40 w-full object-cover">
+                                <img src="{{ \App\Support\ImageManager::publicUrl($imagen->imagen) }}" alt="Imagen actual de galeria" class="h-40 w-full object-cover">
                             </div>
                         @endforeach
                     </div>

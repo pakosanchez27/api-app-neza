@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cupon;
+use App\Support\ImageManager;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 
 class CuponController extends Controller
 {
@@ -42,7 +42,7 @@ class CuponController extends Controller
         if ($establecimiento?->logo) {
             $logoUrl = preg_match('/^https?:\/\//i', $establecimiento->logo)
                 ? $establecimiento->logo
-                : Storage::disk('public')->url($establecimiento->logo);
+                : ImageManager::storageUrl($establecimiento->logo);
         }
 
         return [
@@ -61,7 +61,7 @@ class CuponController extends Controller
                 'id' => $establecimiento?->id_establecimiento,
                 'nombre' => $establecimiento?->nombre_est,
                 'descripcion' => $establecimiento?->descripcion,
-                'logo' => $establecimiento?->logo,
+                'logo' => ImageManager::preferStoragePath($establecimiento?->logo),
                 'logo_url' => $logoUrl,
                 'tipo' => $establecimiento?->tipo?->nombre,
             ],

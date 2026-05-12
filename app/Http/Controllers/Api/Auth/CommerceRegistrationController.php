@@ -11,10 +11,12 @@ use App\Models\HorarioEstablecimiento;
 use App\Models\Tipo;
 use App\Models\TipoDocumento;
 use App\Models\User;
+use App\Support\ImageManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -330,6 +332,12 @@ class CommerceRegistrationController extends Controller
             ->all();
 
         if (count($existingMenuIds) > 0) {
+            Documento::query()
+                ->whereIn('id_documento', $existingMenuIds)
+                ->pluck('ruta_archivo')
+                ->filter()
+                ->each(fn (string $path) => Storage::disk('public')->delete($path));
+
             $establecimiento->documentos()->detach($existingMenuIds);
             Documento::query()->whereIn('id_documento', $existingMenuIds)->delete();
         }
@@ -357,6 +365,12 @@ class CommerceRegistrationController extends Controller
             ->all();
 
         if (count($existingGalleryIds) > 0) {
+            Documento::query()
+                ->whereIn('id_documento', $existingGalleryIds)
+                ->pluck('ruta_archivo')
+                ->filter()
+                ->each(fn (string $path) => Storage::disk('public')->delete($path));
+
             $establecimiento->documentos()->detach($existingGalleryIds);
             Documento::query()->whereIn('id_documento', $existingGalleryIds)->delete();
         }
@@ -381,9 +395,9 @@ class CommerceRegistrationController extends Controller
 
     private function storeFile(UploadedFile $file, Establecimiento $establecimiento, string $folder): string
     {
-        return $file->store(
-            sprintf('commerce-registration/%s/%s', $establecimiento->id_establecimiento, $folder),
-            'public'
+        return ImageManager::storePublicDiskFile(
+            $file,
+            sprintf('commerce-registration/%s/%s', $establecimiento->id_establecimiento, $folder)
         );
     }
 

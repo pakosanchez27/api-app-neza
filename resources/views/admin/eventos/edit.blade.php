@@ -54,7 +54,7 @@
                     <div id="portada-preview-wrapper"
                         class="mt-4 overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] {{ old('portada') || $evento->portada ? '' : 'hidden' }}">
                         <img id="portada-preview"
-                            src="{{ old('portada') ? '' : ($evento->portada ? asset($evento->portada) : '') }}"
+                            src="{{ old('portada') ? '' : ($evento->portada ? \App\Support\ImageManager::publicUrl($evento->portada) : '') }}"
                             alt="Vista previa de portada" class="h-[240px] w-full object-cover">
                     </div>
                     <p id="portada-preview-empty"

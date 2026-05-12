@@ -68,7 +68,7 @@
                     @enderror
                     <div id="portada-preview-wrapper"
                         class="mt-4 flex min-h-[240px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4 {{ !empty($noticia->portada) ? '' : 'hidden' }}">
-                        <img id="portada-preview" src="{{ !empty($noticia->portada) ? asset($noticia->portada) : '' }}"
+                        <img id="portada-preview" src="{{ !empty($noticia->portada) ? \App\Support\ImageManager::publicUrl($noticia->portada) : '' }}"
                             alt="Vista previa de portada" class="max-h-[320px] w-full object-contain">
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                         <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach ($existingGallery as $image)
                                 <div class="overflow-hidden rounded-[20px] border border-[#eadde2] bg-[#fffafc]">
-                                    <img src="{{ asset($image) }}" alt="Imagen actual de la galeria"
+                                    <img src="{{ \App\Support\ImageManager::publicUrl($image) }}" alt="Imagen actual de la galeria"
                                         class="h-40 w-full object-cover">
                                 </div>
                             @endforeach

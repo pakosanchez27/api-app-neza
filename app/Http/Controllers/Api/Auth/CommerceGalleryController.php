@@ -7,10 +7,12 @@ use App\Models\Documento;
 use App\Models\Establecimiento;
 use App\Models\TipoDocumento;
 use App\Models\User;
+use App\Support\ImageManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -90,6 +92,10 @@ class CommerceGalleryController extends Controller
         /** @var UploadedFile $file */
         $file = $request->file('foto');
 
+        if ($documento->ruta_archivo) {
+            Storage::disk('public')->delete($documento->ruta_archivo);
+        }
+
         $path = $this->storeFile($file, $establecimiento, 'galeria');
 
         $documento->forceFill([
@@ -109,6 +115,11 @@ class CommerceGalleryController extends Controller
         $documento = $this->resolveGalleryDocument($establecimiento, $documentoId);
 
         $establecimiento->documentos()->detach([$documento->id_documento]);
+
+        if ($documento->ruta_archivo) {
+            Storage::disk('public')->delete($documento->ruta_archivo);
+        }
+
         $documento->delete();
 
         return $this->profileResponse($user, 'Foto eliminada correctamente.');
@@ -152,9 +163,9 @@ class CommerceGalleryController extends Controller
 
     private function storeFile(UploadedFile $file, Establecimiento $establecimiento, string $folder): string
     {
-        return $file->store(
-            sprintf('commerce-registration/%s/%s', $establecimiento->id_establecimiento, $folder),
-            'public'
+        return ImageManager::storePublicDiskFile(
+            $file,
+            sprintf('commerce-registration/%s/%s', $establecimiento->id_establecimiento, $folder)
         );
     }
 

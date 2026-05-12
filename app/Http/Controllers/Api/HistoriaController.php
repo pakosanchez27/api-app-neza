@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Historia;
+use App\Support\ImageManager;
 
 class HistoriaController extends Controller
 {
@@ -36,7 +37,7 @@ class HistoriaController extends Controller
             ->map(fn ($imagen) => [
                 'id' => $imagen->id,
                 'imagen' => $imagen->imagen,
-                'imagen_url' => $imagen->imagen ? asset($imagen->imagen) : null,
+                'imagen_url' => ImageManager::publicUrl($imagen->imagen),
                 'orden' => $imagen->orden,
             ])
             ->values();
@@ -59,8 +60,8 @@ class HistoriaController extends Controller
             'resumen_corto' => $historia->resumen_corto,
             'periodo' => $historia->periodo,
             'desarrollo' => $historia->desarrollo,
-            'portada' => $historia->portada,
-            'portada_url' => $historia->portada ? asset($historia->portada) : null,
+            'portada' => ImageManager::preferPublicPath($historia->portada),
+            'portada_url' => ImageManager::publicUrl($historia->portada),
             'fecha_publicacion' => optional($historia->fecha_publicacion)->format('Y-m-d'),
             'estatus' => (int) $historia->estatus,
             'galeria' => $galeria,

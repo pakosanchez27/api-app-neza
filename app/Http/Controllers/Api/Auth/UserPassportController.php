@@ -8,11 +8,11 @@ use App\Models\PasaporteSello;
 use App\Models\PasaporteUsuario;
 use App\Models\Ruta;
 use App\Models\User;
+use App\Support\ImageManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Storage;
 
 class UserPassportController extends Controller
 {
@@ -210,6 +210,6 @@ class UserPassportController extends Controller
             return $path;
         }
 
-        return Storage::disk('public')->url($path);
+        return ImageManager::storageUrl($path);
     }
 }

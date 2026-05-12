@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Noticia;
+use App\Support\ImageManager;
 use Illuminate\Support\Str;
 
 class NoticiaController extends Controller
@@ -28,6 +29,7 @@ class NoticiaController extends Controller
     {
         $galeria = collect($noticia->galeria ?? [])
             ->filter()
+            ->map(fn (string $image) => ImageManager::preferPublicPath($image))
             ->values();
 
         return [
@@ -37,11 +39,11 @@ class NoticiaController extends Controller
             'slug' => Str::slug($noticia->titulo ?: 'noticia-' . $noticia->id),
             'resumen' => $noticia->resumen,
             'cta' => $noticia->cta,
-            'portada' => $noticia->portada,
-            'portada_url' => $noticia->portada ? asset($noticia->portada) : null,
+            'portada' => ImageManager::preferPublicPath($noticia->portada),
+            'portada_url' => ImageManager::publicUrl($noticia->portada),
             'galeria' => $galeria->all(),
             'galeria_urls' => $galeria
-                ->map(fn (string $image) => asset($image))
+                ->map(fn (string $image) => ImageManager::publicUrl($image))
                 ->all(),
             'fecha_publicacion' => optional($noticia->fecha_publicacion)->format('Y-m-d'),
             'estatus' => (int) $noticia->estatus,

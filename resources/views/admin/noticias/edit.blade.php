@@ -36,7 +36,7 @@
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                     <div class="mt-4 overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc]">
-                        <img id="portada-preview" src="{{ $noticia->portada ? asset($noticia->portada) : '' }}" alt="Vista previa de portada"
+                        <img id="portada-preview" src="{{ $noticia->portada ? \App\Support\ImageManager::publicUrl($noticia->portada) : '' }}" alt="Vista previa de portada"
                             class="h-[240px] w-full object-cover {{ $noticia->portada ? '' : 'hidden' }}">
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                         <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach ($noticia->galeria as $imagen)
                                 <div class="overflow-hidden rounded-[20px] border border-[#eadde2] bg-[#fffafc]">
-                                    <img src="{{ asset($imagen) }}" alt="Imagen actual de galería" class="h-[150px] w-full object-cover">
+                                    <img src="{{ \App\Support\ImageManager::publicUrl($imagen) }}" alt="Imagen actual de galería" class="h-[150px] w-full object-cover">
                                 </div>
                             @endforeach
                         </div>

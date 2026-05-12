@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EventoCategoriasModel;
 use App\Models\EventoModel;
+use App\Support\ImageManager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -148,10 +149,6 @@ class EventosController extends Controller
         }
 
         $archivoPortada = $request->file('portada');
-        $nombrePortada = 'portada-' . time() . '.' . $archivoPortada->getClientOriginalExtension();
-
-        $archivoPortada->move($directorioEvento, $nombrePortada);
-
-        return 'img/eventos/' . $eventoSlug . '/' . $nombrePortada;
+        return ImageManager::storePublicImage($archivoPortada, $directorioEvento, 'portada');
     }
 }

@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Cupon;
 use App\Models\User;
 use App\Models\UsuarioCupon;
+use App\Support\ImageManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UserCouponController extends Controller
@@ -115,7 +115,7 @@ class UserCouponController extends Controller
         if ($establecimiento?->logo) {
             $logoUrl = preg_match('/^https?:\/\//i', $establecimiento->logo)
                 ? $establecimiento->logo
-                : Storage::disk('public')->url($establecimiento->logo);
+                : ImageManager::storageUrl($establecimiento->logo);
         }
 
         return [

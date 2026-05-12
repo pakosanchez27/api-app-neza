@@ -56,11 +56,11 @@
                 'resumen_corto' => $historia->resumen_corto,
                 'periodo' => $historia->periodo,
                 'desarrollo' => $historia->desarrollo,
-                'portada' => $historia->portada ? asset($historia->portada) : null,
+                'portada' => $historia->portada ? \App\Support\ImageManager::publicUrl($historia->portada) : null,
                 'fecha_publicacion' => $historia->fecha_publicacion ? \Carbon\Carbon::parse($historia->fecha_publicacion)->format('Y-m-d') : 'Sin fecha',
                 'estatus' => (string) ($historia->estatus ?? '0'),
                 'galeria' => $historia->galeria->map(function ($imagen) {
-                    return asset($imagen->imagen);
+                    return \App\Support\ImageManager::publicUrl($imagen->imagen);
                 })->values(),
                 'fuentes' => $historia->fuentes->map(function ($fuente) {
                     return [

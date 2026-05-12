@@ -110,7 +110,7 @@
                             </td>
                             <td>
                                 @if ($timeline->imagen_antes)
-                                    <img src="{{ asset($timeline->imagen_antes) }}" alt="Imagen antes"
+                                    <img src="{{ \App\Support\ImageManager::publicUrl($timeline->imagen_antes) }}" alt="Imagen antes"
                                         class="h-16 w-24 rounded-xl object-cover">
                                 @else
                                     <span class="text-xs text-[#7d6870]">Sin imagen</span>
@@ -118,7 +118,7 @@
                             </td>
                             <td>
                                 @if ($timeline->imagen_despues)
-                                    <img src="{{ asset($timeline->imagen_despues) }}" alt="Imagen despues"
+                                    <img src="{{ \App\Support\ImageManager::publicUrl($timeline->imagen_despues) }}" alt="Imagen despues"
                                         class="h-16 w-24 rounded-xl object-cover">
                                 @else
                                     <span class="text-xs text-[#7d6870]">Sin imagen</span>

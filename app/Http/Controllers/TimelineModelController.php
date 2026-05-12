@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TimelineModel;
+use App\Support\ImageManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -33,7 +34,7 @@ class TimelineModelController extends Controller
         ]);
 
         $timeline = new TimelineModel();
-        $directorioTimeline = $this->resolveDirectory($validatedData['lugar_turistico']);
+        $directorioTimeline = $this->resolveDirectory($timeline, $validatedData['lugar_turistico']);
 
         $validatedData['imagen_antes'] = $this->storeImage(
             $request->file('imagen_antes'),
@@ -71,7 +72,7 @@ class TimelineModelController extends Controller
             'estatus' => 'required|in:0,1',
         ]);
 
-        $directorioTimeline = $this->resolveDirectory($validatedData['lugar_turistico']);
+        $directorioTimeline = $this->resolveDirectory($timeline, $validatedData['lugar_turistico']);
 
         if ($request->hasFile('imagen_antes')) {
             $validatedData['imagen_antes'] = $this->storeImage(
@@ -114,8 +115,16 @@ class TimelineModelController extends Controller
             ->with('success', 'Registro historico eliminado correctamente.');
     }
 
-    private function resolveDirectory(string $lugarTuristico): string
+    private function resolveDirectory(TimelineModel $timeline, string $lugarTuristico): string
     {
+        if ($timeline->exists) {
+            $resolved = $this->resolveExistingDirectory($timeline);
+
+            if ($resolved) {
+                return $resolved;
+            }
+        }
+
         $slug = Str::slug($lugarTuristico) ?: 'timeline';
         $directory = public_path('img/timeline/' . $slug . '-' . time());
 
@@ -141,12 +150,7 @@ class TimelineModelController extends Controller
 
     private function storeImage($file, string $directory, string $prefix): string
     {
-        $filename = $prefix . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move($directory, $filename);
-
-        $relativeDirectory = str_replace(public_path() . DIRECTORY_SEPARATOR, '', $directory);
-
-        return str_replace('\\', '/', $relativeDirectory . '/' . $filename);
+        return ImageManager::storePublicImage($file, $directory, $prefix);
     }
 
     private function deleteStoredFile(?string $relativePath): void

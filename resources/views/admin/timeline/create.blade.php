@@ -76,7 +76,7 @@
                     <div id="imagen-antes-preview-wrapper"
                         class="mt-4 flex min-h-[220px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4 {{ !empty($timeline->imagen_antes) ? '' : 'hidden' }}">
                         <img id="imagen-antes-preview"
-                            src="{{ !empty($timeline->imagen_antes) ? asset($timeline->imagen_antes) : '' }}"
+                            src="{{ !empty($timeline->imagen_antes) ? \App\Support\ImageManager::publicUrl($timeline->imagen_antes) : '' }}"
                             alt="Vista previa de imagen antes" class="max-h-[280px] w-full object-contain">
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                     <div id="imagen-despues-preview-wrapper"
                         class="mt-4 flex min-h-[220px] items-center justify-center overflow-hidden rounded-[24px] border border-[#eadde2] bg-[#fffafc] p-4 {{ !empty($timeline->imagen_despues) ? '' : 'hidden' }}">
                         <img id="imagen-despues-preview"
-                            src="{{ !empty($timeline->imagen_despues) ? asset($timeline->imagen_despues) : '' }}"
+                            src="{{ !empty($timeline->imagen_despues) ? \App\Support\ImageManager::publicUrl($timeline->imagen_despues) : '' }}"
                             alt="Vista previa de imagen despues" class="max-h-[280px] w-full object-contain">
                     </div>
                 </div>

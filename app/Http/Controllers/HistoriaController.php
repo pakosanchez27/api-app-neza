@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Historia;
+use App\Support\ImageManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -200,12 +201,7 @@ class HistoriaController extends Controller
 
     private function storeImage($file, string $directory, string $prefix): string
     {
-        $filename = $prefix . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move($directory, $filename);
-
-        $relativeDirectory = str_replace(public_path() . DIRECTORY_SEPARATOR, '', $directory);
-
-        return str_replace('\\', '/', $relativeDirectory . '/' . $filename);
+        return ImageManager::storePublicImage($file, $directory, $prefix);
     }
 
     private function replaceGallery(Historia $historia, array $files, string $directory): void

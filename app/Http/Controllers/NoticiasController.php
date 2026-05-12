@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Noticia;
+use App\Support\ImageManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -150,12 +151,7 @@ class NoticiasController extends Controller
 
     private function storeImage($file, string $directory, string $prefix): string
     {
-        $filename = $prefix . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move($directory, $filename);
-
-        $relativeDirectory = str_replace(public_path() . DIRECTORY_SEPARATOR, '', $directory);
-
-        return str_replace('\\', '/', $relativeDirectory . '/' . $filename);
+        return ImageManager::storePublicImage($file, $directory, $prefix);
     }
 
     private function storeGallery(Request $request, string $directory): array

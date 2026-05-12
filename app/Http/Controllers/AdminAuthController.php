@@ -40,7 +40,7 @@ class AdminAuthController extends Controller
         }
 
         $payload = $loginResponse->json();
-        $data = $payload['data'] ?? [];
+        $data = is_array($payload['data'] ?? null) ? $payload['data'] : [];
         $roles = $this->normalizeCollection($data['roles'] ?? []);
         $permissions = $this->normalizeCollection($data['permissions'] ?? []);
         $user = is_array($data['user'] ?? null) ? $data['user'] : [];

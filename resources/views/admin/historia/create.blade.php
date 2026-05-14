@@ -28,6 +28,17 @@
             </a>
         </div>
 
+        @if ($errors->any())
+            <div class="mb-6 rounded-[20px] border border-rose-200 bg-rose-50 px-5 py-4 text-rose-800">
+                <p class="text-sm font-semibold">No se pudo guardar el dato historico.</p>
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form class="space-y-6" enctype="multipart/form-data" method="POST"  novalidate
             action="{{ route('admin.historia.store') }}" id="form-crear-historia">
             @csrf
@@ -37,7 +48,7 @@
                     <label for="portada" class="mb-1 block text-sm font-medium text-[#3e2d31]">Portada</label>
                     <input type="file" id="portada" name="portada" accept="image/*"
                         class="w-full rounded-2xl border {{ $errors->has('portada') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-[#63102a] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#7f173c] focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
-                    <p class="mt-2 text-[13px] leading-6 text-[#6f6166]">Selecciona una imagen principal para el encabezado.</p>
+                    <p class="mt-2 text-[13px] leading-6 text-[#6f6166]">Selecciona una imagen principal para el encabezado. Formatos permitidos: JPG, PNG, GIF y WEBP.</p>
                     @error('portada')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror

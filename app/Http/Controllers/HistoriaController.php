@@ -84,7 +84,7 @@ class HistoriaController extends Controller
     private function validateHistoria(Request $request, ?Historia $historia = null): array
     {
         $portadaRule = $historia ? 'nullable' : 'required';
-        $galeriaRule = $historia ? 'nullable|array|max:10' : 'required|array|min:1|max:10';
+        $galeriaRule = $historia ? 'nullable|array|max:5' : 'required|array|min:1|max:5';
         $galeriaItemRule = $historia ? 'nullable|image|mimes:jpeg,png,jpg,gif,webp' : 'required|image|mimes:jpeg,png,jpg,gif,webp';
         $slugRule = 'nullable|string|max:191|unique:historias,slug';
 
@@ -96,7 +96,7 @@ class HistoriaController extends Controller
             'portada' => $portadaRule . '|image|mimes:jpeg,png,jpg,gif,webp',
             'titulo' => 'required|string|max:70',
             'slug' => $slugRule,
-            'autor' => 'required|string|max:150',
+            'autor' => 'nullable|string|max:150',
             'resumen_corto' => 'required|string|max:255',
             'periodo' => 'required|string|max:255',
             'desarrollo' => 'required|string',
@@ -121,7 +121,7 @@ class HistoriaController extends Controller
         $historia->fill([
             'titulo' => $validatedData['titulo'],
             'slug' => $slug,
-            'autor' => $validatedData['autor'],
+            'autor' => $validatedData['autor'] ?? null,
             'resumen_corto' => $validatedData['resumen_corto'],
             'periodo' => $validatedData['periodo'],
             'desarrollo' => $validatedData['desarrollo'],

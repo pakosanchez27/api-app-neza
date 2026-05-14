@@ -105,7 +105,7 @@
                     <input type="file" id="galeria" name="galeria[]" accept="image/*" multiple
                         class="w-full rounded-2xl border {{ $errors->has('galeria') || $errors->has('galeria.*') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-[#63102a] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#7f173c] focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     <p id="galeria-ayuda" class="mt-2 text-[13px] leading-6 text-[#6f6166]">
-                        Si seleccionas nuevas imagenes, la galeria actual sera reemplazada.
+                        Si seleccionas nuevas imagenes, la galeria actual sera reemplazada. Maximo 5 imagenes.
                     </p>
                     @error('galeria')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
@@ -262,8 +262,14 @@
             galeriaInput?.addEventListener('change', function(event) {
                 const files = Array.from(event.target.files || []);
 
+                if (files.length > 5) {
+                    event.target.value = '';
+                    galeriaAyuda.textContent = 'Solo puedes seleccionar hasta 5 imagenes para la galeria.';
+                    return;
+                }
+
                 if (!files.length) {
-                    galeriaAyuda.textContent = 'Si seleccionas nuevas imagenes, la galeria actual sera reemplazada.';
+                    galeriaAyuda.textContent = 'Si seleccionas nuevas imagenes, la galeria actual sera reemplazada. Maximo 5 imagenes.';
                     return;
                 }
 

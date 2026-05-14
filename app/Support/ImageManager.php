@@ -5,6 +5,7 @@ namespace App\Support;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 
@@ -179,21 +180,42 @@ class ImageManager
 
         $scriptPath = base_path('scripts/convert-image-to-webp.mjs');
 
-        if (! File::exists($scriptPath)) {
-            return false;
+        if (File::exists($scriptPath)) {
+            $nodeBinary = self::resolveNodeBinary();
+
+            if ($nodeBinary) {
+                $process = new Process([
+                    $nodeBinary,
+                    $scriptPath,
+                    $sourcePath,
+                    $destinationPath,
+                ], base_path());
+
+                $process->setTimeout(30);
+                $process->run();
+
+                if ($process->isSuccessful() && File::exists($destinationPath)) {
+                    return true;
+                }
+
+                Log::warning('No fue posible convertir imagen a WebP usando Node/Sharp.', [
+                    'node_binary' => $nodeBinary,
+                    'script_path' => $scriptPath,
+                    'source_path' => $sourcePath,
+                    'destination_path' => $destinationPath,
+                    'error_output' => trim($process->getErrorOutput()),
+                    'output' => trim($process->getOutput()),
+                ]);
+            } else {
+                Log::warning('No se encontro un ejecutable de Node para convertir imagenes a WebP.', [
+                    'script_path' => $scriptPath,
+                    'source_path' => $sourcePath,
+                    'destination_path' => $destinationPath,
+                ]);
+            }
         }
 
-        $process = new Process([
-            'node',
-            $scriptPath,
-            $sourcePath,
-            $destinationPath,
-        ], base_path());
-
-        $process->setTimeout(30);
-        $process->run();
-
-        return $process->isSuccessful() && File::exists($destinationPath);
+        return self::attemptGdWebpConversionFromPath($sourcePath, $destinationPath);
     }
 
     private static function isImage(UploadedFile $file): bool
@@ -210,6 +232,64 @@ class ImageManager
         }
 
         return preg_replace('/\.[^.]+$/', '.webp', str_replace('\\', '/', $path));
+    }
+
+    private static function resolveNodeBinary(): ?string
+    {
+        $configuredBinary = env('NODE_BINARY');
+
+        if (is_string($configuredBinary) && trim($configuredBinary) !== '') {
+            return trim($configuredBinary);
+        }
+
+        foreach (['node', 'nodejs'] as $candidate) {
+            $process = new Process([$candidate, '--version'], base_path());
+            $process->setTimeout(10);
+            $process->run();
+
+            if ($process->isSuccessful()) {
+                return $candidate;
+            }
+        }
+
+        return null;
+    }
+
+    private static function attemptGdWebpConversionFromPath(string $sourcePath, string $destinationPath): bool
+    {
+        if (! function_exists('imagecreatefromstring') || ! function_exists('imagewebp')) {
+            return false;
+        }
+
+        try {
+            $imageContents = File::get($sourcePath);
+            $sourceImage = @imagecreatefromstring($imageContents);
+
+            if ($sourceImage === false) {
+                return false;
+            }
+
+            imagepalettetotruecolor($sourceImage);
+            imagealphablending($sourceImage, true);
+            imagesavealpha($sourceImage, true);
+
+            $result = imagewebp($sourceImage, $destinationPath, 82);
+            imagedestroy($sourceImage);
+
+            if (! $result || ! File::exists($destinationPath)) {
+                return false;
+            }
+
+            return true;
+        } catch (\Throwable $exception) {
+            Log::warning('No fue posible convertir imagen a WebP usando GD.', [
+                'source_path' => $sourcePath,
+                'destination_path' => $destinationPath,
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
     }
 
     private static function absoluteUrl(string $path): string

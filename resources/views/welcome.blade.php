@@ -20,7 +20,7 @@
                 <span class="h-1 w-8 rounded-full bg-white"></span>
             </button>
 
-            <a href="#" class="m-0 text-3xl font-bold text-white">NezaGo!</a>
+            <a href="#" class="m-0 text-3xl font-bold text-white">ExploraNeza</a>
 
             <button
                 type="button"
@@ -35,7 +35,7 @@
         <div class="grid min-h-[calc(100vh-16px)] grid-cols-1 gap-3 rounded-[22px] bg-white/85 p-2 shadow-[0_20px_60px_rgba(97,18,50,0.08)] backdrop-blur-[10px] sm:min-h-[calc(100vh-24px)] sm:gap-4 sm:rounded-[24px] sm:p-3 md:min-h-[calc(100vh-32px)] md:grid-cols-[224px_minmax(0,1fr)] md:rounded-[28px] md:p-4">
             <aside class="hidden h-full flex-col rounded-[24px] bg-[linear-gradient(180deg,#63102a_0%,#7f173c_100%)] px-5 py-6 text-white md:flex">
                 <a href="#" class="block border-b border-white/15 pb-5">
-                    <p class="text-4xl font-bold text-white">NezaGo!</p>
+                    <p class="text-4xl font-bold text-white">ExploraNeza</p>
                 </a>
 
                 <div class="mt-4 rounded-[18px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm">

@@ -26,14 +26,11 @@ class UserActivationMail extends Mailable
 
     public function content(): Content
     {
-        $frontendUrl = rtrim((string) env('FRONTEND_URL', config('app.url')), '/');
-        $activationUrl = $frontendUrl . '/auth/activar?token=' . $this->user->token_activacion;
-
         return new Content(
             view: 'emails.user-activation',
             with: [
                 'user' => $this->user,
-                'activationUrl' => $activationUrl,
+                'activationCode' => $this->user->token_activacion,
             ],
         );
     }

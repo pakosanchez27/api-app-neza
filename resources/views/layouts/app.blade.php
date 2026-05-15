@@ -41,7 +41,7 @@
                 <span class="h-1 w-8 rounded-full bg-white"></span>
             </button>
 
-            <a href="#" class="m-0 text-3xl font-bold text-white">NezaGo!</a>
+            <a href="#" class="m-0 text-3xl font-bold text-white">ExploraNeza</a>
 
             <button type="button"
                 class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/70 bg-[linear-gradient(135deg,#bc955c,#f2cf91)] text-sm font-semibold text-[#63102a]">
@@ -56,7 +56,7 @@
         class="fixed inset-y-0 left-0 z-50 flex w-[285px] max-w-[85vw] -translate-x-full flex-col bg-[linear-gradient(180deg,#63102a_0%,#7f173c_100%)] px-5 py-6 text-white shadow-[0_18px_45px_rgba(19,7,16,0.34)] transition-transform duration-300 md:hidden">
         <div class="flex items-center justify-between border-b border-white/15 pb-5">
             <a href="#" class="block">
-                <p class="text-4xl font-bold text-white">NezaGo!</p>
+                <p class="text-4xl font-bold text-white">ExploraNeza</p>
             </a>
             <button type="button" id="mobile-menu-close" aria-label="Cerrar menu"
                 class="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/10">
@@ -117,7 +117,7 @@
             <aside
                 class="hidden h-full flex-col rounded-[24px] bg-[linear-gradient(180deg,#63102a_0%,#7f173c_100%)] px-5 py-6 text-white md:flex">
                 <a href="#" class="block border-b border-white/15 pb-5">
-                    <p class="text-4xl font-bold text-white">NezaGo!</p>
+                    <p class="text-4xl font-bold text-white">ExploraNeza</p>
                 </a>
 
                 <nav aria-label="Navegacion del panel" class="mt-4 space-y-0.5">

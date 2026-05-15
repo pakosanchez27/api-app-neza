@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NezaGo | Descubre Nezahualcoyotl desde una sola app</title>
+    <title>ExploraNeza | Descubre Nezahualcoyotl desde una sola app</title>
     <meta name="description"
-        content="Explora eventos, historia, rutas, lugares, cupones y experiencias de Nezahualcoyotl desde NezaGo.">
+        content="Explora eventos, historia, rutas, lugares, cupones y experiencias de Nezahualcoyotl desde ExploraNeza.">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @keyframes floatSoft {
@@ -137,7 +137,7 @@
             <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
                 <a href="{{ route('landing') }}"
                     class="flex shrink-0 items-center rounded-2xl px-2 py-1 transition hover:bg-[#f7ecd8]">
-                    <img src="{{ $logoLanding }}" alt="NezaGo" class="h-12 w-auto sm:h-14">
+                    <img src="{{ $logoLanding }}" alt="ExploraNeza" class="h-12 w-auto sm:h-14">
                 </a>
 
                 <nav
@@ -208,7 +208,7 @@
                         <div
                             class="pointer-events-none absolute inset-x-8 bottom-4 h-12 rounded-full bg-black/30 blur-2xl">
                         </div>
-                        <img src="{{ $heroPhone2 }}" alt="Pasaporte gastronómico mundialista en la app NezaGo"
+                        <img src="{{ $heroPhone2 }}" alt="Pasaporte gastronómico mundialista en la app ExploraNeza"
                             class="fx-float w-full max-w-[330px] drop-shadow-[0_26px_38px_rgba(0,0,0,0.42)] sm:max-w-[360px] lg:max-w-[390px] lg:translate-y-3">
                     </div>
                 </div>
@@ -293,7 +293,7 @@
                                 class="pointer-events-none absolute bottom-4 left-10 right-10 h-12 rounded-full bg-[#2c2875]/30 blur-2xl">
                             </div>
 
-                            <img src="{{ $heroPhone2 }}" alt="Pasaporte gastronómico mundialista en la app NezaGo"
+                            <img src="{{ $heroPhone2 }}" alt="Pasaporte gastronómico mundialista en la app ExploraNeza"
                                 class="fx-float relative z-10 w-full max-w-[330px] rotate-[6deg] drop-shadow-[0_28px_50px_rgba(44,40,117,0.35)] sm:max-w-[360px] lg:max-w-[410px]">
                         </div>
                     </div>
@@ -304,7 +304,7 @@
 
         <div class="flex items-end justify-between mb-12">
             <div class="max-w-2xl">
-                <span class="text-[#bc955c] text-xs font-black uppercase tracking-[0.2em] block mb-3">Funciones NezaGo</span>
+                <span class="text-[#bc955c] text-xs font-black uppercase tracking-[0.2em] block mb-3">Funciones ExploraNeza</span>
                 <h2 class="text-4xl md:text-5xl font-black text-[#201815]">Explora cada rincón.</h2>
             </div>
 
@@ -465,7 +465,7 @@
                     </div>
 
                     <div class="h-[420px] sm:h-[520px] lg:h-[680px] xl:h-[560px] rounded-[36px] overflow-hidden bg-[#f7ecd8]">
-                        <img src="{{ $mapPreview }}" alt="Mapa NezaGo" class="w-full h-full object-contain">
+                        <img src="{{ $mapPreview }}" alt="Mapa ExploraNeza" class="w-full h-full object-contain">
                     </div>
 
                     <div class="mt-4 p-2 flex flex-wrap gap-2 justify-center">
@@ -518,7 +518,7 @@
                                 <span class="text-[#bc955c] font-black text-5xl opacity-20">01</span>
                                 <h3 class="text-2xl font-black text-[#201815] mt-2">Escanea el código QR</h3>
                                 <p class="mt-4 text-[#4f0c22]/70 text-lg leading-relaxed"
-                                    x-text="os === 'android' ? 'Escanea el QR con tu cámara o lector desde Android para abrir directamente NezaGo en Chrome.' : 'Escanea el QR con la cámara de tu iPhone para abrir NezaGo directamente en Safari.'">
+                                    x-text="os === 'android' ? 'Escanea el QR con tu cámara o lector desde Android para abrir directamente ExploraNeza en Chrome.' : 'Escanea el QR con la cámara de tu iPhone para abrir ExploraNeza directamente en Safari.'">
                                 </p>
                             </div>
                             <div class="flex justify-center lg:justify-start">
@@ -531,7 +531,7 @@
                                                 class="mx-auto h-32 w-32 rounded-[28px] border-2 border-dashed border-[#bc955c] bg-white">
                                             </div>
                                             <p class="mt-5 text-sm font-bold text-[#63102a]">Espacio para colocar el QR
-                                                de NezaGo</p>
+                                                de ExploraNeza</p>
                                         </div>
                                     </div>
                                 </div>
@@ -541,9 +541,9 @@
                         <div class="relative grid lg:grid-cols-2 gap-12 items-center mb-32">
                             <div class="lg:order-2">
                                 <span class="text-[#bc955c] font-black text-5xl opacity-20">02</span>
-                                <h3 class="text-2xl font-black text-[#201815] mt-2">Abre NezaGo</h3>
+                                <h3 class="text-2xl font-black text-[#201815] mt-2">Abre ExploraNeza</h3>
                                 <p class="mt-4 text-[#4f0c22]/70 text-lg leading-relaxed"
-                                    x-text="os === 'android' ? 'Una vez abierto el enlace, asegúrate de que NezaGo cargue dentro de Chrome para continuar con la instalación.' : 'Cuando se abra el enlace, verifica que NezaGo esté cargado en Safari antes de seguir al siguiente paso.'">
+                                    x-text="os === 'android' ? 'Una vez abierto el enlace, asegúrate de que ExploraNeza cargue dentro de Chrome para continuar con la instalación.' : 'Cuando se abra el enlace, verifica que ExploraNeza esté cargado en Safari antes de seguir al siguiente paso.'">
                                 </p>
                             </div>
                             <div class="flex justify-center lg:justify-end lg:order-1">
@@ -581,7 +581,7 @@
                                 <span class="text-[#bc955c] font-black text-5xl opacity-20">04</span>
                                 <h3 class="text-2xl font-black text-[#201815] mt-2">Instala y confirma</h3>
                                 <p class="mt-4 text-[#4f0c22]/70 text-lg leading-relaxed"
-                                    x-text="os === 'android' ? 'Selecciona Instalar aplicación y confirma. El ícono de NezaGo aparecerá en tu pantalla principal.' : 'Elige Agregar a pantalla de inicio y confirma. El ícono de NezaGo quedará listo en tu inicio.'">
+                                    x-text="os === 'android' ? 'Selecciona Instalar aplicación y confirma. El ícono de ExploraNeza aparecerá en tu pantalla principal.' : 'Elige Agregar a pantalla de inicio y confirma. El ícono de ExploraNeza quedará listo en tu inicio.'">
                                 </p>
                             </div>
                             <div class="flex justify-center lg:justify-end lg:order-1">
@@ -608,13 +608,13 @@
                                     ahora</p>
                                 <h2 class="mt-4 text-4xl font-black tracking-tight">Explora Nezahualcoyotl con una guia
                                     digital hecha para descubrir la ciudad.</h2>
-                                <p class="mt-4 max-w-3xl text-base leading-8 text-white/78">Abre NezaGo y encuentra
+                                <p class="mt-4 max-w-3xl text-base leading-8 text-white/78">Abre ExploraNeza y encuentra
                                     eventos, lugares, historia y experiencias listas para acompañar tu visita.</p>
                             </div>
                             <div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
                                 <a href="{{ $frontendUrl }}"
                                     class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-[#63102a] transition hover:bg-[#fbf5eb]">
-                                    Abrir NezaGo
+                                    Abrir ExploraNeza
                                 </a>
                                 <a href="#descubre"
                                     class="inline-flex items-center justify-center rounded-full border border-white/16 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/16">
@@ -631,7 +631,7 @@
             <div
                 class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-[#4f0c22]/75 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
                 <div>
-                    <p class="font-semibold text-[#201815]">NezaGo</p>
+                    <p class="font-semibold text-[#201815]">ExploraNeza</p>
                     <p class="mt-1">Una forma simple de explorar eventos, historia, rutas y experiencias en
                         Nezahualcoyotl.</p>
                 </div>

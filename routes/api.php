@@ -83,7 +83,8 @@ Route::prefix('auth/usuarios')->group(function () {
     Route::post('/forgot-password', [UserPasswordResetController::class, 'sendResetLink']);
     Route::post('/reset-password', [UserPasswordResetController::class, 'resetPassword']);
     Route::post('/registro', [RegisterController::class, 'register']);
-    Route::get('/activar/{token}', [RegisterController::class, 'activate']);
+    Route::post('/activar', [RegisterController::class, 'verifyActivationCode']);
+    Route::post('/activar/reenviar', [RegisterController::class, 'resendActivationCode']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [UserAuthController::class, 'me']);

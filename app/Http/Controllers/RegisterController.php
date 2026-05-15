@@ -50,7 +50,7 @@ class RegisterController extends Controller
 
         try {
             $user = DB::transaction(function () use ($validatedData) {
-                $activationToken = Str::random(64);
+                $activationCode = $this->generateActivationCode();
 
                 $user = new User();
                 $user->name = trim(implode(' ', array_filter([
@@ -67,7 +67,7 @@ class RegisterController extends Controller
                 $user->id_rol = 3; // Rol de cliente
                 $user->activo = false;
                 $user->email_verified_at = null;
-                $user->token_activacion = $activationToken;
+                $user->token_activacion = $activationCode;
                 $user->foto_perfil = '';
                 $user->save();
 
@@ -85,22 +85,51 @@ class RegisterController extends Controller
         }
 
         return response()->json([
-            'message' => 'Usuario registrado exitosamente. Revisa tu correo para activar la cuenta.',
+            'message' => 'Usuario registrado exitosamente. Revisa tu correo e ingresa el codigo de 6 digitos para activar la cuenta.',
             'user' => $user,
+            'email' => $user->email,
             'code' => 201,
         ], 201);
     }
 
-    public function activate(string $token)
+    public function verifyActivationCode(Request $request)
     {
+        $validatedData = $request->validate(
+            [
+                'email' => 'required|string|email|max:80',
+                'code' => 'required|string|size:6',
+            ],
+            [
+                'email.required' => 'El correo electronico es obligatorio.',
+                'email.email' => 'El correo electronico no tiene un formato valido.',
+                'code.required' => 'El codigo de activacion es obligatorio.',
+                'code.size' => 'El codigo de activacion debe tener 6 digitos.',
+            ]
+        );
+
+        $email = Str::lower(trim($validatedData['email']));
+        $code = trim($validatedData['code']);
+
         $user = User::query()
-            ->where('token_activacion', $token)
+            ->whereRaw('LOWER(email) = ?', [$email])
             ->first();
 
         if (!$user) {
             return response()->json([
-                'message' => 'El enlace de activacion no es valido o ya fue utilizado.',
+                'message' => 'No encontramos una cuenta asociada a ese correo.',
             ], 404);
+        }
+
+        if ($user->activo) {
+            return response()->json([
+                'message' => 'La cuenta ya se encuentra activa. Ya puedes iniciar sesion.',
+            ], 409);
+        }
+
+        if ((string) $user->token_activacion !== $code) {
+            return response()->json([
+                'message' => 'El codigo de activacion no es valido.',
+            ], 422);
         }
 
         $user->forceFill([
@@ -112,5 +141,59 @@ class RegisterController extends Controller
         return response()->json([
             'message' => 'Tu cuenta fue activada correctamente. Ya puedes iniciar sesion.',
         ]);
+    }
+
+    public function resendActivationCode(Request $request)
+    {
+        $validatedData = $request->validate(
+            [
+                'email' => 'required|string|email|max:80',
+            ],
+            [
+                'email.required' => 'El correo electronico es obligatorio.',
+                'email.email' => 'El correo electronico no tiene un formato valido.',
+            ]
+        );
+
+        $email = Str::lower(trim($validatedData['email']));
+
+        $user = User::query()
+            ->whereRaw('LOWER(email) = ?', [$email])
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'No encontramos una cuenta asociada a ese correo.',
+            ], 404);
+        }
+
+        if ($user->activo) {
+            return response()->json([
+                'message' => 'La cuenta ya se encuentra activa. Ya puedes iniciar sesion.',
+            ], 409);
+        }
+
+        try {
+            $user->forceFill([
+                'token_activacion' => $this->generateActivationCode(),
+            ])->save();
+
+            Mail::to($user->email)->send(new UserActivationMail($user));
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return response()->json([
+                'message' => 'No fue posible reenviar el codigo. Intenta nuevamente en unos minutos.',
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Te enviamos un nuevo codigo de activacion a tu correo.',
+        ]);
+    }
+
+    private function generateActivationCode(): string
+    {
+        return str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
     }
 }

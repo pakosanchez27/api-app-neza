@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NezaGo Admin | Acceso</title>
+    <title>ExploraNeza Admin | Acceso</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @keyframes fadeUp {
@@ -39,7 +39,7 @@
             <div class="flex items-center justify-between gap-4">
                 <a href="{{ $landingUrl }}"
                     class="inline-flex items-center rounded-2xl bg-[#fff6ea] px-3 py-2 transition hover:bg-[#f8ecdc]">
-                    <img src="{{ $logoLanding }}" alt="NezaGo" class="h-10 w-auto">
+                    <img src="{{ $logoLanding }}" alt="ExploraNeza" class="h-10 w-auto">
                 </a>
                 <span
                     class="inline-flex items-center gap-2 rounded-full border border-[#63102a]/10 bg-[#fff8ef] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#63102a]">

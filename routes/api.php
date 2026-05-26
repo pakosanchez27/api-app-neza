@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Integration\ApprovedPreregisterController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\TipoController;
 use App\Http\Controllers\Api\TipoDocumentoController;
+use App\Http\Controllers\PreregistroController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,7 @@ Route::get('/rutas', [RutaController::class, 'index']);
 Route::get('/rutas/{ruta}/establecimientos', [RutaController::class, 'establecimientos']);
 Route::get('/cupones', [CuponController::class, 'index']);
 Route::post('/integracion/preregistros/aprobar', [ApprovedPreregisterController::class, 'store']);
+Route::post('/auth/comercios/preregistro', [PreregistroController::class, 'store']);
 
 Route::prefix('auth/comercios')->group(function () {
     Route::post('/login', [CommerceAdminAuthController::class, 'login']);

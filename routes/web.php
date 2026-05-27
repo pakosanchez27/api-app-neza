@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AprobarComerciosController;
 use App\Http\Controllers\EventosController;
 use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HomeController;
@@ -52,6 +53,11 @@ Route::middleware(['admin.app'])->group(function () {
     Route::get('/admin/timeline/{timeline}/edit', [TimelineModelController::class, 'edit'])->name('admin.timeline.edit');
     Route::put('/admin/timeline/{timeline}', [TimelineModelController::class, 'update'])->name('admin.timeline.update');
     Route::delete('/admin/timeline/{timeline}', [TimelineModelController::class, 'destroy'])->name('admin.timeline.destroy');
+
+    Route::get('/admin/aprobar-comercios', [AprobarComerciosController::class, 'index'])->name('admin.aprobar-comercios');
+    Route::patch('/admin/aprobar-comercios/{preregistro}/approve', [AprobarComerciosController::class, 'approve'])->name('admin.aprobar-comercios.approve');
+    Route::patch('/admin/aprobar-comercios/{preregistro}/correction', [AprobarComerciosController::class, 'requestCorrection'])->name('admin.aprobar-comercios.correction');
+    Route::patch('/admin/aprobar-comercios/{preregistro}/reject', [AprobarComerciosController::class, 'reject'])->name('admin.aprobar-comercios.reject');
 
     Route::get('/admin/puntos-mapa', [PuntosMapaController::class, 'index'])->name('admin.puntos-mapa');
     Route::get('/admin/puntos-mapa/create', [PuntosMapaController::class, 'create'])->name('admin.puntos-mapa.create');

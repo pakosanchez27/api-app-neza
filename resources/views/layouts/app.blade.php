@@ -18,6 +18,7 @@
         $isEventos = request()->routeIs('admin.eventos*');
         $isHistoria = request()->routeIs('admin.historia*');
         $isTimeline = request()->routeIs('admin.timeline*');
+        $isAprobarComercios = request()->routeIs('admin.aprobar-comercios*');
         $isPuntosMapa = request()->routeIs('admin.puntos-mapa*');
 
         $navItemClasses = function (bool $isActive) {
@@ -89,6 +90,10 @@
                 <span class="{{ $navDotClasses($isTimeline) }}">-</span>
                 <span>Antes y Despues</span>
             </a>
+            <a href="{{ route('admin.aprobar-comercios') }}" class="{{ $navItemClasses($isAprobarComercios) }}">
+                <span class="{{ $navDotClasses($isAprobarComercios) }}">-</span>
+                <span>Aprobar comercios</span>
+            </a>
             <a href="{{ route('admin.puntos-mapa') }}" class="{{ $navItemClasses($isPuntosMapa) }}">
                 <span class="{{ $navDotClasses($isPuntosMapa) }}">-</span>
                 <span>Puntos Mapa</span>
@@ -142,6 +147,10 @@
                     <a href="{{ route('admin.timeline') }}" class="{{ $navItemClasses($isTimeline) }}">
                         <span class="{{ $navDotClasses($isTimeline) }}">-</span>
                         <span>Antes y Despues</span>
+                    </a>
+                    <a href="{{ route('admin.aprobar-comercios') }}" class="{{ $navItemClasses($isAprobarComercios) }}">
+                        <span class="{{ $navDotClasses($isAprobarComercios) }}">-</span>
+                        <span>Aprobar comercios</span>
                     </a>
                     <a href="{{ route('admin.puntos-mapa') }}" class="{{ $navItemClasses($isPuntosMapa) }}">
                         <span class="{{ $navDotClasses($isPuntosMapa) }}">-</span>

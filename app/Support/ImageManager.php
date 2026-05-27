@@ -71,7 +71,13 @@ class ImageManager
             return $path;
         }
 
-        $storagePath = Storage::disk('public')->url(self::preferStoragePath($path));
+        $preferredPath = self::preferStoragePath($path);
+
+        if (app()->bound('request')) {
+            return rtrim(request()->root(), '/') . '/storage/' . ltrim((string) $preferredPath, '/');
+        }
+
+        $storagePath = Storage::disk('public')->url($preferredPath);
 
         return self::absoluteUrl($storagePath);
     }
@@ -298,10 +304,28 @@ class ImageManager
             return $path;
         }
 
-        $normalizedPath = '/' . ltrim(str_replace('\\', '/', $path), '/');
+        $normalizedPath = str_replace('\\', '/', $path);
+
+        if (preg_match('/^[A-Za-z0-9.-]+(?::\d+)?\//', $normalizedPath)) {
+            $scheme = 'http';
+
+            if (app()->bound('request')) {
+                $scheme = request()->getScheme();
+            } else {
+                $configuredScheme = parse_url((string) config('app.url'), PHP_URL_SCHEME);
+
+                if (is_string($configuredScheme) && $configuredScheme !== '') {
+                    $scheme = $configuredScheme;
+                }
+            }
+
+            return $scheme . '://' . ltrim($normalizedPath, '/');
+        }
+
+        $normalizedPath = '/' . ltrim($normalizedPath, '/');
 
         if (app()->bound('request')) {
-            return request()->getSchemeAndHttpHost() . $normalizedPath;
+            return rtrim(request()->root(), '/') . $normalizedPath;
         }
 
         return URL::to($normalizedPath);

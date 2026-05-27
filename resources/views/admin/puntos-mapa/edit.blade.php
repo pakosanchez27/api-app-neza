@@ -115,8 +115,8 @@
 
                 <div>
                     <label for="cp" class="mb-1 block text-sm font-medium text-[#3e2d31]">Codigo postal</label>
-                    <input type="text" id="cp" name="cp" readonly value="{{ old('cp', $puntoMapa->cp) }}"
-                        class="w-full rounded-2xl border {{ $errors->has('cp') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#f8f3ef]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    <input type="text" id="cp" name="cp" value="{{ old('cp', $puntoMapa->cp) }}"
+                        class="w-full rounded-2xl border {{ $errors->has('cp') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     @error('cp')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
@@ -124,8 +124,8 @@
 
                 <div class="md:col-span-2">
                     <label for="colonia" class="mb-1 block text-sm font-medium text-[#3e2d31]">Colonia</label>
-                    <input type="text" id="colonia" name="colonia" readonly value="{{ old('colonia', $puntoMapa->colonia) }}"
-                        class="w-full rounded-2xl border {{ $errors->has('colonia') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#f8f3ef]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    <input type="text" id="colonia" name="colonia" value="{{ old('colonia', $puntoMapa->colonia) }}"
+                        class="w-full rounded-2xl border {{ $errors->has('colonia') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     @error('colonia')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
@@ -133,8 +133,8 @@
 
                 <div>
                     <label for="latitud" class="mb-1 block text-sm font-medium text-[#3e2d31]">Latitud</label>
-                    <input type="number" step="0.00000001" id="latitud" name="latitud" readonly value="{{ old('latitud', $puntoMapa->latitud) }}"
-                        class="w-full rounded-2xl border {{ $errors->has('latitud') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#f8f3ef]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    <input type="number" step="0.00000001" id="latitud" name="latitud" value="{{ old('latitud', $puntoMapa->latitud) }}"
+                        class="w-full rounded-2xl border {{ $errors->has('latitud') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     @error('latitud')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
@@ -142,8 +142,8 @@
 
                 <div>
                     <label for="longitud" class="mb-1 block text-sm font-medium text-[#3e2d31]">Longitud</label>
-                    <input type="number" step="0.00000001" id="longitud" name="longitud" readonly value="{{ old('longitud', $puntoMapa->longitud) }}"
-                        class="w-full rounded-2xl border {{ $errors->has('longitud') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#f8f3ef]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    <input type="number" step="0.00000001" id="longitud" name="longitud" value="{{ old('longitud', $puntoMapa->longitud) }}"
+                        class="w-full rounded-2xl border {{ $errors->has('longitud') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     @error('longitud')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
@@ -464,6 +464,8 @@
 
             calleInput?.addEventListener('input', resolveCoordinates);
             numeroExteriorInput?.addEventListener('input', resolveCoordinates);
+            latitudInput?.addEventListener('input', () => updateMap(latitudInput.value, longitudInput.value));
+            longitudInput?.addEventListener('input', () => updateMap(latitudInput.value, longitudInput.value));
 
             loadStreetSuggestions()
                 .then(() => {

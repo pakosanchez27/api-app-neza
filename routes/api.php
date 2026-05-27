@@ -53,6 +53,8 @@ Route::get('/rutas/{ruta}/establecimientos', [RutaController::class, 'establecim
 Route::get('/cupones', [CuponController::class, 'index']);
 Route::post('/integracion/preregistros/aprobar', [ApprovedPreregisterController::class, 'store']);
 Route::post('/auth/comercios/preregistro', [PreregistroController::class, 'store']);
+Route::get('/auth/comercios/preregistro/correccion/{token}', [PreregistroController::class, 'showCorrection']);
+Route::match(['post', 'put'], '/auth/comercios/preregistro/correccion/{token}', [PreregistroController::class, 'updateCorrection']);
 
 Route::prefix('auth/comercios')->group(function () {
     Route::post('/login', [CommerceAdminAuthController::class, 'login']);

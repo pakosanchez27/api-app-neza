@@ -18,6 +18,7 @@
         $isEventos = request()->routeIs('admin.eventos*');
         $isHistoria = request()->routeIs('admin.historia*');
         $isTimeline = request()->routeIs('admin.timeline*');
+        $isPuntosMapa = request()->routeIs('admin.puntos-mapa*');
 
         $navItemClasses = function (bool $isActive) {
             return $isActive
@@ -60,7 +61,8 @@
             </a>
             <button type="button" id="mobile-menu-close" aria-label="Cerrar menu"
                 class="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/10">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-6 w-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                    stroke="currentColor" class="h-6 w-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
             </button>
@@ -68,37 +70,37 @@
 
         <nav aria-label="Navegacion del panel movil" class="mt-4 space-y-0.5">
             <a href="{{ route('admin.dashboard') }}" class="{{ $navItemClasses($isDashboard) }}">
-                <span class="{{ $navDotClasses($isDashboard) }}">•</span>
+                <span class="{{ $navDotClasses($isDashboard) }}">-</span>
                 <span>Dashboard</span>
             </a>
             <a href="{{ route('admin.noticias') }}" class="{{ $navItemClasses($isNoticias) }}">
-                <span class="{{ $navDotClasses($isNoticias) }}">•</span>
+                <span class="{{ $navDotClasses($isNoticias) }}">-</span>
                 <span>Noticias</span>
             </a>
             <a href="{{ route('admin.eventos') }}" class="{{ $navItemClasses($isEventos) }}">
-                <span class="{{ $navDotClasses($isEventos) }}">•</span>
+                <span class="{{ $navDotClasses($isEventos) }}">-</span>
                 <span>Eventos</span>
             </a>
             <a href="{{ route('admin.historia') }}" class="{{ $navItemClasses($isHistoria) }}">
-                <span class="{{ $navDotClasses($isHistoria) }}">•</span>
+                <span class="{{ $navDotClasses($isHistoria) }}">-</span>
                 <span>Historia de Neza</span>
             </a>
             <a href="{{ route('admin.timeline') }}" class="{{ $navItemClasses($isTimeline) }}">
-                <span class="{{ $navDotClasses($isTimeline) }}">•</span>
-                <span>Antes y Después</span>
+                <span class="{{ $navDotClasses($isTimeline) }}">-</span>
+                <span>Antes y Despues</span>
             </a>
-            {{-- <a href="#"
-                class="flex items-center gap-2.5 rounded-[14px] px-3.5 py-2 text-[13px] font-medium text-white/88 transition hover:bg-white/12 hover:text-white">
-                <span class="grid h-3.5 w-3.5 place-items-center rounded-full bg-white/30 text-[8px] text-transparent">•</span>
-                <span>Configuracion</span>
-            </a> --}}
+            <a href="{{ route('admin.puntos-mapa') }}" class="{{ $navItemClasses($isPuntosMapa) }}">
+                <span class="{{ $navDotClasses($isPuntosMapa) }}">-</span>
+                <span>Puntos Mapa</span>
+            </a>
         </nav>
 
         <div class="mt-auto pt-6">
             <div class="rounded-[18px] border border-white/12 bg-white/10 p-3 text-white backdrop-blur-sm">
                 <p class="text-xs font-semibold text-white">Administrador</p>
                 <p class="text-[11px] text-white/72">Panel administrativo</p>
-                <div class="mt-3 overflow-hidden rounded-[16px] bg-white text-[#23171C] shadow-[0_16px_32px_rgba(35,23,28,0.16)]">
+                <div
+                    class="mt-3 overflow-hidden rounded-[16px] bg-white text-[#23171C] shadow-[0_16px_32px_rgba(35,23,28,0.16)]">
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit"
@@ -122,44 +124,37 @@
 
                 <nav aria-label="Navegacion del panel" class="mt-4 space-y-0.5">
                     <a href="{{ route('admin.dashboard') }}" class="{{ $navItemClasses($isDashboard) }}">
-                        <span class="{{ $navDotClasses($isDashboard) }}">•</span>
+                        <span class="{{ $navDotClasses($isDashboard) }}">-</span>
                         <span>Dashboard</span>
                     </a>
                     <a href="{{ route('admin.noticias') }}" class="{{ $navItemClasses($isNoticias) }}">
-                        <span class="{{ $navDotClasses($isNoticias) }}">•</span>
+                        <span class="{{ $navDotClasses($isNoticias) }}">-</span>
                         <span>Noticias</span>
                     </a>
                     <a href="{{ route('admin.eventos') }}" class="{{ $navItemClasses($isEventos) }}">
-                        <span class="{{ $navDotClasses($isEventos) }}">•</span>
+                        <span class="{{ $navDotClasses($isEventos) }}">-</span>
                         <span>Eventos</span>
                     </a>
                     <a href="{{ route('admin.historia') }}" class="{{ $navItemClasses($isHistoria) }}">
-                        <span class="{{ $navDotClasses($isHistoria) }}">•</span>
+                        <span class="{{ $navDotClasses($isHistoria) }}">-</span>
                         <span>Historia de Neza</span>
                     </a>
                     <a href="{{ route('admin.timeline') }}" class="{{ $navItemClasses($isTimeline) }}">
-                        <span class="{{ $navDotClasses($isTimeline) }}">•</span>
-                        <span>Antes y Después</span>
+                        <span class="{{ $navDotClasses($isTimeline) }}">-</span>
+                        <span>Antes y Despues</span>
                     </a>
-
-                    {{-- <a href="#"
-                        class="flex items-center gap-2.5 rounded-[14px] px-3.5 py-2 text-[13px] font-medium text-white/88 transition hover:bg-white/12 hover:text-white">
-                        <span
-                            class="grid h-3.5 w-3.5 place-items-center rounded-full bg-white/30 text-[8px] text-transparent">•</span>
-                        <span>Configuracion</span>
-                    </a> --}}
+                    <a href="{{ route('admin.puntos-mapa') }}" class="{{ $navItemClasses($isPuntosMapa) }}">
+                        <span class="{{ $navDotClasses($isPuntosMapa) }}">-</span>
+                        <span>Puntos Mapa</span>
+                    </a>
                 </nav>
 
                 <div class="mt-auto pt-6">
                     <div class="rounded-[18px] border border-white/12 bg-white/10 p-3 text-white backdrop-blur-sm">
                         <div class="flex items-center gap-3">
                             <div>
-                                <p class="text-xs font-semibold text-white">
-                                    Administrador
-                                </p>
-                                <p class="text-[11px] text-white/72">
-                                    Panel administrativo
-                                </p>
+                                <p class="text-xs font-semibold text-white">Administrador</p>
+                                <p class="text-[11px] text-white/72">Panel administrativo</p>
                             </div>
                         </div>
                         <div
@@ -177,8 +172,6 @@
             </aside>
 
             <main class="min-w-0 pb-3 sm:pb-4">
-
-
                 <div class="mt-4 sm:mt-5 md:mt-6">
                     @yield('content')
                 </div>

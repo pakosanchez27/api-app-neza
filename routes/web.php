@@ -5,6 +5,7 @@ use App\Http\Controllers\EventosController;
 use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiasController;
+use App\Http\Controllers\PuntosMapaController;
 use App\Http\Controllers\TimelineModelController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,4 +52,12 @@ Route::middleware(['admin.app'])->group(function () {
     Route::get('/admin/timeline/{timeline}/edit', [TimelineModelController::class, 'edit'])->name('admin.timeline.edit');
     Route::put('/admin/timeline/{timeline}', [TimelineModelController::class, 'update'])->name('admin.timeline.update');
     Route::delete('/admin/timeline/{timeline}', [TimelineModelController::class, 'destroy'])->name('admin.timeline.destroy');
+
+    Route::get('/admin/puntos-mapa', [PuntosMapaController::class, 'index'])->name('admin.puntos-mapa');
+    Route::get('/admin/puntos-mapa/create', [PuntosMapaController::class, 'create'])->name('admin.puntos-mapa.create');
+    Route::post('/admin/puntos-mapa/store', [PuntosMapaController::class, 'store'])->name('admin.puntos-mapa.store');
+    Route::get('/admin/puntos-mapa/{puntoMapa}/edit', [PuntosMapaController::class, 'edit'])->name('admin.puntos-mapa.edit');
+    Route::put('/admin/puntos-mapa/{puntoMapa}', [PuntosMapaController::class, 'update'])->name('admin.puntos-mapa.update');
+    Route::delete('/admin/puntos-mapa/{puntoMapa}', [PuntosMapaController::class, 'destroy'])->name('admin.puntos-mapa.destroy');
+    Route::get('/admin/puntos-mapa/{puntoMapa}/foto', [PuntosMapaController::class, 'fotoPrincipal'])->name('admin.puntos-mapa.foto');
 });

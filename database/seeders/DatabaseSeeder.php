@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             // UserSeeder::class,
             // EstablecimientoSeeder::class,
             CategoriasEventosSeeder::class,
+            CategoriasPuntosSeeder::class,
         ]);
     }
 }

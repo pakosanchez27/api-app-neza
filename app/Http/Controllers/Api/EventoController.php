@@ -87,7 +87,6 @@ class EventoController extends Controller
                 'nombre' => $evento->categoria->nombre,
                 'slug' => $evento->categoria->slug,
             ] : null,
-            'user_id' => $evento->user_id,
             'created_at' => $evento->created_at,
             'updated_at' => $evento->updated_at,
         ];

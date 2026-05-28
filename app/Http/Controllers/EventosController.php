@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\EventoCategoriasModel;
 use App\Models\EventoModel;
-use App\Models\User;
 use App\Support\ImageManager;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -134,18 +133,6 @@ class EventosController extends Controller
         $validatedData['category_id'] = $validatedData['id_categoria'];
         $validatedData['is_destacado'] = $request->boolean('is_destacado');
 
-        $resolvedUserId = $this->resolveAdminUserId($request);
-
-        if ($resolvedUserId !== null) {
-            $validatedData['user_id'] = $resolvedUserId;
-        } elseif (! $evento->exists) {
-            return back()
-                ->withErrors([
-                    'general' => 'No fue posible identificar un usuario administrador valido para guardar el evento.',
-                ])
-                ->withInput();
-        }
-
         $eventoDestacadoActual = EventoModel::where('is_destacado', true)
             ->where('id', '!=', $evento->id)
             ->first();
@@ -191,25 +178,6 @@ class EventosController extends Controller
 
         $archivoPortada = $request->file('portada');
         return ImageManager::storePublicImage($archivoPortada, $directorioEvento, 'portada');
-    }
-
-    private function resolveAdminUserId(Request $request): ?int
-    {
-        $adminUser = $request->session()->get('admin_user', []);
-
-        if (! is_array($adminUser) || $adminUser === []) {
-            return null;
-        }
-
-        $candidateId = $adminUser['id'] ?? $adminUser['user_id'] ?? null;
-
-        if ($candidateId === null || $candidateId === '') {
-            return null;
-        }
-
-        $user = User::query()->find($candidateId);
-
-        return $user ? (int) $user->id : null;
     }
 
     private function loadCallesCatalogo(): array

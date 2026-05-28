@@ -31,6 +31,17 @@
             </a>
         </div>
 
+        @if ($errors->any())
+            <div class="mb-6 rounded-[20px] border border-rose-200 bg-rose-50 px-5 py-4 text-rose-800">
+                <p class="text-sm font-semibold">No se pudo guardar el dato historico.</p>
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form class="space-y-6" enctype="multipart/form-data" method="POST"
             action="{{ route('admin.historia.update', $historia) }}" id="form-editar-historia">
             @csrf

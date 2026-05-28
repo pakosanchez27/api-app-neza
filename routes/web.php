@@ -8,7 +8,29 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\PuntosMapaController;
 use App\Http\Controllers\TimelineModelController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+if ($adminDomain = env('ADMIN_APP_DOMAIN')) {
+    Route::domain($adminDomain)->group(function () {
+        Route::get('/', function (Request $request) {
+            if (filter_var(env('ADMIN_AUTH_BYPASS', false), FILTER_VALIDATE_BOOL)) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            $isAuthenticated = (bool) $request->session()->get('admin_auth');
+            $token = $request->session()->get('admin_access_token');
+            $user = $request->session()->get('admin_user', []);
+            $isActive = (bool) ($user['activo'] ?? true);
+
+            if ($isAuthenticated && ! empty($token) && ! empty($user) && $isActive) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('admin.login');
+        })->name('admin.entry');
+    });
+}
 
 Route::view('/', 'landing')->name('landing');
 

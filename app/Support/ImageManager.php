@@ -306,7 +306,7 @@ class ImageManager
 
         $normalizedPath = str_replace('\\', '/', $path);
 
-        if (preg_match('/^[A-Za-z0-9.-]+(?::\d+)?\//', $normalizedPath)) {
+        if (preg_match('/^(localhost|(?:\d{1,3}\.){3}\d{1,3}|[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)(?::\d+)?\//', $normalizedPath)) {
             $scheme = 'http';
 
             if (app()->bound('request')) {

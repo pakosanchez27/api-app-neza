@@ -18,8 +18,27 @@
         $isEventos = request()->routeIs('admin.eventos*');
         $isHistoria = request()->routeIs('admin.historia*');
         $isTimeline = request()->routeIs('admin.timeline*');
+        $isUsuarios = request()->routeIs('admin.usuarios*');
+        $isComercios = request()->routeIs('admin.comercios*');
+        $isCatalogos = request()->routeIs('admin.catalogos*');
+        $isTiposNegocio = request()->routeIs('admin.catalogos.tipos-negocio');
+        $isCategoriasEventos = request()->routeIs('admin.catalogos.categorias-eventos');
+        $isCategoriasMapa = request()->routeIs('admin.catalogos.categorias-mapa');
         $isAprobarComercios = request()->routeIs('admin.aprobar-comercios*');
         $isPuntosMapa = request()->routeIs('admin.puntos-mapa*');
+        $adminPermissions = collect(session('admin_permissions', []));
+        $hasPermission = fn (string $permission) => $adminPermissions->contains($permission);
+        $canDashboard = $hasPermission('dashboard.ver');
+        $canNoticias = $hasPermission('noticias.ver');
+        $canEventos = $hasPermission('eventos.ver');
+        $canHistoria = $hasPermission('historia.ver');
+        $canTimeline = $hasPermission('antesydespues.ver');
+        $canAprobarComercios = $hasPermission('aprobar.ver');
+        $canPuntosMapa = $hasPermission('puntos.ver');
+        $canUsuarios = $hasPermission('usuarios-app.ver');
+        $canComercios = $hasPermission('comercios.ver');
+        $canRegistros = $hasPermission('registros-enlace.ver') && ($canUsuarios || $canComercios);
+        $canCatalogos = $canEventos || $canComercios || $canPuntosMapa;
         $navItemClasses = function (bool $isActive) {
             return $isActive
                 ? 'flex items-center gap-2.5 rounded-[14px] bg-white px-3.5 py-2 text-[13px] font-medium text-[#63102a] shadow-[0_10px_22px_rgba(0,0,0,0.14)]'
@@ -30,6 +49,25 @@
             return $isActive
                 ? 'grid h-3.5 w-3.5 place-items-center rounded-full bg-current text-[8px] text-white'
                 : 'grid h-3.5 w-3.5 place-items-center rounded-full bg-white/30 text-[8px] text-transparent';
+        };
+        $navGroupClasses = function (bool $isActive) {
+            return $isActive
+                ? 'rounded-[16px] border border-white/18 bg-white/10 px-3.5 py-3'
+                : 'rounded-[16px] px-3.5 py-3';
+        };
+        $navGroupTitleClasses = function (bool $isActive) {
+            return $isActive
+                ? 'flex w-full items-center gap-2.5 text-[13px] font-semibold text-white'
+                : 'flex w-full items-center gap-2.5 text-[13px] font-semibold text-white/82 transition hover:text-white';
+        };
+        $navChildClasses = function (bool $isActive, bool $isDisabled = false) {
+            if ($isDisabled) {
+                return 'flex items-center gap-2.5 rounded-[12px] border border-transparent px-3 py-2 text-[12px] font-medium text-white/45';
+            }
+
+            return $isActive
+                ? 'flex items-center gap-2.5 rounded-[12px] border border-white/20 bg-white px-3 py-2 text-[12px] font-semibold text-[#63102a] shadow-[0_8px_18px_rgba(19,7,16,0.15)]'
+                : 'flex items-center gap-2.5 rounded-[12px] border border-transparent px-3 py-2 text-[12px] font-medium text-white/72 transition hover:bg-white/10 hover:text-white';
         };
 
         $brandClasses = 'inline-flex items-end leading-none font-black tracking-[-0.045em] select-none';
@@ -80,34 +118,106 @@
         </div>
 
         <nav aria-label="Navegacion del panel movil" class="mt-4 space-y-0.5">
+            @if ($canDashboard)
             <a href="{{ route('admin.dashboard') }}" class="{{ $navItemClasses($isDashboard) }}">
                 <span class="{{ $navDotClasses($isDashboard) }}">-</span>
                 <span>Dashboard</span>
             </a>
+            @endif
+            @if ($canRegistros)
+            <div class="{{ $navGroupClasses($isUsuarios || $isComercios) }}">
+                <button type="button" class="{{ $navGroupTitleClasses($isUsuarios || $isComercios) }} nav-dropdown-toggle"
+                    aria-expanded="{{ $isUsuarios || $isComercios ? 'true' : 'false' }}">
+                    <span class="{{ $navDotClasses($isUsuarios || $isComercios) }}">-</span>
+                    <span>Registros</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                        stroke="currentColor"
+                        class="ml-auto h-4 w-4 transition-transform {{ $isUsuarios || $isComercios ? 'rotate-180' : '' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                    </svg>
+                </button>
+                <div class="{{ $isUsuarios || $isComercios ? '' : 'hidden' }} ml-6 mt-2 space-y-1 nav-dropdown-menu">
+                    @if ($canUsuarios)
+                    <a href="{{ route('admin.usuarios') }}" class="{{ $navChildClasses($isUsuarios) }}">
+                        <span>Usuarios</span>
+                    </a>
+                    @endif
+                    @if ($canComercios)
+                    <a href="{{ route('admin.comercios') }}" class="{{ $navChildClasses($isComercios) }}">
+                        <span>Comercios</span>
+                    </a>
+                    @endif
+                </div>
+            </div>
+            @endif
+            @if ($canNoticias)
             <a href="{{ route('admin.noticias') }}" class="{{ $navItemClasses($isNoticias) }}">
                 <span class="{{ $navDotClasses($isNoticias) }}">-</span>
                 <span>Noticias</span>
             </a>
+            @endif
+            @if ($canEventos)
             <a href="{{ route('admin.eventos') }}" class="{{ $navItemClasses($isEventos) }}">
                 <span class="{{ $navDotClasses($isEventos) }}">-</span>
                 <span>Eventos</span>
             </a>
+            @endif
+            @if ($canCatalogos)
+            <div class="{{ $navGroupClasses($isCatalogos) }}">
+                <button type="button" class="{{ $navGroupTitleClasses($isCatalogos) }} nav-dropdown-toggle"
+                    aria-expanded="{{ $isCatalogos ? 'true' : 'false' }}">
+                    <span class="{{ $navDotClasses($isCatalogos) }}">-</span>
+                    <span>Catalogos</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                        stroke="currentColor"
+                        class="ml-auto h-4 w-4 transition-transform {{ $isCatalogos ? 'rotate-180' : '' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                    </svg>
+                </button>
+                <div class="{{ $isCatalogos ? '' : 'hidden' }} ml-6 mt-2 space-y-1 nav-dropdown-menu">
+                    @if ($canComercios)
+                    <a href="{{ route('admin.catalogos.tipos-negocio') }}" class="{{ $navChildClasses($isTiposNegocio) }}">
+                        <span>Tipos de negocio</span>
+                    </a>
+                    @endif
+                    @if ($canEventos)
+                    <a href="{{ route('admin.catalogos.categorias-eventos') }}"
+                        class="{{ $navChildClasses($isCategoriasEventos) }}">
+                        <span>Categorias eventos</span>
+                    </a>
+                    @endif
+                    @if ($canPuntosMapa)
+                    <a href="{{ route('admin.catalogos.categorias-mapa') }}" class="{{ $navChildClasses($isCategoriasMapa) }}">
+                        <span>Categorias mapa</span>
+                    </a>
+                    @endif
+                </div>
+            </div>
+            @endif
+            @if ($canHistoria)
             <a href="{{ route('admin.historia') }}" class="{{ $navItemClasses($isHistoria) }}">
                 <span class="{{ $navDotClasses($isHistoria) }}">-</span>
                 <span>Historia de Neza</span>
             </a>
+            @endif
+            @if ($canTimeline)
             <a href="{{ route('admin.timeline') }}" class="{{ $navItemClasses($isTimeline) }}">
                 <span class="{{ $navDotClasses($isTimeline) }}">-</span>
                 <span>Antes y Despues</span>
             </a>
+            @endif
+            @if ($canAprobarComercios)
             <a href="{{ route('admin.aprobar-comercios') }}" class="{{ $navItemClasses($isAprobarComercios) }}">
                 <span class="{{ $navDotClasses($isAprobarComercios) }}">-</span>
                 <span>Aprobar comercios</span>
             </a>
+            @endif
+            @if ($canPuntosMapa)
             <a href="{{ route('admin.puntos-mapa') }}" class="{{ $navItemClasses($isPuntosMapa) }}">
                 <span class="{{ $navDotClasses($isPuntosMapa) }}">-</span>
                 <span>Puntos Mapa</span>
             </a>
+            @endif
         </nav>
 
         <div class="mt-auto pt-6">
@@ -141,34 +251,109 @@
                 </a>
 
                 <nav aria-label="Navegacion del panel" class="mt-4 space-y-0.5">
+                    @if ($canDashboard)
                     <a href="{{ route('admin.dashboard') }}" class="{{ $navItemClasses($isDashboard) }}">
                         <span class="{{ $navDotClasses($isDashboard) }}">-</span>
                         <span>Dashboard</span>
                     </a>
+                    @endif
+                    @if ($canRegistros)
+                    <div class="{{ $navGroupClasses($isUsuarios || $isComercios) }}">
+                        <button type="button"
+                            class="{{ $navGroupTitleClasses($isUsuarios || $isComercios) }} nav-dropdown-toggle"
+                            aria-expanded="{{ $isUsuarios || $isComercios ? 'true' : 'false' }}">
+                            <span class="{{ $navDotClasses($isUsuarios || $isComercios) }}">-</span>
+                            <span>Registros</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.8" stroke="currentColor"
+                                class="ml-auto h-4 w-4 transition-transform {{ $isUsuarios || $isComercios ? 'rotate-180' : '' }}">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+                        <div class="{{ $isUsuarios || $isComercios ? '' : 'hidden' }} ml-6 mt-2 space-y-1 nav-dropdown-menu">
+                            @if ($canUsuarios)
+                            <a href="{{ route('admin.usuarios') }}" class="{{ $navChildClasses($isUsuarios) }}">
+                                <span>Usuarios</span>
+                            </a>
+                            @endif
+                            @if ($canComercios)
+                            <a href="{{ route('admin.comercios') }}" class="{{ $navChildClasses($isComercios) }}">
+                                <span>Comercios</span>
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
+                    @if ($canNoticias)
                     <a href="{{ route('admin.noticias') }}" class="{{ $navItemClasses($isNoticias) }}">
                         <span class="{{ $navDotClasses($isNoticias) }}">-</span>
                         <span>Noticias</span>
                     </a>
+                    @endif
+                    @if ($canEventos)
                     <a href="{{ route('admin.eventos') }}" class="{{ $navItemClasses($isEventos) }}">
                         <span class="{{ $navDotClasses($isEventos) }}">-</span>
                         <span>Eventos</span>
                     </a>
+                    @endif
+                    @if ($canCatalogos)
+                    <div class="{{ $navGroupClasses($isCatalogos) }}">
+                        <button type="button" class="{{ $navGroupTitleClasses($isCatalogos) }} nav-dropdown-toggle"
+                            aria-expanded="{{ $isCatalogos ? 'true' : 'false' }}">
+                            <span class="{{ $navDotClasses($isCatalogos) }}">-</span>
+                            <span>Catalogos</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.8" stroke="currentColor"
+                                class="ml-auto h-4 w-4 transition-transform {{ $isCatalogos ? 'rotate-180' : '' }}">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+                        <div class="{{ $isCatalogos ? '' : 'hidden' }} ml-6 mt-2 space-y-1 nav-dropdown-menu">
+                            @if ($canComercios)
+                            <a href="{{ route('admin.catalogos.tipos-negocio') }}"
+                                class="{{ $navChildClasses($isTiposNegocio) }}">
+                                <span>Tipos de negocio</span>
+                            </a>
+                            @endif
+                            @if ($canEventos)
+                            <a href="{{ route('admin.catalogos.categorias-eventos') }}"
+                                class="{{ $navChildClasses($isCategoriasEventos) }}">
+                                <span>Categorias eventos</span>
+                            </a>
+                            @endif
+                            @if ($canPuntosMapa)
+                            <a href="{{ route('admin.catalogos.categorias-mapa') }}"
+                                class="{{ $navChildClasses($isCategoriasMapa) }}">
+                                <span>Categorias mapa</span>
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
+                    @if ($canHistoria)
                     <a href="{{ route('admin.historia') }}" class="{{ $navItemClasses($isHistoria) }}">
                         <span class="{{ $navDotClasses($isHistoria) }}">-</span>
                         <span>Historia de Neza</span>
                     </a>
+                    @endif
+                    @if ($canTimeline)
                     <a href="{{ route('admin.timeline') }}" class="{{ $navItemClasses($isTimeline) }}">
                         <span class="{{ $navDotClasses($isTimeline) }}">-</span>
                         <span>Antes y Despues</span>
                     </a>
+                    @endif
+                    @if ($canAprobarComercios)
                     <a href="{{ route('admin.aprobar-comercios') }}" class="{{ $navItemClasses($isAprobarComercios) }}">
                         <span class="{{ $navDotClasses($isAprobarComercios) }}">-</span>
                         <span>Aprobar comercios</span>
                     </a>
+                    @endif
+                    @if ($canPuntosMapa)
                     <a href="{{ route('admin.puntos-mapa') }}" class="{{ $navItemClasses($isPuntosMapa) }}">
                         <span class="{{ $navDotClasses($isPuntosMapa) }}">-</span>
                         <span>Puntos Mapa</span>
                     </a>
+                    @endif
                 </nav>
 
                 <div class="mt-auto pt-6">
@@ -230,6 +415,18 @@
 
             panel.querySelectorAll('a').forEach((link) => {
                 link.addEventListener('click', closeMenu);
+            });
+
+            document.querySelectorAll('.nav-dropdown-toggle').forEach((toggle) => {
+                toggle.addEventListener('click', function() {
+                    const menu = toggle.parentElement?.querySelector('.nav-dropdown-menu');
+                    const icon = toggle.querySelector('svg');
+                    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+                    toggle.setAttribute('aria-expanded', String(!isExpanded));
+                    menu?.classList.toggle('hidden', isExpanded);
+                    icon?.classList.toggle('rotate-180', !isExpanded);
+                });
             });
         });
     </script>

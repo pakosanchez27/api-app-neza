@@ -38,6 +38,8 @@ return [
     'auth_api' => [
         'url' => rtrim((string) env('AUTH_API_URL', 'http://127.0.0.1:8000'), '/'),
         'system_key' => (string) env('AUTH_API_SYSTEM_KEY', ''),
+        'verify' => filter_var(env('AUTH_API_VERIFY', true), FILTER_VALIDATE_BOOL),
+        'ca_bundle' => env('AUTH_API_CA_BUNDLE'),
     ],
 
 ];

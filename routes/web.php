@@ -2,19 +2,25 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AprobarComerciosController;
+use App\Http\Controllers\CatalogosController;
+use App\Http\Controllers\ComerciosController;
 use App\Http\Controllers\EventosController;
 use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\PuntosMapaController;
 use App\Http\Controllers\TimelineModelController;
+use App\Http\Controllers\UsuariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 if ($adminDomain = env('ADMIN_APP_DOMAIN')) {
     Route::domain($adminDomain)->group(function () {
         Route::get('/', function (Request $request) {
-            if (filter_var(env('ADMIN_AUTH_BYPASS', false), FILTER_VALIDATE_BOOL)) {
+            if (
+                filter_var(env('ADMIN_AUTH_BYPASS', false), FILTER_VALIDATE_BOOL)
+                && ! $request->session()->get('admin_bypass_logged_out')
+            ) {
                 return redirect()->route('admin.dashboard');
             }
 
@@ -75,6 +81,40 @@ Route::middleware(['admin.app'])->group(function () {
     Route::get('/admin/timeline/{timeline}/edit', [TimelineModelController::class, 'edit'])->name('admin.timeline.edit');
     Route::put('/admin/timeline/{timeline}', [TimelineModelController::class, 'update'])->name('admin.timeline.update');
     Route::delete('/admin/timeline/{timeline}', [TimelineModelController::class, 'destroy'])->name('admin.timeline.destroy');
+
+    Route::get('/admin/usuarios', [UsuariosController::class, 'index'])->name('admin.usuarios');
+    Route::get('/admin/usuarios/{user}/edit', [UsuariosController::class, 'edit'])->name('admin.usuarios.edit');
+    Route::put('/admin/usuarios/{user}', [UsuariosController::class, 'update'])->name('admin.usuarios.update');
+    Route::patch('/admin/usuarios/{user}/toggle-status', [UsuariosController::class, 'toggleStatus'])->name('admin.usuarios.toggle-status');
+    Route::post('/admin/usuarios/{user}/reset-password', [UsuariosController::class, 'sendResetPassword'])->name('admin.usuarios.reset-password');
+
+    Route::get('/admin/comercios', [ComerciosController::class, 'index'])->name('admin.comercios');
+    Route::get('/admin/comercios/{user}', [ComerciosController::class, 'show'])->name('admin.comercios.show');
+    Route::get('/admin/comercios/{user}/edit', [ComerciosController::class, 'edit'])->name('admin.comercios.edit');
+    Route::put('/admin/comercios/{user}', [ComerciosController::class, 'update'])->name('admin.comercios.update');
+    Route::patch('/admin/comercios/{user}/toggle-status', [ComerciosController::class, 'toggleStatus'])->name('admin.comercios.toggle-status');
+    Route::post('/admin/comercios/{user}/reset-password', [ComerciosController::class, 'sendResetPassword'])->name('admin.comercios.reset-password');
+
+    Route::get('/admin/catalogos/tipos-negocio', [CatalogosController::class, 'tiposNegocio'])->name('admin.catalogos.tipos-negocio');
+    Route::get('/admin/catalogos/tipos-negocio/create', [CatalogosController::class, 'createTipoNegocio'])->name('admin.catalogos.tipos-negocio.create');
+    Route::post('/admin/catalogos/tipos-negocio', [CatalogosController::class, 'storeTipoNegocio'])->name('admin.catalogos.tipos-negocio.store');
+    Route::get('/admin/catalogos/tipos-negocio/{tipo}/edit', [CatalogosController::class, 'editTipoNegocio'])->name('admin.catalogos.tipos-negocio.edit');
+    Route::put('/admin/catalogos/tipos-negocio/{tipo}', [CatalogosController::class, 'updateTipoNegocio'])->name('admin.catalogos.tipos-negocio.update');
+    Route::delete('/admin/catalogos/tipos-negocio/{tipo}', [CatalogosController::class, 'destroyTipoNegocio'])->name('admin.catalogos.tipos-negocio.destroy');
+
+    Route::get('/admin/catalogos/categorias-eventos', [CatalogosController::class, 'categoriasEventos'])->name('admin.catalogos.categorias-eventos');
+    Route::get('/admin/catalogos/categorias-eventos/create', [CatalogosController::class, 'createCategoriaEvento'])->name('admin.catalogos.categorias-eventos.create');
+    Route::post('/admin/catalogos/categorias-eventos', [CatalogosController::class, 'storeCategoriaEvento'])->name('admin.catalogos.categorias-eventos.store');
+    Route::get('/admin/catalogos/categorias-eventos/{categoria}/edit', [CatalogosController::class, 'editCategoriaEvento'])->name('admin.catalogos.categorias-eventos.edit');
+    Route::put('/admin/catalogos/categorias-eventos/{categoria}', [CatalogosController::class, 'updateCategoriaEvento'])->name('admin.catalogos.categorias-eventos.update');
+    Route::delete('/admin/catalogos/categorias-eventos/{categoria}', [CatalogosController::class, 'destroyCategoriaEvento'])->name('admin.catalogos.categorias-eventos.destroy');
+
+    Route::get('/admin/catalogos/categorias-mapa', [CatalogosController::class, 'categoriasMapa'])->name('admin.catalogos.categorias-mapa');
+    Route::get('/admin/catalogos/categorias-mapa/create', [CatalogosController::class, 'createCategoriaMapa'])->name('admin.catalogos.categorias-mapa.create');
+    Route::post('/admin/catalogos/categorias-mapa', [CatalogosController::class, 'storeCategoriaMapa'])->name('admin.catalogos.categorias-mapa.store');
+    Route::get('/admin/catalogos/categorias-mapa/{categoria}/edit', [CatalogosController::class, 'editCategoriaMapa'])->name('admin.catalogos.categorias-mapa.edit');
+    Route::put('/admin/catalogos/categorias-mapa/{categoria}', [CatalogosController::class, 'updateCategoriaMapa'])->name('admin.catalogos.categorias-mapa.update');
+    Route::delete('/admin/catalogos/categorias-mapa/{categoria}', [CatalogosController::class, 'destroyCategoriaMapa'])->name('admin.catalogos.categorias-mapa.destroy');
 
     Route::get('/admin/aprobar-comercios', [AprobarComerciosController::class, 'index'])->name('admin.aprobar-comercios');
     Route::patch('/admin/aprobar-comercios/{preregistro}/approve', [AprobarComerciosController::class, 'approve'])->name('admin.aprobar-comercios.approve');

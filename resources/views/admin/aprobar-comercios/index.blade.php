@@ -292,8 +292,10 @@
                                 Abrir PDF
                             </a>
                         </div>
-                        <div class="mt-4 overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white p-3">
-                            <iframe id="detail-ine-frame" src="" class="h-[420px]"></iframe>
+                        <div class="mt-4 overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white p-5">
+                            <div id="detail-ine-placeholder" class="text-center text-[14px] text-[#6b7280]">
+                                Abre el PDF manualmente para revisarlo.
+                            </div>
                         </div>
                     </div>
 
@@ -305,8 +307,10 @@
                                 Abrir PDF
                             </a>
                         </div>
-                        <div class="mt-4 overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white p-3">
-                            <iframe id="detail-licencia-frame" src="" class="h-[420px]"></iframe>
+                        <div class="mt-4 overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white p-5">
+                            <div id="detail-licencia-placeholder" class="text-center text-[14px] text-[#6b7280]">
+                                Abre el PDF manualmente para revisarlo.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -458,19 +462,19 @@
                 }, 0);
             }
 
-            function setDocumentPreview(frameId, linkId, url) {
-                const frame = document.getElementById(frameId);
+            function setDocumentPreview(placeholderId, linkId, url) {
+                const placeholder = document.getElementById(placeholderId);
                 const link = document.getElementById(linkId);
 
                 if (!url) {
-                    frame.setAttribute('src', '');
-                    frame.classList.add('hidden');
+                    placeholder.textContent = 'No hay archivo disponible.';
+                    placeholder.classList.remove('hidden');
                     link.classList.add('hidden');
                     return;
                 }
 
-                frame.setAttribute('src', url);
-                frame.classList.remove('hidden');
+                placeholder.textContent = 'Abre el PDF manualmente para revisarlo.';
+                placeholder.classList.remove('hidden');
                 link.setAttribute('href', url);
                 link.classList.remove('hidden');
             }
@@ -497,8 +501,8 @@
                             ? 'inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700'
                             : 'inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700'));
 
-                setDocumentPreview('detail-ine-frame', 'detail-ine-link', payload.ine_url);
-                setDocumentPreview('detail-licencia-frame', 'detail-licencia-link', payload.licencia_url);
+                setDocumentPreview('detail-ine-placeholder', 'detail-ine-link', payload.ine_url);
+                setDocumentPreview('detail-licencia-placeholder', 'detail-licencia-link', payload.licencia_url);
 
                 const foto = document.getElementById('detail-foto');
                 if (payload.foto_url) {

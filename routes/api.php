@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CuponController;
 use App\Http\Controllers\Api\EventoController;
 use App\Http\Controllers\Api\HistoriaController;
 use App\Http\Controllers\Api\NoticiaController;
+use App\Http\Controllers\Api\PuntoMapaController;
 use App\Http\Controllers\Api\RutaController;
 use App\Http\Controllers\Api\TimelineController;
 use App\Http\Controllers\Api\Auth\CommerceAdminAuthController;
@@ -51,6 +52,8 @@ Route::get('/establecimientos/{id}', [EstablecimientoController::class, 'show'])
 Route::get('/rutas', [RutaController::class, 'index']);
 Route::get('/rutas/{ruta}/establecimientos', [RutaController::class, 'establecimientos']);
 Route::get('/cupones', [CuponController::class, 'index']);
+Route::get('/puntos-mapa', [PuntoMapaController::class, 'index']);
+Route::get('/puntos-mapa/{puntoMapa}/foto', [PuntoMapaController::class, 'photo'])->name('api.puntos-mapa.foto');
 Route::post('/integracion/preregistros/aprobar', [ApprovedPreregisterController::class, 'store']);
 Route::post('/auth/comercios/preregistro', [PreregistroController::class, 'store']);
 Route::get('/auth/comercios/preregistro/correccion/{token}', [PreregistroController::class, 'showCorrection']);

@@ -20,7 +20,6 @@
         $isTimeline = request()->routeIs('admin.timeline*');
         $isAprobarComercios = request()->routeIs('admin.aprobar-comercios*');
         $isPuntosMapa = request()->routeIs('admin.puntos-mapa*');
-
         $navItemClasses = function (bool $isActive) {
             return $isActive
                 ? 'flex items-center gap-2.5 rounded-[14px] bg-white px-3.5 py-2 text-[13px] font-medium text-[#63102a] shadow-[0_10px_22px_rgba(0,0,0,0.14)]'
@@ -32,6 +31,11 @@
                 ? 'grid h-3.5 w-3.5 place-items-center rounded-full bg-current text-[8px] text-white'
                 : 'grid h-3.5 w-3.5 place-items-center rounded-full bg-white/30 text-[8px] text-transparent';
         };
+
+        $brandClasses = 'inline-flex items-end leading-none font-black tracking-[-0.045em] select-none';
+        $brandExploraClasses = 'text-white text-[1.25rem] sm:text-[1.35rem]';
+        $brandNezaClasses = 'text-[#efc36f] text-[1.25rem] sm:text-[1.35rem]';
+        $brandSidebarClasses = 'inline-flex items-end leading-none font-black tracking-[-0.045em] select-none text-[1.45rem]';
     @endphp
 
     <header class="bg-[#63102a] px-4 py-2 shadow-sm md:hidden">
@@ -43,7 +47,11 @@
                 <span class="h-1 w-8 rounded-full bg-white"></span>
             </button>
 
-            <a href="#" class="m-0 text-3xl font-bold text-white">ExploraNeza</a>
+            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center" aria-label="ExploraNeza">
+                <span class="{{ $brandClasses }}" aria-hidden="true">
+                    <span class="{{ $brandExploraClasses }}">Explora</span><span class="{{ $brandNezaClasses }}">Neza</span>
+                </span>
+            </a>
 
             <button type="button"
                 class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/70 bg-[linear-gradient(135deg,#bc955c,#f2cf91)] text-sm font-semibold text-[#63102a]">
@@ -57,8 +65,10 @@
     <aside id="mobile-menu-panel"
         class="fixed inset-y-0 left-0 z-50 flex w-[285px] max-w-[85vw] -translate-x-full flex-col bg-[linear-gradient(180deg,#63102a_0%,#7f173c_100%)] px-5 py-6 text-white shadow-[0_18px_45px_rgba(19,7,16,0.34)] transition-transform duration-300 md:hidden">
         <div class="flex items-center justify-between border-b border-white/15 pb-5">
-            <a href="#" class="block">
-                <p class="text-4xl font-bold text-white">ExploraNeza</p>
+            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center" aria-label="ExploraNeza">
+                <span class="{{ $brandSidebarClasses }}" aria-hidden="true">
+                    <span class="text-white">Explora</span><span class="text-[#efc36f]">Neza</span>
+                </span>
             </a>
             <button type="button" id="mobile-menu-close" aria-label="Cerrar menu"
                 class="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/10">
@@ -123,8 +133,11 @@
             class="grid min-h-[calc(100vh-16px)] grid-cols-1 gap-3 rounded-[22px] bg-white/85 p-2 shadow-[0_20px_60px_rgba(97,18,50,0.08)] backdrop-blur-[10px] sm:min-h-[calc(100vh-24px)] sm:gap-4 sm:rounded-[24px] sm:p-3 md:min-h-[calc(100vh-32px)] md:grid-cols-[224px_minmax(0,1fr)] md:rounded-[28px] md:p-4">
             <aside
                 class="hidden h-full flex-col rounded-[24px] bg-[linear-gradient(180deg,#63102a_0%,#7f173c_100%)] px-5 py-6 text-white md:flex">
-                <a href="#" class="block border-b border-white/15 pb-5">
-                    <p class="text-4xl font-bold text-white">ExploraNeza</p>
+                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center border-b border-white/15 pb-5"
+                    aria-label="ExploraNeza">
+                    <span class="{{ $brandSidebarClasses }}" aria-hidden="true">
+                        <span class="text-white">Explora</span><span class="text-[#efc36f]">Neza</span>
+                    </span>
                 </a>
 
                 <nav aria-label="Navegacion del panel" class="mt-4 space-y-0.5">

@@ -112,14 +112,14 @@ class CommerceRegistrationController extends Controller
                 'telefonoPrincipal' => ['nullable', 'string', 'min:10', 'max:20'],
             ],
             3 => [
-                'calle' => ['required', 'string', 'max:120'],
-                'colonia' => ['required', 'string', 'max:120'],
+                'calle' => ['nullable', 'string', 'max:120'],
+                'colonia' => ['nullable', 'string', 'max:120'],
                 'numeroInterior' => ['nullable', 'string', 'max:30'],
-                'numeroExterior' => ['required', 'string', 'max:30'],
-                'localidad' => ['required', 'string', 'max:120'],
-                'codigoPostal' => ['required', 'digits:5'],
-                'latitud' => ['nullable', 'numeric'],
-                'longitud' => ['nullable', 'numeric'],
+                'numeroExterior' => ['nullable', 'string', 'max:30'],
+                'localidad' => ['nullable', 'string', 'max:120'],
+                'codigoPostal' => ['nullable', 'digits:5'],
+                'latitud' => ['required', 'numeric', 'between:-90,90'],
+                'longitud' => ['required', 'numeric', 'between:-180,180'],
             ],
             4 => [
                 'telefonoNegocio' => ['required', 'string', 'min:10', 'max:20'],
@@ -144,7 +144,35 @@ class CommerceRegistrationController extends Controller
             ],
         };
 
-        $validator = Validator::make($payload, $rules);
+        $attributes = [
+            'currentPassword' => 'contrasena actual',
+            'newPassword' => 'nueva contrasena',
+            'confirmPassword' => 'confirmacion de contrasena',
+            'nombreEstablecimiento' => 'nombre del establecimiento',
+            'tipo' => 'tipo de negocio',
+            'aforo' => 'aforo',
+            'descripcionCorta' => 'descripcion corta',
+            'telefonoPrincipal' => 'telefono principal',
+            'calle' => 'calle',
+            'colonia' => 'colonia',
+            'numeroInterior' => 'numero interior',
+            'numeroExterior' => 'numero exterior',
+            'localidad' => 'localidad',
+            'codigoPostal' => 'codigo postal',
+            'latitud' => 'latitud',
+            'longitud' => 'longitud',
+            'telefonoNegocio' => 'telefono del negocio',
+            'correoNegocio' => 'correo del negocio',
+            'facebook' => 'facebook',
+            'instagram' => 'instagram',
+            'tiktok' => 'tiktok',
+            'horarios' => 'horarios',
+            'amenidades' => 'amenidades',
+            'existingMenu' => 'menu actual',
+            'existingGalleryCount' => 'cantidad actual de galeria',
+        ];
+
+        $validator = Validator::make($payload, $rules, [], $attributes);
 
         $validator->after(function ($validator) use ($phase, $payload, $request, $user, $establecimiento) {
             if ($phase === 1 && !$user->is_password_templ) {

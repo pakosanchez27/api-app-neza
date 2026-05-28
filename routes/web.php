@@ -10,7 +10,7 @@ use App\Http\Controllers\PuntosMapaController;
 use App\Http\Controllers\TimelineModelController;
 use Illuminate\Support\Facades\Route;
 
-// Route::view('/', 'landing')->name('landing');
+Route::view('/', 'landing')->name('landing');
 
 Route::view('/docs/api', 'api-docs')->name('api.docs');
 

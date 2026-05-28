@@ -14,7 +14,7 @@ Route::view('/', 'landing')->name('landing');
 
 Route::view('/docs/api', 'api-docs')->name('api.docs');
 
-Route::get('/', [AdminAuthController::class, 'create'])->name('admin.login');
+Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'store'])->name('admin.login.store');
 Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
 

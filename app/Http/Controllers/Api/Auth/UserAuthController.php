@@ -37,7 +37,7 @@ class UserAuthController extends Controller
 
         if ($user->role && $user->role->nombre === 'AdminComercios') {
             return response()->json([
-                'message' => 'Este acceso es exclusivo para usuarios generales de NezaGo.',
+                'message' => 'Este acceso es exclusivo para usuarios generales de ExploraNeza.',
             ], 403);
         }
 

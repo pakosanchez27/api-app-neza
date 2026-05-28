@@ -20,7 +20,7 @@ class UserActivationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Activa tu cuenta de NezaGo',
+            subject: 'Activa tu cuenta de ExploraNeza',
         );
     }
 

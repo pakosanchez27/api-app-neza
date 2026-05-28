@@ -14,7 +14,7 @@ return new class extends Migration
             $routeId = DB::table('rutas')->insertGetId([
                 'nombre' => 'Ruta Gastronomica Neza',
                 'slug' => 'ruta-gastronomica-neza',
-                'descripcion' => 'Recorrido gastronomico principal de NezaGo.',
+                'descripcion' => 'Recorrido gastronomico principal de ExploraNeza.',
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

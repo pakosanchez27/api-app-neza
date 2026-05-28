@@ -30,7 +30,7 @@ class CommerceResetPasswordNotification extends Notification
             . urlencode($this->email);
 
         return (new MailMessage())
-            ->subject('Restablece tu contrasena de comercio en NezaGo')
+            ->subject('Restablece tu contrasena de comercio en ExploraNeza')
             ->greeting('Hola ' . ($notifiable->nombre_p ?: ''))
             ->line('Recibimos una solicitud para restablecer la contrasena de tu cuenta de comercio.')
             ->action('Restablecer contrasena', $resetUrl)

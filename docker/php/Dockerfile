@@ -61,7 +61,7 @@ RUN apt-get update && apt-get install -y \
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 COPY --from=frontend /app/public/build ./public/build
-COPY docker/php/start-container.sh /usr/local/bin/start-container
+COPY docker/start-container.sh /usr/local/bin/start-container
 
 RUN chmod +x /usr/local/bin/start-container \
     && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views bootstrap/cache \

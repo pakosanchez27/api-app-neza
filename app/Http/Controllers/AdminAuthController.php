@@ -7,12 +7,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class AdminAuthController extends Controller
 {
     public function create(Request $request)
     {
-        if (filter_var(env('ADMIN_AUTH_BYPASS', false), FILTER_VALIDATE_BOOL)) {
+        if (
+            filter_var(env('ADMIN_AUTH_BYPASS', false), FILTER_VALIDATE_BOOL)
+            && ! $request->session()->get('admin_bypass_logged_out')
+        ) {
             return redirect()->route('admin.dashboard');
         }
 
@@ -62,6 +66,7 @@ class AdminAuthController extends Controller
             ->all();
 
         $request->session()->regenerate();
+        $request->session()->forget('admin_bypass_logged_out');
         $request->session()->put([
             'admin_auth' => true,
             'admin_message' => $payload['message'] ?? null,
@@ -74,6 +79,7 @@ class AdminAuthController extends Controller
             'admin_permissions' => $permissions->all(),
         ]);
 
+
         return redirect()->intended(route('admin.dashboard'));
     }
 
@@ -83,20 +89,18 @@ class AdminAuthController extends Controller
         $authApiUrl = (string) config('services.auth_api.url');
 
         if (!empty($token)) {
-            $logoutResponse = $this->authApiClient()
-                ->withToken($token)
-                ->post($authApiUrl.'/api/auth/logout');
-
-            // dd([
-            //     'status' => $logoutResponse->status(),
-            //     'ok' => $logoutResponse->ok(),
-            //     'json' => $logoutResponse->json(),
-            //     'body' => $logoutResponse->body(),
-            // ]);
+            try {
+                $this->authApiClient()
+                    ->withToken($token)
+                    ->post($authApiUrl.'/api/auth/logout');
+            } catch (Throwable $exception) {
+                report($exception);
+            }
         }
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        $request->session()->put('admin_bypass_logged_out', true);
 
         return redirect()->route('admin.login')->with('status', 'Sesion cerrada correctamente.');
     }

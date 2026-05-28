@@ -29,7 +29,7 @@ class AdminAuthController extends Controller
         $authApiUrl = (string) config('services.auth_api.url');
         $systemKey = (string) config('services.auth_api.system_key');
 
-        $loginResponse = Http::acceptJson()->post($authApiUrl.'/api/auth/login', [
+        $loginResponse = $this->authApiClient()->post($authApiUrl.'/api/auth/login', [
             'email' => $credentials['email'],
             'password' => $credentials['password'],
             'system_key' => $systemKey,
@@ -83,7 +83,7 @@ class AdminAuthController extends Controller
         $authApiUrl = (string) config('services.auth_api.url');
 
         if (!empty($token)) {
-            $logoutResponse = Http::acceptJson()
+            $logoutResponse = $this->authApiClient()
                 ->withToken($token)
                 ->post($authApiUrl.'/api/auth/logout');
 
@@ -117,5 +117,19 @@ class AdminAuthController extends Controller
     private function normalizeCollection(mixed $value): Collection
     {
         return collect(is_array($value) ? $value : []);
+    }
+
+    private function authApiClient()
+    {
+        $verify = (bool) config('services.auth_api.verify', true);
+        $caBundle = config('services.auth_api.ca_bundle');
+
+        if (is_string($caBundle) && $caBundle !== '') {
+            $verify = $caBundle;
+        }
+
+        return Http::acceptJson()->withOptions([
+            'verify' => $verify,
+        ]);
     }
 }

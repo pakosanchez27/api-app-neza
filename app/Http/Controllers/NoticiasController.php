@@ -14,6 +14,8 @@ class NoticiasController extends Controller
     public function index()
     {
         $noticias = Noticia::query()
+            ->orderByRaw('orden IS NULL')
+            ->orderBy('orden')
             ->orderByDesc('fecha_publicacion')
             ->orderByDesc('created_at')
             ->get();
@@ -83,6 +85,7 @@ class NoticiasController extends Controller
             'galeria' => 'nullable|array|max:10',
             'galeria.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
             'cta' => 'nullable|url|max:255',
+            'orden' => 'nullable|integer|min:0',
             'fecha_publicacion' => 'required|date',
             'estatus' => 'required|in:0,1',
         ]);

@@ -27,7 +27,7 @@
             <div>
                 <h2 class="text-xl font-semibold text-[#201815]">{{ $pageTitle }}</h2>
                 <p class="mt-1 text-sm text-[#7d6870]">
-                    {{ $isEdit ? 'Modifica portada, textos clave, galeria, CTA, fecha de publicacion y estatus.' : 'Captura portada, textos clave, galeria, CTA, fecha de publicacion y estatus.' }}
+                    {{ $isEdit ? 'Modifica portada, textos clave, galeria, CTA, orden, fecha de publicacion y estatus.' : 'Captura portada, textos clave, galeria, CTA, orden, fecha de publicacion y estatus.' }}
                 </p>
             </div>
             <a href="{{ route('admin.noticias') }}"
@@ -147,6 +147,19 @@
                         Ingresa el enlace que abrira el boton "Ver mas" en el detalle de la noticia.
                     </p>
                     @error('cta')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="orden" class="mb-1 block text-sm font-medium text-[#3e2d31]">Orden</label>
+                    <input type="number" id="orden" name="orden" min="0"
+                        value="{{ old('orden', $noticia->orden ?? 0) }}"
+                        class="w-full rounded-2xl border {{ $errors->has('orden') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    <p class="mt-2 text-[13px] leading-6 text-[#6f6166]">
+                        El numero mas bajo se muestra primero en el slider de noticias.
+                    </p>
+                    @error('orden')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>

@@ -15,12 +15,14 @@ class Noticia extends Model
         'resumen',
         'galeria',
         'cta',
+        'orden',
         'fecha_publicacion',
         'estatus',
     ];
 
     protected $casts = [
         'galeria' => 'array',
+        'orden' => 'integer',
         'fecha_publicacion' => 'date',
         'estatus' => 'integer',
     ];

@@ -90,6 +90,7 @@
                 <thead>
                     <tr>
                         <th>Titulo</th>
+                        <th>Orden</th>
                         <th>Fecha de publicacion</th>
                         <th>Estatus</th>
                         <th>Acciones</th>
@@ -108,6 +109,7 @@
                                     <p class="mt-1 text-xs text-[#7d6870]">Registro editorial</p>
                                 </div>
                             </td>
+                            <td>{{ $noticia->orden ?? 0 }}</td>
                             <td>{{ $fechaPublicacion ? \Carbon\Carbon::parse($fechaPublicacion)->format('Y-m-d') : 'Sin fecha' }}</td>
                             <td>
                                 @if ((string) $estatus === '1' || $estatus === true || $estatus === 'activo')
@@ -175,7 +177,8 @@
                 },
                 pageLength: 10,
                 order: [
-                    [1, 'desc']
+                    [1, 'asc'],
+                    [2, 'desc']
                 ]
             });
 

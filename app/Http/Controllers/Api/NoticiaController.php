@@ -12,6 +12,8 @@ class NoticiaController extends Controller
     public function index()
     {
         $noticias = Noticia::query()
+            ->orderByRaw('orden IS NULL')
+            ->orderBy('orden')
             ->orderByDesc('fecha_publicacion')
             ->orderByDesc('created_at')
             ->get()
@@ -39,6 +41,7 @@ class NoticiaController extends Controller
             'slug' => Str::slug($noticia->titulo ?: 'noticia-' . $noticia->id),
             'resumen' => $noticia->resumen,
             'cta' => $noticia->cta,
+            'orden' => (int) ($noticia->orden ?? 0),
             'portada' => ImageManager::preferPublicPath($noticia->portada),
             'portada_url' => ImageManager::publicUrl($noticia->portada),
             'galeria' => $galeria->all(),

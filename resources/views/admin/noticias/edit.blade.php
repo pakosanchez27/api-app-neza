@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Noticias')
 @section('title-section', 'Editar Noticia')
-@section('description', 'Actualiza la información principal de la noticia.')
+@section('description', 'Actualiza la informacion principal de la noticia.')
 
 @section('content')
     <div class="w-full rounded-[24px] bg-white p-6 shadow-[0_24px_60px_rgba(32,24,21,0.12)]">
         <div class="mb-6 flex items-start justify-between gap-4 border-b border-[#efe6dd] pb-4">
             <div>
                 <h2 class="text-xl font-semibold text-[#201815]">Editar Noticia</h2>
-                <p class="mt-1 text-sm text-[#7d6870]">Actualiza portada, textos clave, galería, URL del CTA, fecha de publicación y estatus.</p>
+                <p class="mt-1 text-sm text-[#7d6870]">Actualiza portada, textos clave, galeria, URL del CTA, orden, fecha de publicacion y estatus.</p>
             </div>
             <a href="{{ route('admin.noticias') }}"
                 class="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <label for="titulo" class="mb-1 block text-sm font-medium text-[#3e2d31]">Título</label>
+                    <label for="titulo" class="mb-1 block text-sm font-medium text-[#3e2d31]">Titulo</label>
                     <input type="text" id="titulo" name="titulo" value="{{ old('titulo', $noticia->titulo) }}"
                         class="w-full rounded-2xl border {{ $errors->has('titulo') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     @error('titulo')
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <label for="subtitulo" class="mb-1 block text-sm font-medium text-[#3e2d31]">Subtítulo</label>
+                    <label for="subtitulo" class="mb-1 block text-sm font-medium text-[#3e2d31]">Subtitulo</label>
                     <input type="text" id="subtitulo" name="subtitulo" value="{{ old('subtitulo', $noticia->subtitulo) }}"
                         class="w-full rounded-2xl border {{ $errors->has('subtitulo') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     @error('subtitulo')
@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <label for="galeria" class="mb-1 block text-sm font-medium text-[#3e2d31]">Galería</label>
+                    <label for="galeria" class="mb-1 block text-sm font-medium text-[#3e2d31]">Galeria</label>
                     <input type="file" id="galeria" name="galeria[]" accept="image/*" multiple
                         class="w-full rounded-2xl border {{ $errors->has('galeria') || $errors->has('galeria.*') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-[#63102a] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#7f173c] focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     @error('galeria')
@@ -85,13 +85,13 @@
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                     <p id="galeria-status" class="mt-2 text-[13px] leading-6 text-[#6f6166]">
-                        Si seleccionas nuevas imágenes, se reemplazará la galería actual.
+                        Si seleccionas nuevas imagenes, se reemplazara la galeria actual.
                     </p>
                     @if (!empty($noticia->galeria))
                         <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach ($noticia->galeria as $imagen)
                                 <div class="overflow-hidden rounded-[20px] border border-[#eadde2] bg-[#fffafc]">
-                                    <img src="{{ \App\Support\ImageManager::publicUrl($imagen) }}" alt="Imagen actual de galería" class="h-[150px] w-full object-cover">
+                                    <img src="{{ \App\Support\ImageManager::publicUrl($imagen) }}" alt="Imagen actual de galeria" class="h-[150px] w-full object-cover">
                                 </div>
                             @endforeach
                         </div>
@@ -104,7 +104,7 @@
                         placeholder="https://ejemplo.com/mas-informacion"
                         class="w-full rounded-2xl border {{ $errors->has('cta') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
                     <p class="mt-2 text-[13px] leading-6 text-[#6f6166]">
-                        Ingresa el enlace que abrirá el botón "Más información" en el detalle de la noticia.
+                        Ingresa el enlace que abrira el boton "Mas informacion" en el detalle de la noticia.
                     </p>
                     @error('cta')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
@@ -112,7 +112,20 @@
                 </div>
 
                 <div>
-                    <label for="fecha_publicacion" class="mb-1 block text-sm font-medium text-[#3e2d31]">Fecha de publicación</label>
+                    <label for="orden" class="mb-1 block text-sm font-medium text-[#3e2d31]">Orden</label>
+                    <input type="number" id="orden" name="orden" min="0"
+                        value="{{ old('orden', $noticia->orden ?? 0) }}"
+                        class="w-full rounded-2xl border {{ $errors->has('orden') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
+                    <p class="mt-2 text-[13px] leading-6 text-[#6f6166]">
+                        El numero mas bajo se muestra primero en el slider de noticias.
+                    </p>
+                    @error('orden')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="fecha_publicacion" class="mb-1 block text-sm font-medium text-[#3e2d31]">Fecha de publicacion</label>
                     <input type="date" id="fecha_publicacion" name="fecha_publicacion"
                         value="{{ old('fecha_publicacion', optional($noticia->fecha_publicacion)->format('Y-m-d')) }}"
                         class="w-full rounded-2xl border {{ $errors->has('fecha_publicacion') ? 'border-rose-400 bg-rose-50' : 'border-[#e8d9cb] bg-[#fffdfa]' }} px-4 py-3 text-sm text-[#201815] outline-none transition focus:border-[#63102a] focus:ring-2 focus:ring-[#63102a]/15">
@@ -179,8 +192,8 @@
             galeriaInput?.addEventListener('change', function(event) {
                 const totalFiles = event.target.files?.length ?? 0;
                 galeriaStatus.textContent = totalFiles
-                    ? `${totalFiles} archivo(s) seleccionado(s). Al guardar se reemplazará la galería actual.`
-                    : 'Si seleccionas nuevas imágenes, se reemplazará la galería actual.';
+                    ? `${totalFiles} archivo(s) seleccionado(s). Al guardar se reemplazara la galeria actual.`
+                    : 'Si seleccionas nuevas imagenes, se reemplazara la galeria actual.';
             });
         });
     </script>

@@ -68,12 +68,12 @@ class StorePublicPreregistroRequest extends FormRequest
                 'mimes:pdf',
                 'max:10240',
             ]),
-            'lic_fun' => array_filter([
-                $isCorrection && $preregistro?->lic_fun ? 'nullable' : 'required',
+            'lic_fun' => [
+                'nullable',
                 'file',
                 'mimes:pdf',
                 'max:10240',
-            ]),
+            ],
             'foto_est' => array_filter([
                 $isCorrection && $preregistro?->foto_est ? 'nullable' : 'required',
                 'image',

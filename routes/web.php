@@ -14,6 +14,7 @@ use App\Http\Controllers\UsuariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 if ($adminDomain = env('ADMIN_APP_DOMAIN')) {
     Route::domain($adminDomain)->group(function () {
         Route::get('/', function (Request $request) {
@@ -45,6 +46,8 @@ Route::view('/docs/api', 'api-docs')->name('api.docs');
 Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'store'])->name('admin.login.store');
 Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
+
+
 
 Route::middleware(['admin.app'])->group(function () {
     Route::get('/admin', [HomeController::class, 'index'])->name('admin.dashboard');

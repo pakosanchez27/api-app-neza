@@ -27,10 +27,13 @@ use App\Http\Controllers\PreregistroController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TranslateController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('/translate', [TranslateController::class, 'translate']);
 
 Route::get('/roles', [RoleController::class, 'index']);
 Route::get('/tipos', [TipoController::class, 'index']);

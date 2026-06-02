@@ -120,6 +120,7 @@ Route::middleware(['admin.app'])->group(function () {
     Route::delete('/admin/catalogos/categorias-mapa/{categoria}', [CatalogosController::class, 'destroyCategoriaMapa'])->name('admin.catalogos.categorias-mapa.destroy');
 
     Route::get('/admin/aprobar-comercios', [AprobarComerciosController::class, 'index'])->name('admin.aprobar-comercios');
+    Route::get('/admin/aprobar-comercios/{preregistro}', [AprobarComerciosController::class, 'show'])->name('admin.aprobar-comercios.show');
     Route::patch('/admin/aprobar-comercios/{preregistro}/approve', [AprobarComerciosController::class, 'approve'])->name('admin.aprobar-comercios.approve');
     Route::patch('/admin/aprobar-comercios/{preregistro}/correction', [AprobarComerciosController::class, 'requestCorrection'])->name('admin.aprobar-comercios.correction');
     Route::patch('/admin/aprobar-comercios/{preregistro}/reject', [AprobarComerciosController::class, 'reject'])->name('admin.aprobar-comercios.reject');

@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -25,6 +26,16 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'message' => 'No autenticado.',
                 ], 401);
+            }
+
+            return null;
+        });
+
+        $exceptions->render(function (PostTooLargeException $exception, Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Los archivos enviados exceden el tamano maximo permitido para el formulario.',
+                ], 413);
             }
 
             return null;

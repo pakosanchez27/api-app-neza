@@ -32,11 +32,17 @@ class AprobarComerciosController extends Controller
         return view('admin.aprobar-comercios.index', compact('comercios'));
     }
 
+    public function show(Preregistro $preregistro)
+    {
+        $preregistro->loadMissing('tipoRelacion:id_tipo,nombre');
+
+        return view('admin.aprobar-comercios.show', compact('preregistro'));
+    }
+
     public function approve(Preregistro $preregistro)
     {
         if (User::query()->where('email', $preregistro->correo)->exists()) {
-            return redirect()
-                ->route('admin.aprobar-comercios')
+            return $this->redirectAfterAction()
                 ->with('error', 'Ya existe un usuario con ese correo. No fue posible aprobar el preregistro.');
         }
 
@@ -58,8 +64,7 @@ class AprobarComerciosController extends Controller
                 ]);
             });
         } catch (RuntimeException $exception) {
-            return redirect()
-                ->route('admin.aprobar-comercios')
+            return $this->redirectAfterAction()
                 ->with('error', $exception->getMessage());
         }
 
@@ -81,8 +86,7 @@ class AprobarComerciosController extends Controller
             ]);
         }
 
-        return redirect()
-            ->route('admin.aprobar-comercios')
+        return $this->redirectAfterAction()
             ->with('success', 'Comercio aprobado, integrado al sistema y correo enviado correctamente.');
     }
 
@@ -116,8 +120,7 @@ class AprobarComerciosController extends Controller
             ]);
         }
 
-        return redirect()
-            ->route('admin.aprobar-comercios')
+        return $this->redirectAfterAction()
             ->with('success', 'Solicitud de correccion guardada y correo enviado correctamente.');
     }
 
@@ -148,9 +151,13 @@ class AprobarComerciosController extends Controller
             ]);
         }
 
-        return redirect()
-            ->route('admin.aprobar-comercios')
+        return $this->redirectAfterAction()
             ->with('success', 'Rechazo definitivo guardado y correo enviado correctamente.');
+    }
+
+    private function redirectAfterAction()
+    {
+        return redirect()->back(fallback: route('admin.aprobar-comercios'));
     }
 
     private function buildCorrectionUrl(string $token): string

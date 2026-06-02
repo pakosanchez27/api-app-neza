@@ -256,12 +256,12 @@ class CommerceRegistrationController extends Controller
         $establecimiento->domicilio()->updateOrCreate(
             ['id_establecimiento' => $establecimiento->id_establecimiento],
             [
-                'calle' => $payload['calle'],
-                'colonia' => $payload['colonia'],
+                'calle' => $payload['calle'] ?? null,
+                'colonia' => $payload['colonia'] ?? null,
                 'num_int' => $payload['numeroInterior'] ?? null,
                 'num_ext' => $payload['numeroExterior'] ?? null,
-                'localidad' => $payload['localidad'],
-                'cp' => $payload['codigoPostal'],
+                'localidad' => $payload['localidad'] ?? null,
+                'cp' => $payload['codigoPostal'] ?? null,
                 'latitud' => $payload['latitud'] ?? null,
                 'longitud' => $payload['longitud'] ?? null,
                 'x' => $payload['longitud'] ?? null,

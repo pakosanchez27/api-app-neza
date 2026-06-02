@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers;
 
@@ -17,15 +17,24 @@ class TranslateController extends Controller
             'format' => ['nullable', 'string'],
         ]);
 
-        $credentialsPath = env('GOOGLE_TRANSLATE_CREDENTIALS');
+        $credentialsPath = env('GOOGLE_TRANSLATE_CREDENTIALS', 'google/calve.json');
+        $resolvedCredentialsPath = str_contains($credentialsPath, DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR)
+            || preg_match('/^[A-Za-z]:\\|^\//', $credentialsPath)
+            ? $credentialsPath
+            : storage_path('app/' . ltrim($credentialsPath, '/\\'));
 
-        if (!$credentialsPath || !file_exists($credentialsPath)) {
+        if (!file_exists($resolvedCredentialsPath)) {
+            $fallbackPath = base_path(ltrim($credentialsPath, '/\\'));
+            $resolvedCredentialsPath = file_exists($fallbackPath) ? $fallbackPath : $resolvedCredentialsPath;
+        }
+
+        if (!$credentialsPath || !file_exists($resolvedCredentialsPath)) {
             return response()->json([
                 'error' => ['message' => 'No se encontraron las credenciales de Google Translate.'],
             ], 500);
         }
 
-        $credentials = json_decode(file_get_contents($credentialsPath), true);
+        $credentials = json_decode(file_get_contents($resolvedCredentialsPath), true);
 
         if (!$credentials || empty($credentials['client_email']) || empty($credentials['private_key'])) {
             return response()->json([

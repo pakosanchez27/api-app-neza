@@ -98,26 +98,28 @@ Route::middleware(['admin.app'])->group(function () {
     Route::patch('/admin/comercios/{user}/toggle-status', [ComerciosController::class, 'toggleStatus'])->name('admin.comercios.toggle-status');
     Route::post('/admin/comercios/{user}/reset-password', [ComerciosController::class, 'sendResetPassword'])->name('admin.comercios.reset-password');
 
-    Route::get('/admin/catalogos/tipos-negocio', [CatalogosController::class, 'tiposNegocio'])->name('admin.catalogos.tipos-negocio');
-    Route::get('/admin/catalogos/tipos-negocio/create', [CatalogosController::class, 'createTipoNegocio'])->name('admin.catalogos.tipos-negocio.create');
-    Route::post('/admin/catalogos/tipos-negocio', [CatalogosController::class, 'storeTipoNegocio'])->name('admin.catalogos.tipos-negocio.store');
-    Route::get('/admin/catalogos/tipos-negocio/{tipo}/edit', [CatalogosController::class, 'editTipoNegocio'])->name('admin.catalogos.tipos-negocio.edit');
-    Route::put('/admin/catalogos/tipos-negocio/{tipo}', [CatalogosController::class, 'updateTipoNegocio'])->name('admin.catalogos.tipos-negocio.update');
-    Route::delete('/admin/catalogos/tipos-negocio/{tipo}', [CatalogosController::class, 'destroyTipoNegocio'])->name('admin.catalogos.tipos-negocio.destroy');
+    Route::middleware('admin.permission:catalogos-explora.ver')->group(function () {
+        Route::get('/admin/catalogos/tipos-negocio', [CatalogosController::class, 'tiposNegocio'])->name('admin.catalogos.tipos-negocio');
+        Route::get('/admin/catalogos/tipos-negocio/create', [CatalogosController::class, 'createTipoNegocio'])->name('admin.catalogos.tipos-negocio.create');
+        Route::post('/admin/catalogos/tipos-negocio', [CatalogosController::class, 'storeTipoNegocio'])->name('admin.catalogos.tipos-negocio.store');
+        Route::get('/admin/catalogos/tipos-negocio/{tipo}/edit', [CatalogosController::class, 'editTipoNegocio'])->name('admin.catalogos.tipos-negocio.edit');
+        Route::put('/admin/catalogos/tipos-negocio/{tipo}', [CatalogosController::class, 'updateTipoNegocio'])->name('admin.catalogos.tipos-negocio.update');
+        Route::delete('/admin/catalogos/tipos-negocio/{tipo}', [CatalogosController::class, 'destroyTipoNegocio'])->name('admin.catalogos.tipos-negocio.destroy');
 
-    Route::get('/admin/catalogos/categorias-eventos', [CatalogosController::class, 'categoriasEventos'])->name('admin.catalogos.categorias-eventos');
-    Route::get('/admin/catalogos/categorias-eventos/create', [CatalogosController::class, 'createCategoriaEvento'])->name('admin.catalogos.categorias-eventos.create');
-    Route::post('/admin/catalogos/categorias-eventos', [CatalogosController::class, 'storeCategoriaEvento'])->name('admin.catalogos.categorias-eventos.store');
-    Route::get('/admin/catalogos/categorias-eventos/{categoria}/edit', [CatalogosController::class, 'editCategoriaEvento'])->name('admin.catalogos.categorias-eventos.edit');
-    Route::put('/admin/catalogos/categorias-eventos/{categoria}', [CatalogosController::class, 'updateCategoriaEvento'])->name('admin.catalogos.categorias-eventos.update');
-    Route::delete('/admin/catalogos/categorias-eventos/{categoria}', [CatalogosController::class, 'destroyCategoriaEvento'])->name('admin.catalogos.categorias-eventos.destroy');
+        Route::get('/admin/catalogos/categorias-eventos', [CatalogosController::class, 'categoriasEventos'])->name('admin.catalogos.categorias-eventos');
+        Route::get('/admin/catalogos/categorias-eventos/create', [CatalogosController::class, 'createCategoriaEvento'])->name('admin.catalogos.categorias-eventos.create');
+        Route::post('/admin/catalogos/categorias-eventos', [CatalogosController::class, 'storeCategoriaEvento'])->name('admin.catalogos.categorias-eventos.store');
+        Route::get('/admin/catalogos/categorias-eventos/{categoria}/edit', [CatalogosController::class, 'editCategoriaEvento'])->name('admin.catalogos.categorias-eventos.edit');
+        Route::put('/admin/catalogos/categorias-eventos/{categoria}', [CatalogosController::class, 'updateCategoriaEvento'])->name('admin.catalogos.categorias-eventos.update');
+        Route::delete('/admin/catalogos/categorias-eventos/{categoria}', [CatalogosController::class, 'destroyCategoriaEvento'])->name('admin.catalogos.categorias-eventos.destroy');
 
-    Route::get('/admin/catalogos/categorias-mapa', [CatalogosController::class, 'categoriasMapa'])->name('admin.catalogos.categorias-mapa');
-    Route::get('/admin/catalogos/categorias-mapa/create', [CatalogosController::class, 'createCategoriaMapa'])->name('admin.catalogos.categorias-mapa.create');
-    Route::post('/admin/catalogos/categorias-mapa', [CatalogosController::class, 'storeCategoriaMapa'])->name('admin.catalogos.categorias-mapa.store');
-    Route::get('/admin/catalogos/categorias-mapa/{categoria}/edit', [CatalogosController::class, 'editCategoriaMapa'])->name('admin.catalogos.categorias-mapa.edit');
-    Route::put('/admin/catalogos/categorias-mapa/{categoria}', [CatalogosController::class, 'updateCategoriaMapa'])->name('admin.catalogos.categorias-mapa.update');
-    Route::delete('/admin/catalogos/categorias-mapa/{categoria}', [CatalogosController::class, 'destroyCategoriaMapa'])->name('admin.catalogos.categorias-mapa.destroy');
+        Route::get('/admin/catalogos/categorias-mapa', [CatalogosController::class, 'categoriasMapa'])->name('admin.catalogos.categorias-mapa');
+        Route::get('/admin/catalogos/categorias-mapa/create', [CatalogosController::class, 'createCategoriaMapa'])->name('admin.catalogos.categorias-mapa.create');
+        Route::post('/admin/catalogos/categorias-mapa', [CatalogosController::class, 'storeCategoriaMapa'])->name('admin.catalogos.categorias-mapa.store');
+        Route::get('/admin/catalogos/categorias-mapa/{categoria}/edit', [CatalogosController::class, 'editCategoriaMapa'])->name('admin.catalogos.categorias-mapa.edit');
+        Route::put('/admin/catalogos/categorias-mapa/{categoria}', [CatalogosController::class, 'updateCategoriaMapa'])->name('admin.catalogos.categorias-mapa.update');
+        Route::delete('/admin/catalogos/categorias-mapa/{categoria}', [CatalogosController::class, 'destroyCategoriaMapa'])->name('admin.catalogos.categorias-mapa.destroy');
+    });
 
     Route::get('/admin/aprobar-comercios', [AprobarComerciosController::class, 'index'])->name('admin.aprobar-comercios');
     Route::get('/admin/aprobar-comercios/{preregistro}', [AprobarComerciosController::class, 'show'])->name('admin.aprobar-comercios.show');

@@ -6,6 +6,7 @@ use App\Mail\UserDeactivationMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rule;
@@ -185,8 +186,16 @@ class ComerciosController extends Controller
             }
         }
 
-        $user->activo = ! (bool) $user->activo;
-        $user->save();
+        $nextActiveStatus = ! (bool) $user->activo;
+
+        DB::transaction(function () use ($user, $nextActiveStatus) {
+            $user->activo = $nextActiveStatus;
+            $user->save();
+
+            $user->establecimientos()->update([
+                'estatus' => $nextActiveStatus,
+            ]);
+        });
 
         return redirect()
             ->route('admin.comercios')

@@ -38,7 +38,7 @@
         $canUsuarios = $hasPermission('usuarios-app.ver');
         $canComercios = $hasPermission('comercios.ver');
         $canRegistros = $hasPermission('registros-enlace.ver') && ($canUsuarios || $canComercios);
-        $canCatalogos = $canEventos || $canComercios || $canPuntosMapa;
+        $canCatalogos = $hasPermission('catalogos-explora.ver') && ($canEventos || $canComercios || $canPuntosMapa);
         $navItemClasses = function (bool $isActive) {
             return $isActive
                 ? 'flex items-center gap-2.5 rounded-[14px] bg-white px-3.5 py-2 text-[13px] font-medium text-[#63102a] shadow-[0_10px_22px_rgba(0,0,0,0.14)]'

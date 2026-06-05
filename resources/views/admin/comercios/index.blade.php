@@ -41,7 +41,11 @@
         $usuarios = $usuarios ?? collect();
         $usuariosActivos = $usuarios->where('activo', true)->count();
         $usuariosConNegocio = $usuarios->filter(fn ($usuario) => $usuario->establecimientos->isNotEmpty())->count();
-        $comerciosVisibles = $usuarios->filter(fn ($usuario) => (bool) optional($usuario->establecimientos->first())->is_visible)->count();
+        $comerciosVisibles = $usuarios->filter(function ($usuario) {
+            $establecimiento = $usuario->establecimientos->first();
+
+            return $establecimiento && (bool) $establecimiento->is_visible && (bool) $establecimiento->estatus;
+        })->count();
     @endphp
 
     <div class="admin-shell mb-5 overflow-hidden">

@@ -40,6 +40,7 @@ if ($adminDomain = env('ADMIN_APP_DOMAIN')) {
 }
 
 Route::view('/', 'landing')->name('landing');
+Route::view('/comercios', 'landing-comercios')->name('landing.comercios');
 
 Route::view('/docs/api', 'api-docs')->name('api.docs');
 

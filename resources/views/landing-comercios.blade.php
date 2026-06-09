@@ -80,7 +80,7 @@
         $frontendCommerceRegisterUrl = $frontendUrl . '/auth/comercios/registro';
         $frontendCommerceLoginUrl = $frontendUrl . '/auth/comercios/login';
 
-        $logoLanding = asset('img/landing/logo-landing.png');
+        $logoLanding = asset('img/logo.png');
         $heroPhone = asset('img/landing/tel-hero.png');
         $heroVector = asset('img/landing/Vector.png');
         $mapPreview = asset('img/landing/mapas.png');

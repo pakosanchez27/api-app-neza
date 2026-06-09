@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 
@@ -13,7 +12,9 @@
 
     <style>
         @keyframes floatSoft {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
 
@@ -175,87 +176,96 @@
             <section id="inicio" class="relative overflow-hidden bg-[#63102a] bg-cover bg-center bg-no-repeat"
                 style="background-image: url('{{ $heroVector }}');">
                 <div
-                    class="absolute inset-0 bg-[linear-gradient(90deg,rgba(79,12,34,0.96),rgba(99,16,42,0.9),rgba(99,16,42,0.72))]">
+                    class="absolute inset-0 bg-[linear-gradient(90deg,rgba(79,12,34,0.97),rgba(99,16,42,0.92),rgba(99,16,42,0.76))]">
                 </div>
                 <div
-                    class="pointer-events-none absolute left-[8%] top-20 h-36 w-36 rounded-full bg-[#f2cf91]/14 blur-3xl">
+                    class="pointer-events-none absolute left-[6%] top-16 h-40 w-40 rounded-full bg-[#f2cf91]/14 blur-3xl">
                 </div>
                 <div
-                    class="pointer-events-none absolute right-[12%] bottom-20 h-44 w-44 rounded-full bg-white/10 blur-3xl">
+                    class="pointer-events-none absolute right-[10%] bottom-16 h-52 w-52 rounded-full bg-white/10 blur-3xl">
                 </div>
-
                 <div
-                    class="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_430px] lg:px-8 lg:py-20">
+                    class="pointer-events-none absolute bottom-0 left-1/2 h-px w-[80%] -translate-x-1/2 bg-[linear-gradient(90deg,transparent,rgba(242,207,145,0.35),transparent)]">
+                </div>
+                <div
+                    class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:px-8 lg:py-20">
                     <div class="text-white fx-appear">
                         <div
                             class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-black text-[#f2cf91] glass-card">
-                            <span class="h-2 w-2 rounded-full bg-[#f2cf91]"></span>
-                            ExploraNeza para comercios
+                            <span class="h-2 w-2 rounded-full bg-[#f2cf91]"></span> ExploraNeza para negocios locales
                         </div>
-
-                        <h1 class="mt-5 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-[58px]">
-                            Haz visible tu negocio en la app de la ciudad.
-                        </h1>
-
-                        <p class="mt-5 max-w-2xl text-lg leading-8 text-white/86">
-                            Registra tu comercio, muestra fotos, horarios y ubicación, publica promociones y participa
-                            en recorridos con sellos dentro de ExploraNeza.
-                        </p>
-
-                        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                            <a href="{{ $frontendCommerceRegisterUrl }}"
+                        <h1
+                            class="mt-5 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-[58px]">
+                            Haz que más personas encuentren tu comercio en Neza. </h1>
+                        <p class="mt-5 max-w-2xl text-lg leading-8 text-white/86"> Registra tu negocio en ExploraNeza y
+                            muestra ubicación, horarios, fotos, promociones y beneficios para conectar con vecinos y
+                            visitantes desde la app de la ciudad. </p>
+                        <div class="mt-8 flex flex-col gap-3 sm:flex-row"> <a href="{{ $frontendCommerceRegisterUrl }}"
                                 class="shine-wrap inline-flex items-center justify-center rounded-xl bg-[#f2cf91] px-6 py-3.5 text-sm font-black text-[#63102a] shadow-[0_18px_38px_rgba(188,149,92,0.24)] transition hover:-translate-y-0.5 hover:bg-white">
-                                Registrar mi comercio
-                            </a>
-
-                            <a href="{{ $frontendCommerceLoginUrl }}"
+                                Registrar mi comercio </a> <a href="{{ $frontendCommerceLoginUrl }}"
                                 class="inline-flex items-center justify-center rounded-xl border border-white/14 bg-white/10 px-6 py-3.5 text-sm font-black text-white transition hover:bg-white/16">
-                                Ingresar al panel
-                            </a>
-
-                            <a href="{{ route('landing') }}"
-                                class="inline-flex items-center justify-center rounded-xl border border-white/14 bg-white/10 px-6 py-3.5 text-sm font-black text-white transition hover:bg-white/16">
-                                Ver app para usuarios
-                            </a>
-                        </div>
-
+                                Ingresar al panel </a> <a href="{{ route('landing') }}"
+                                class="inline-flex items-center justify-center rounded-xl border border-white/14 bg-transparent px-6 py-3.5 text-sm font-black text-white/90 transition hover:bg-white/10">
+                                Ver app ciudadana </a> </div>
                         <div class="mt-10 grid gap-3 sm:grid-cols-3">
-                            <div class="rounded-2xl border border-white/10 bg-white/10 p-4 glass-card">
+                            <article class="rounded-2xl border border-white/10 bg-white/10 p-4 glass-card">
+                                <div
+                                    class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#f2cf91]">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
                                 <p class="text-[11px] font-black uppercase tracking-[0.14em] text-[#f2cf91]">
-                                    Visibilidad
+                                    Visibilidad </p>
+                                <p class="mt-2 text-sm leading-6 text-white/82"> Aparece en el mapa y ayuda a que
+                                    lleguen a tu local. </p>
+                            </article>
+                            <article class="rounded-2xl border border-white/10 bg-white/10 p-4 glass-card">
+                                <div
+                                    class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#f2cf91]">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <p class="text-[11px] font-black uppercase tracking-[0.14em] text-[#f2cf91]"> Perfil
                                 </p>
-                                <p class="mt-2 text-sm leading-6 text-white/82">
-                                    Aparece en el mapa de la app.
-                                </p>
-                            </div>
-
-                            <div class="rounded-2xl border border-white/10 bg-white/10 p-4 glass-card">
+                                <p class="mt-2 text-sm leading-6 text-white/82"> Comparte fotos, descripción, horarios
+                                    y contacto. </p>
+                            </article>
+                            <article class="rounded-2xl border border-white/10 bg-white/10 p-4 glass-card">
+                                <div
+                                    class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#f2cf91]">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-10c1.11 0 2.08.402 2.599 1M12 8V7m0 11v-1m0 0c-1.11 0-2.08-.402-2.599-1" />
+                                    </svg>
+                                </div>
                                 <p class="text-[11px] font-black uppercase tracking-[0.14em] text-[#f2cf91]">
-                                    Promociones
-                                </p>
-                                <p class="mt-2 text-sm leading-6 text-white/82">
-                                    Publica cupones y beneficios.
-                                </p>
-                            </div>
-
-                            <div class="rounded-2xl border border-white/10 bg-white/10 p-4 glass-card">
-                                <p class="text-[11px] font-black uppercase tracking-[0.14em] text-[#f2cf91]">
-                                    Recorridos
-                                </p>
-                                <p class="mt-2 text-sm leading-6 text-white/82">
-                                    Participa con sellos y QR.
-                                </p>
-                            </div>
+                                    Beneficios </p>
+                                <p class="mt-2 text-sm leading-6 text-white/82"> Publica cupones, descuentos o
+                                    participación en rutas. </p>
+                            </article>
                         </div>
                     </div>
-
                     <div class="relative flex justify-center lg:justify-end">
                         <div
-                            class="pointer-events-none absolute bottom-4 h-14 w-[72%] rounded-full bg-black/30 blur-2xl lg:right-0">
+                            class="pointer-events-none absolute bottom-5 h-14 w-[72%] rounded-full bg-black/30 blur-2xl lg:right-0">
                         </div>
-
-                        <img src="{{ $heroPhone }}" alt="Panel de comercios de ExploraNeza"
-                            class="fx-float relative w-full max-w-[330px] drop-shadow-[0_30px_46px_rgba(0,0,0,0.44)] sm:max-w-[370px] lg:max-w-[420px]">
+                        <div
+                            class="relative rounded-[42px] border border-white/10 bg-white/10 p-4 shadow-[0_30px_70px_rgba(0,0,0,0.22)] glass-card">
+                            <img src="{{ $heroPhone }}" alt="Panel de comercios de ExploraNeza"
+                                class="fx-float relative w-full max-w-[310px] drop-shadow-[0_30px_46px_rgba(0,0,0,0.44)] sm:max-w-[350px] lg:max-w-[390px]">
+                        </div>
+                        <div
+                            class="absolute right-0 top-8 hidden rounded-2xl bg-[#f2cf91] px-4 py-3 text-sm font-black text-[#63102a] shadow-[0_18px_38px_rgba(188,149,92,0.24)] sm:block">
+                            + Visibilidad </div>
+                        <div
+                            class="absolute bottom-10 left-0 hidden rounded-2xl bg-white px-4 py-3 text-sm font-black text-[#63102a] shadow-[0_18px_38px_rgba(0,0,0,0.16)] sm:block">
+                            Cupones + QR </div>
                     </div>
                 </div>
             </section>
@@ -373,92 +383,81 @@
                 </div>
             </section>
 
-            {{-- PANEL --}}
-            <section id="panel" class="relative overflow-hidden bg-[#fbf5eb] py-20 sm:py-24">
+            {{-- PANEL --}} <section id="panel"
+                class="relative overflow-hidden bg-[#fbf5eb] py-20 sm:py-24">
                 <div
                     class="pointer-events-none absolute left-0 top-12 h-72 w-72 -translate-x-1/2 rounded-full bg-[#63102a]/8 blur-3xl">
                 </div>
                 <div
                     class="pointer-events-none absolute right-0 bottom-10 h-72 w-72 translate-x-1/2 rounded-full bg-[#bc955c]/12 blur-3xl">
                 </div>
-
                 <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="grid gap-12 lg:grid-cols-12 lg:items-center">
-                        <div class="lg:col-span-5">
-                            <span
+                        <div class="lg:col-span-5"> <span
                                 class="inline-flex rounded-full bg-[#63102a]/8 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-[#63102a]">
-                                Panel administrativo
-                            </span>
-
-                            <h2 class="mt-5 text-4xl font-black leading-tight text-[#201815] sm:text-5xl">
-                                Administra cómo se ve tu negocio dentro de la app.
-                            </h2>
-
-                            <p class="mt-6 text-lg leading-8 text-[#4f0c22]/72">
-                                Desde tu cuenta podrás mantener actualizada la información que verá la población:
-                                datos del negocio, horarios, fotos, promociones y participación en recorridos.
-                            </p>
-
+                                Panel administrativo </span>
+                            <h2 class="mt-5 text-4xl font-black leading-tight text-[#201815] sm:text-5xl"> Controla la
+                                información que verá la gente de tu negocio. </h2>
+                            <p class="mt-6 text-lg leading-8 text-[#4f0c22]/72"> Desde tu panel podrás mantener
+                                actualizado tu perfil, horarios, fotos, ubicación y promociones para que vecinos y
+                                visitantes encuentren información clara antes de llegar. </p>
+                            <div class="mt-8 flex flex-col gap-3 sm:flex-row"> <a
+                                    href="{{ $frontendCommerceLoginUrl }}"
+                                    class="inline-flex items-center justify-center rounded-xl bg-[#63102a] px-5 py-3 text-sm font-black text-white shadow-[0_16px_34px_rgba(99,16,42,0.18)] transition hover:-translate-y-0.5 hover:bg-[#4f0c22]">
+                                    Ingresar al panel </a> <a href="{{ $frontendCommerceRegisterUrl }}"
+                                    class="inline-flex items-center justify-center rounded-xl border border-[#63102a]/12 bg-white px-5 py-3 text-sm font-black text-[#63102a] transition hover:bg-[#f7ecd8]">
+                                    Registrar comercio </a> </div>
                             <div class="mt-10 grid gap-4">
                                 <article
-                                    class="flex gap-5 rounded-[28px] border border-[#63102a]/8 bg-white p-6 shadow-[0_16px_38px_rgba(99,16,42,0.08)]">
+                                    class="group flex gap-5 rounded-[28px] border border-[#63102a]/8 bg-white p-6 shadow-[0_16px_38px_rgba(99,16,42,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_46px_rgba(99,16,42,0.14)]">
                                     <div
-                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f7ecd8] text-[#63102a]">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f7ecd8] text-[#63102a] transition group-hover:scale-105">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 6h16M4 12h10M4 18h16" />
-                                        </svg>
-                                    </div>
+                                        </svg> </div>
                                     <div>
-                                        <h3 class="text-lg font-black text-[#201815]">
-                                            Información completa
+                                        <h3 class="text-lg font-black text-[#201815]"> Perfil completo del negocio
                                         </h3>
-                                        <p class="mt-1 text-sm leading-6 text-[#4f0c22]/70">
-                                            Actualiza nombre comercial, descripción, dirección, contacto y servicios.
-                                        </p>
+                                        <p class="mt-1 text-sm leading-6 text-[#4f0c22]/70"> Edita nombre comercial,
+                                            descripción, dirección, contacto, servicios y ubicación. </p>
                                     </div>
                                 </article>
-
                                 <article
-                                    class="flex gap-5 rounded-[28px] border border-[#63102a]/8 bg-[#fff9ef] p-6 shadow-[0_16px_38px_rgba(188,149,92,0.12)]">
+                                    class="group flex gap-5 rounded-[28px] border border-[#63102a]/8 bg-[#fff9ef] p-6 shadow-[0_16px_38px_rgba(188,149,92,0.12)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_46px_rgba(99,16,42,0.14)]">
                                     <div
-                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f7ecd8] text-[#235b4e]">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f7ecd8] text-[#235b4e] transition group-hover:scale-105">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M8 7V3m8 4V3M5 11h14M7 21h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                    </div>
+                                        </svg> </div>
                                     <div>
-                                        <h3 class="text-lg font-black text-[#201815]">
-                                            Horarios por día
+                                        <h3 class="text-lg font-black text-[#201815]"> Horarios siempre actualizados
                                         </h3>
-                                        <p class="mt-1 text-sm leading-6 text-[#4f0c22]/70">
-                                            Indica cuándo abres, cuándo cierras y qué días no das servicio.
-                                        </p>
+                                        <p class="mt-1 text-sm leading-6 text-[#4f0c22]/70"> Indica días de atención,
+                                            horarios de apertura, cierre y descansos. </p>
                                     </div>
                                 </article>
-
                                 <article
-                                    class="flex gap-5 rounded-[28px] border border-[#63102a]/8 bg-white p-6 shadow-[0_16px_38px_rgba(99,16,42,0.08)]">
+                                    class="group flex gap-5 rounded-[28px] border border-[#63102a]/8 bg-white p-6 shadow-[0_16px_38px_rgba(99,16,42,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_46px_rgba(99,16,42,0.14)]">
                                     <div
-                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#fff0d8] text-[#bc955c]">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#fff0d8] text-[#bc955c] transition group-hover:scale-105">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                    </div>
+                                        </svg> </div>
                                     <div>
-                                        <h3 class="text-lg font-black text-[#201815]">
-                                            Galería visual
-                                        </h3>
-                                        <p class="mt-1 text-sm leading-6 text-[#4f0c22]/70">
-                                            Sube fotos del lugar, menú, productos o servicios para generar confianza.
-                                        </p>
+                                        <h3 class="text-lg font-black text-[#201815]"> Fotos, promociones y contenido
+                                            visual </h3>
+                                        <p class="mt-1 text-sm leading-6 text-[#4f0c22]/70"> Sube imágenes, menú,
+                                            productos, servicios y promociones para generar más confianza. </p>
                                     </div>
                                 </article>
                             </div>
                         </div>
-
                         <div class="relative lg:col-span-7">
                             <div
                                 class="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-[#bc955c]/10 blur-[100px]">
@@ -466,26 +465,128 @@
                             <div
                                 class="absolute -bottom-10 -left-10 h-64 w-64 rounded-full bg-[#63102a]/10 blur-[100px]">
                             </div>
-
                             <div
                                 class="relative overflow-hidden rounded-[44px] border border-[#63102a]/5 bg-white p-3 shadow-[0_40px_80px_rgba(99,16,42,0.12)]">
                                 <div
                                     class="absolute inset-x-6 top-4 z-10 hidden items-center justify-between rounded-full border border-white/60 bg-white/84 px-5 py-2 backdrop-blur-md sm:flex">
                                     <div
                                         class="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] text-[#63102a]">
-                                        <span class="h-2.5 w-2.5 rounded-full bg-[#bc955c]"></span>
-                                        Vista ilustrativa
-                                    </div>
-                                    <span class="text-xs font-semibold text-[#4f0c22]/55">
-                                        Perfil + mapa
+                                        <span class="h-2.5 w-2.5 rounded-full bg-[#bc955c]"></span> Vista del panel
+                                    </div> <span class="text-xs font-semibold text-[#4f0c22]/55"> Perfil + promociones
                                     </span>
                                 </div>
-
-                                <div class="h-[380px] overflow-hidden rounded-[34px] bg-[#f7ecd8] sm:h-[520px] lg:h-[600px]">
-                                    <img src="{{ $mapPreview }}" alt="Vista ilustrativa de ExploraNeza Comercios"
-                                        class="h-full w-full object-contain">
+                                <div
+                                    class="relative overflow-hidden rounded-[34px] bg-[linear-gradient(180deg,#fbf5eb_0%,#ffffff_100%)] p-5 sm:p-7 lg:min-h-[600px]">
+                                    <div class="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)]">
+                                        <aside
+                                            class="rounded-[28px] border border-[#63102a]/8 bg-[#63102a] p-5 text-white shadow-[0_20px_45px_rgba(99,16,42,0.16)]">
+                                            <p
+                                                class="text-[11px] font-black uppercase tracking-[0.16em] text-[#f2cf91]">
+                                                Mi comercio </p>
+                                            <div class="mt-5 flex items-center gap-3">
+                                                <div
+                                                    class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/12 text-[#f2cf91]">
+                                                    <svg class="h-6 w-6" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" />
+                                                    </svg> </div>
+                                                <div>
+                                                    <p class="text-sm font-black"> Negocio local </p>
+                                                    <p class="text-xs text-white/62"> Perfil activo </p>
+                                                </div>
+                                            </div>
+                                            <div class="mt-6 space-y-3 text-sm">
+                                                <div class="rounded-2xl bg-white/10 px-4 py-3 font-bold text-white">
+                                                    Resumen </div>
+                                                <div class="rounded-2xl px-4 py-3 text-white/72"> Información </div>
+                                                <div class="rounded-2xl px-4 py-3 text-white/72"> Horarios </div>
+                                                <div class="rounded-2xl px-4 py-3 text-white/72"> Galería </div>
+                                                <div class="rounded-2xl px-4 py-3 text-white/72"> Cupones </div>
+                                            </div>
+                                        </aside>
+                                        <div class="grid gap-5">
+                                            <div
+                                                class="rounded-[28px] border border-[#63102a]/8 bg-white p-5 shadow-[0_18px_38px_rgba(99,16,42,0.07)]">
+                                                <div
+                                                    class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                                    <div>
+                                                        <p
+                                                            class="text-[11px] font-black uppercase tracking-[0.16em] text-[#bc955c]">
+                                                            Resumen </p>
+                                                        <h3 class="mt-2 text-2xl font-black text-[#201815]"> Tu negocio
+                                                            en ExploraNeza </h3>
+                                                    </div> <span
+                                                        class="inline-flex w-fit rounded-full bg-[#ecf6f2] px-4 py-2 text-xs font-black text-[#235b4e]">
+                                                        Publicado </span>
+                                                </div>
+                                                <div class="mt-5 grid gap-3 sm:grid-cols-3">
+                                                    <div class="rounded-2xl bg-[#fbf5eb] p-4">
+                                                        <p class="text-2xl font-black text-[#63102a]"> 100% </p>
+                                                        <p class="mt-1 text-xs font-bold text-[#4f0c22]/65"> Perfil
+                                                            completo </p>
+                                                    </div>
+                                                    <div class="rounded-2xl bg-[#fbf5eb] p-4">
+                                                        <p class="text-2xl font-black text-[#bc955c]"> 8 </p>
+                                                        <p class="mt-1 text-xs font-bold text-[#4f0c22]/65"> Fotos
+                                                            cargadas </p>
+                                                    </div>
+                                                    <div class="rounded-2xl bg-[#fbf5eb] p-4">
+                                                        <p class="text-2xl font-black text-[#235b4e]"> 3 </p>
+                                                        <p class="mt-1 text-xs font-bold text-[#4f0c22]/65"> Beneficios
+                                                            activos </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="grid gap-5 md:grid-cols-2">
+                                                <div
+                                                    class="rounded-[28px] border border-[#63102a]/8 bg-white p-5 shadow-[0_18px_38px_rgba(99,16,42,0.07)]">
+                                                    <p
+                                                        class="text-[11px] font-black uppercase tracking-[0.16em] text-[#bc955c]">
+                                                        Horarios </p>
+                                                    <h4 class="mt-2 text-lg font-black text-[#201815]"> Abierto hoy
+                                                    </h4>
+                                                    <p class="mt-2 text-sm leading-6 text-[#4f0c22]/70"> 09:00 a 19:00
+                                                        hrs </p>
+                                                    <div class="mt-4 h-2 overflow-hidden rounded-full bg-[#f7ecd8]">
+                                                        <div class="h-full w-3/4 rounded-full bg-[#235b4e]"></div>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="rounded-[28px] border border-[#63102a]/8 bg-white p-5 shadow-[0_18px_38px_rgba(99,16,42,0.07)]">
+                                                    <p
+                                                        class="text-[11px] font-black uppercase tracking-[0.16em] text-[#bc955c]">
+                                                        Promociones </p>
+                                                    <h4 class="mt-2 text-lg font-black text-[#201815]"> Cupón destacado
+                                                    </h4>
+                                                    <p class="mt-2 text-sm leading-6 text-[#4f0c22]/70"> Beneficio
+                                                        activo para visitantes de la app. </p>
+                                                    <div
+                                                        class="mt-4 rounded-2xl bg-[#63102a] px-4 py-3 text-sm font-black text-white">
+                                                        15% de descuento </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="rounded-[28px] border border-[#63102a]/8 bg-white p-5 shadow-[0_18px_38px_rgba(99,16,42,0.07)]">
+                                                <p
+                                                    class="text-[11px] font-black uppercase tracking-[0.16em] text-[#bc955c]">
+                                                    Galería </p>
+                                                <div class="mt-4 grid grid-cols-4 gap-3">
+                                                    <div class="h-20 rounded-2xl bg-[#f7ecd8]"></div>
+                                                    <div class="h-20 rounded-2xl bg-[#fff0d8]"></div>
+                                                    <div class="h-20 rounded-2xl bg-[#ecf6f2]"></div>
+                                                    <div
+                                                        class="flex h-20 items-center justify-center rounded-2xl bg-[#63102a] text-xs font-black text-white">
+                                                        +5 fotos </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <p class="mx-auto mt-5 max-w-2xl text-center text-sm leading-6 text-[#4f0c22]/60"> Vista
+                                ilustrativa: el panel puede adaptarse a las funciones activas de tu comercio. </p>
                         </div>
                     </div>
                 </div>
@@ -613,7 +714,8 @@
                         </div>
 
                         <div class="grid gap-4">
-                            <article class="rounded-[30px] border border-[#63102a]/8 bg-white p-6 shadow-[0_18px_40px_rgba(99,16,42,0.06)]">
+                            <article
+                                class="rounded-[30px] border border-[#63102a]/8 bg-white p-6 shadow-[0_18px_40px_rgba(99,16,42,0.06)]">
                                 <p class="text-4xl font-black text-[#bc955c]/30">01</p>
                                 <h3 class="mt-2 text-xl font-black text-[#201815]">
                                     Crea tu cuenta de comercio
@@ -623,7 +725,8 @@
                                 </p>
                             </article>
 
-                            <article class="rounded-[30px] border border-[#63102a]/8 bg-white p-6 shadow-[0_18px_40px_rgba(99,16,42,0.06)]">
+                            <article
+                                class="rounded-[30px] border border-[#63102a]/8 bg-white p-6 shadow-[0_18px_40px_rgba(99,16,42,0.06)]">
                                 <p class="text-4xl font-black text-[#bc955c]/30">02</p>
                                 <h3 class="mt-2 text-xl font-black text-[#201815]">
                                     Completa tu perfil
@@ -634,7 +737,8 @@
                                 </p>
                             </article>
 
-                            <article class="rounded-[30px] border border-[#63102a]/8 bg-[#63102a] p-6 text-white shadow-[0_22px_48px_rgba(99,16,42,0.18)]">
+                            <article
+                                class="rounded-[30px] border border-[#63102a]/8 bg-[#63102a] p-6 text-white shadow-[0_22px_48px_rgba(99,16,42,0.18)]">
                                 <p class="text-4xl font-black text-[#f2cf91]/40">03</p>
                                 <h3 class="mt-2 text-xl font-black">
                                     Publica beneficios y participa
@@ -667,7 +771,8 @@
                                     Únete a ExploraNeza
                                 </p>
 
-                                <h2 class="mt-4 max-w-4xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">
+                                <h2
+                                    class="mt-4 max-w-4xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">
                                     Tu comercio puede formar parte del mapa, las rutas y los beneficios de la ciudad.
                                 </h2>
 
@@ -766,12 +871,10 @@
                             </p>
 
                             <div class="mt-4 flex flex-col gap-2 text-sm font-semibold text-[#4f0c22]/75">
-                                <a href="{{ $frontendCommerceRegisterUrl }}"
-                                    class="transition hover:text-[#63102a]">
+                                <a href="{{ $frontendCommerceRegisterUrl }}" class="transition hover:text-[#63102a]">
                                     Registrar comercio
                                 </a>
-                                <a href="{{ $frontendCommerceLoginUrl }}"
-                                    class="transition hover:text-[#63102a]">
+                                <a href="{{ $frontendCommerceLoginUrl }}" class="transition hover:text-[#63102a]">
                                     Ingresar al panel
                                 </a>
                                 <a href="{{ route('landing') }}" class="transition hover:text-[#63102a]">
@@ -805,4 +908,3 @@
 </body>
 
 </html>
-

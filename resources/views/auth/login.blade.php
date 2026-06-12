@@ -30,7 +30,7 @@
     class="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(188,149,92,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(99,16,42,0.14),transparent_30%),linear-gradient(180deg,#fffdfa_0%,#fbf5eb_100%)] text-[#201815] antialiased">
     @php
         $landingUrl = route('landing');
-        $logoLanding = asset('img/landing/logo-landing.png');
+        $logoLanding = asset('img/Logo.png');
     @endphp
 
     <main class="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-6 sm:px-6 lg:px-8">

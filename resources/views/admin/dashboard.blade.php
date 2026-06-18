@@ -2,260 +2,208 @@
 
 @section('title', 'Dashboard')
 @section('title-section', 'Panel de Control')
-@section('description', 'Sigue crecimiento, visibilidad comercial y avance del pasaporte desde un tablero más claro y útil.')
+@section('description', 'Sigue crecimiento, visibilidad comercial y avance del pasaporte desde un tablero claro y util.')
 
 @section('content')
-    <div class="space-y-6">
-        <section class="overflow-hidden rounded-[30px] bg-[linear-gradient(90deg,#4730d9_0%,#5a40f0_42%,#6d56ff_100%)] text-white shadow-[0_28px_70px_rgba(76,56,216,0.26)]">
-            <div class="px-6 py-6 sm:px-7">
-                <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
-                        <p class="text-sm font-semibold text-white/90">Resumen General</p>
-                        <p class="mt-1 max-w-2xl text-sm leading-6 text-white/72">
-                            Seguimiento rápido de crecimiento, comercios y actividad del pasaporte.
-                        </p>
-                    </div>
+    @php
+        $completionRate = $totalPasaportes > 0 ? round(($pasaportesCompletados / $totalPasaportes) * 100) : 0;
+        $visibleCommerceRate = $totalComercios > 0 ? round(($comerciosVisibles / $totalComercios) * 100) : 0;
+        $passportActivityRate = $totalPasaportes > 0 ? round(min(100, ($totalSellos / max(1, $totalPasaportes)) * 18)) : 0;
+        $chartBars = [
+            ['label' => 'U', 'value' => max(18, min(100, $usuariosNuevosSemana * 12)), 'solid' => false],
+            ['label' => 'C', 'value' => max(28, min(100, $comerciosVisibles * 5)), 'solid' => true],
+            ['label' => 'S', 'value' => max(34, min(100, $totalSellos * 4)), 'solid' => true, 'light' => true],
+            ['label' => 'P', 'value' => max(30, min(100, $totalPasaportes * 8)), 'solid' => true, 'dark' => true],
+            ['label' => 'R', 'value' => max(22, min(100, $totalRutasActivas * 22)), 'solid' => false],
+            ['label' => 'M', 'value' => max(20, min(100, $usuariosNuevosMes * 5)), 'solid' => false],
+            ['label' => 'A', 'value' => max(26, min(100, $passportActivityRate)), 'solid' => false],
+        ];
+    @endphp
 
-                    <div class="grid gap-3 sm:grid-cols-2">
-                        <div class="rounded-[18px] border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/65">Usuarios nuevos</p>
-                            <p class="mt-2 text-2xl font-bold">{{ number_format($usuariosNuevosSemana) }}</p>
-                            <p class="mt-1 text-xs text-white/65">Semana actual</p>
-                        </div>
-                        <div class="rounded-[18px] border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/65">Pasaportes</p>
-                            <p class="mt-2 text-2xl font-bold">{{ number_format($pasaportesCompletados) }}</p>
-                            <p class="mt-1 text-xs text-white/65">Completados</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="space-y-4">
+        <section class="flex flex-col gap-4 px-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <h1 class="text-3xl font-semibold tracking-normal text-[#201815] sm:text-4xl">Dashboard</h1>
+                <p class="mt-2 text-sm text-[#8b6f79]">Monitorea usuarios, comercios y actividad del pasaporte.</p>
             </div>
 
-            <div class="bg-[#f8f6ff] px-4 pb-4 pt-1 sm:px-5 sm:pb-5">
-                <div class="-mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p class="text-sm font-medium text-[#5f5a78]">Usuarios</p>
-                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalUsuarios) }}</p>
-                            </div>
-                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0-3-.479c-1.067 0-2.092.18-3 .479m6 0a8.962 8.962 0 0 1-6 0m6 0a8.966 8.966 0 0 0 1.128-5.702 4.5 4.5 0 1 0-8.256 0A8.966 8.966 0 0 0 9 19.128" />
-                                </svg>
-                            </span>
-                        </div>
-                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Total acumulado de cuentas registradas en la plataforma.</p>
-                    </article>
-
-                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p class="text-sm font-medium text-[#5f5a78]">Comercios</p>
-                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalComercios) }}</p>
-                            </div>
-                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15l-1.5 6h-12L4.5 3Zm0 0L3 9.75m15 0 1.5-6M6.75 9.75V21m10.5-11.25V21M9.75 13.5h4.5" />
-                                </svg>
-                            </span>
-                        </div>
-                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Cantidad de establecimientos dados de alta en el sistema.</p>
-                    </article>
-
-                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p class="text-sm font-medium text-[#5f5a78]">Sellos</p>
-                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalSellos) }}</p>
-                            </div>
-                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3.72c.992-.454 2.096-.454 3.088 0l5.134 2.35c1.243.569 1.243 2.331 0 2.9l-5.134 2.35a3.75 3.75 0 0 1-3.088 0L4.434 8.97c-1.243-.569-1.243-2.331 0-2.9l5.134-2.35Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 10.5 9.568 13.16c.992.454 2.096.454 3.088 0l5.844-2.67M3.75 15l5.818 2.66c.992.454 2.096.454 3.088 0L18.5 15" />
-                                </svg>
-                            </span>
-                        </div>
-                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Número total de sellos registrados en los pasaportes.</p>
-                    </article>
-
-                    <article class="rounded-[18px] border border-[#ebe7ff] bg-white px-5 py-4 text-[#201815] shadow-[0_12px_30px_rgba(38,26,87,0.10)]">
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p class="text-sm font-medium text-[#5f5a78]">Pasaportes</p>
-                                <p class="mt-3 text-4xl font-bold leading-none">{{ number_format($totalPasaportes) }}</p>
-                            </div>
-                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#efeaff] text-[#5a40f0] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3.75h8.25A2.25 2.25 0 0 1 17.25 6v12.75a1.5 1.5 0 0 1-2.366 1.218L12 17.25l-2.884 1.968A1.5 1.5 0 0 1 6.75 18.75V3.75Z" />
-                                </svg>
-                            </span>
-                        </div>
-                        <p class="mt-4 text-xs leading-5 text-[#8a85a3]">Pasaportes iniciados por usuarios dentro de las rutas activas.</p>
-                    </article>
-                </div>
-            </div>
         </section>
 
-        <section class="grid gap-4 xl:grid-cols-[1.2fr,1fr,1fr]">
-            <article class="rounded-[26px] border border-[#efe6dd] bg-white p-6 shadow-[0_18px_42px_rgba(32,24,21,0.08)]">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#8b6f79]">Captación</p>
-                        <h3 class="mt-2 text-xl font-semibold text-[#201815]">Usuarios nuevos</h3>
-                    </div>
-                    <div class="rounded-full bg-[#fff3f7] px-3 py-1 text-xs font-semibold text-[#8d2048]">
-                        Tendencia reciente
-                    </div>
+        <section class="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <article class="rounded-[22px] bg-[linear-gradient(145deg,#63102a_0%,#0f6b43_100%)] p-5 text-white shadow-[0_18px_42px_rgba(99,16,42,0.22)]">
+                <div class="flex items-start justify-between">
+                    <p class="text-sm font-semibold">Usuarios</p>
                 </div>
+                <p class="mt-4 text-4xl font-semibold leading-none">{{ number_format($totalUsuarios) }}</p>
+                <p class="mt-3 inline-flex items-center rounded-full bg-[#f2cf91]/18 px-2 py-1 text-[11px] font-medium text-[#f8e7bd]">
+                    {{ number_format($usuariosNuevosSemana) }} nuevos esta semana
+                </p>
+                <p class="mt-3 text-xs leading-5 text-white/72">Lectura: si este numero sube pero los sellos no, hay registro sin participacion en pasaporte.</p>
+            </article>
 
-                <div class="mt-6 grid gap-4 sm:grid-cols-2">
-                    <div class="rounded-[22px] bg-[#fff7fa] p-5">
-                        <p class="text-sm font-medium text-[#7c5d69]">Últimos 7 días</p>
-                        <p class="mt-2 text-4xl font-bold text-[#63102a]">{{ number_format($usuariosNuevosSemana) }}</p>
-                        <p class="mt-2 text-xs leading-5 text-[#7c5d69]">Altas creadas desde el inicio de la semana actual.</p>
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex items-start justify-between">
+                    <p class="text-sm font-semibold text-[#201815]">Comercios</p>
+                </div>
+                <p class="mt-4 text-4xl font-semibold leading-none text-[#201815]">{{ number_format($totalComercios) }}</p>
+                <p class="mt-3 text-xs text-[#6d5a62]">{{ number_format($comerciosVisibles) }} visibles al publico</p>
+                <p class="mt-3 text-xs leading-5 text-[#8b6f79]">Lectura: compara total contra visibles para saber cuantos comercios ya aparecen en la app.</p>
+            </article>
+
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex items-start justify-between">
+                    <p class="text-sm font-semibold text-[#201815]">Sellos</p>
+                </div>
+                <p class="mt-4 text-4xl font-semibold leading-none text-[#201815]">{{ number_format($totalSellos) }}</p>
+                <p class="mt-3 text-xs text-[#6d5a62]">Interacciones del pasaporte</p>
+                <p class="mt-3 text-xs leading-5 text-[#8b6f79]">Lectura: cada sello representa una visita validada; es el mejor indicador de uso real de rutas.</p>
+            </article>
+
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex items-start justify-between">
+                    <p class="text-sm font-semibold text-[#201815]">Pasaportes</p>
+                </div>
+                <p class="mt-4 text-4xl font-semibold leading-none text-[#201815]">{{ number_format($totalPasaportes) }}</p>
+                <p class="mt-3 text-xs text-[#6d5a62]">{{ number_format($pasaportesCompletados) }} completados</p>
+                <p class="mt-3 text-xs leading-5 text-[#8b6f79]">Lectura: mide cuantas personas iniciaron una ruta y cuantas llegaron al final.</p>
+            </article>
+        </section>
+
+        <section class="grid gap-3 xl:grid-cols-[1.1fr_0.8fr_0.9fr]">
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex items-center justify-between gap-4">
+                    <h2 class="text-base font-semibold text-[#201815]">Actividad general</h2>
+                    <span class="rounded-full border border-[#63102a]/25 px-3 py-1 text-xs font-semibold text-[#63102a]">Pasaporte</span>
+                </div>
+                <p class="mt-2 text-xs leading-5 text-[#8b6f79]">
+                    Las barras comparan senales clave del sistema: U usuarios nuevos, C comercios visibles, S sellos, P pasaportes, R rutas, M altas del mes y A actividad estimada.
+                </p>
+
+                <div class="mt-5 flex h-36 items-end gap-4">
+                    @foreach ($chartBars as $bar)
+                        <div class="flex flex-1 flex-col items-center gap-2">
+                            <div class="flex h-28 w-full items-end">
+                                <div
+                                    class="w-full rounded-full {{ $bar['solid'] ?? false ? (($bar['dark'] ?? false) ? 'bg-[#63102a]' : (($bar['light'] ?? false) ? 'bg-[#5fbf96]' : 'bg-[#1f8f61]')) : '' }}"
+                                    style="height: {{ $bar['value'] }}%; {{ $bar['solid'] ?? false ? '' : 'background: repeating-linear-gradient(135deg, rgba(99,16,42,0.55) 0 3px, transparent 3px 7px);' }}">
+                                </div>
+                            </div>
+                            <span class="text-xs font-medium text-[#9a8a82]">{{ $bar['label'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </article>
+
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <h2 class="text-base font-semibold text-[#201815]">Estado comercial</h2>
+                <p class="mt-2 text-xs leading-5 text-[#8b6f79]">Un porcentaje alto de visibles significa que el catalogo esta listo para consulta publica; los incompletos requieren seguimiento.</p>
+                <div class="mt-5 space-y-4">
+                    <div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="font-medium text-[#6d5a62]">Visibles</span>
+                            <span class="font-semibold text-[#63102a]">{{ $visibleCommerceRate }}%</span>
+                        </div>
+                        <div class="mt-2 h-3 rounded-full bg-[#f3ebe4]">
+                            <div class="h-3 rounded-full bg-[#63102a]" style="width: {{ $visibleCommerceRate }}%"></div>
+                        </div>
                     </div>
-                    <div class="rounded-[22px] bg-[#f8f8ff] p-5">
-                        <p class="text-sm font-medium text-[#6e6c8f]">Mes actual</p>
-                        <p class="mt-2 text-4xl font-bold text-[#29338b]">{{ number_format($usuariosNuevosMes) }}</p>
-                        <p class="mt-2 text-xs leading-5 text-[#6e6c8f]">Altas registradas desde el primer día del mes.</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="rounded-[18px] bg-[#fff7ed] p-4">
+                            <p class="text-3xl font-semibold text-[#bc955c]">{{ number_format($comerciosIncompletos) }}</p>
+                            <p class="mt-1 text-xs text-[#7d6870]">Incompletos</p>
+                        </div>
+                        <div class="rounded-[18px] bg-[#fff5f8] p-4">
+                            <p class="text-3xl font-semibold text-[#63102a]">{{ number_format($totalRutasActivas) }}</p>
+                            <p class="mt-1 text-xs text-[#7d6870]">Rutas activas</p>
+                        </div>
                     </div>
                 </div>
             </article>
 
-            <article class="rounded-[26px] border border-[#efe6dd] bg-white p-6 shadow-[0_18px_42px_rgba(32,24,21,0.08)]">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#8b6f79]">Padrón comercial</p>
-                        <h3 class="mt-2 text-xl font-semibold text-[#201815]">Estado de comercios</h3>
-                    </div>
+            <article class="overflow-hidden rounded-[22px] bg-[#63102a] p-5 text-white shadow-[0_18px_42px_rgba(99,16,42,0.22)]">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-semibold">Progreso pasaporte</h2>
+                    <span class="rounded-full bg-white/12 px-3 py-1 text-xs font-semibold text-[#f2cf91]">Global</span>
                 </div>
-
-                <div class="mt-6 space-y-4">
-                    <div class="rounded-[22px] bg-[#f2fbf4] p-5">
-                        <p class="text-sm font-medium text-[#4c7b5d]">Visibles al público</p>
-                        <p class="mt-2 text-4xl font-bold text-[#166534]">{{ number_format($comerciosVisibles) }}</p>
-                        <p class="mt-2 text-xs leading-5 text-[#4c7b5d]">Comercios activos y habilitados para mostrarse en la app.</p>
-                    </div>
-                    <div class="rounded-[22px] bg-[#fff7ed] p-5">
-                        <p class="text-sm font-medium text-[#8a5a2d]">Aún incompletos</p>
-                        <p class="mt-2 text-4xl font-bold text-[#c2410c]">{{ number_format($comerciosIncompletos) }}</p>
-                        <p class="mt-2 text-xs leading-5 text-[#8a5a2d]">Registros de comercio que todavía no terminan su proceso de alta.</p>
-                    </div>
-                </div>
-            </article>
-
-            <article class="rounded-[26px] border border-[#efe6dd] bg-white p-6 shadow-[0_18px_42px_rgba(32,24,21,0.08)]">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#8b6f79]">Actividad</p>
-                        <h3 class="mt-2 text-xl font-semibold text-[#201815]">Pasaporte y rutas</h3>
-                    </div>
-                </div>
-
-                <div class="mt-6 space-y-4">
-                    <div class="rounded-[22px] bg-[#faf5ff] p-5">
-                        <p class="text-sm font-medium text-[#74528a]">Rutas activas</p>
-                        <p class="mt-2 text-4xl font-bold text-[#6b21a8]">{{ number_format($totalRutasActivas) }}</p>
-                        <p class="mt-2 text-xs leading-5 text-[#74528a]">Rutas disponibles actualmente para experiencia y pasaporte.</p>
-                    </div>
-                    <div class="rounded-[22px] bg-[#f0fdfa] p-5">
-                        <p class="text-sm font-medium text-[#3f7770]">Sellos emitidos</p>
-                        <p class="mt-2 text-4xl font-bold text-[#0f766e]">{{ number_format($totalSellos) }}</p>
-                        <p class="mt-2 text-xs leading-5 text-[#3f7770]">Interacciones efectivas de usuarios dentro del sistema de pasaporte.</p>
+                <p class="mt-2 text-xs leading-5 text-white/68">El porcentaje muestra pasaportes completados contra pasaportes iniciados. Si baja, hay personas empezando rutas pero sin terminarlas.</p>
+                <div class="mt-6 flex items-center justify-center">
+                    <div class="grid h-40 w-40 place-items-center rounded-full" style="background: conic-gradient(#f2cf91 {{ $completionRate }}%, rgba(255,255,255,0.18) 0);">
+                        <div class="grid h-28 w-28 place-items-center rounded-full bg-[#63102a]">
+                            <div class="text-center">
+                                <p class="text-4xl font-semibold leading-none">{{ $completionRate }}%</p>
+                                <p class="mt-1 text-xs text-white/68">Completados</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </article>
         </section>
 
-        <section class="grid gap-6 xl:grid-cols-[1.3fr,1fr]">
-            <article class="rounded-[28px] border border-[#efe6dd] bg-white p-6 shadow-[0_18px_42px_rgba(32,24,21,0.08)]">
-                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <section class="grid gap-3 xl:grid-cols-[1.3fr_0.9fr]">
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h3 class="text-xl font-semibold text-[#201815]">Top 10 usuarios con más avance en pasaporte</h3>
-                        <p class="mt-1 text-sm text-[#6d5a62]">
-                            Ordenados por porcentaje de progreso y luego por sellos acumulados.
-                        </p>
+                        <h2 class="text-base font-semibold text-[#201815]">Top 10 usuarios con mas avance en pasaporte</h2>
+                        <p class="mt-1 text-sm text-[#8b6f79]">Solo usuarios con al menos un sello, ordenados por sellos acumulados.</p>
+                        <p class="mt-1 text-xs leading-5 text-[#9a8a82]">Usalo para identificar a quienes mas participan; el porcentaje indica que tan cerca estan de completar sus sellos posibles.</p>
                     </div>
                 </div>
 
-                <div class="mt-5 overflow-x-auto">
-                    <table class="min-w-full divide-y divide-[#efe6dd] text-sm">
-                        <thead>
-                            <tr class="text-left text-[#7d6870]">
-                                <th class="py-3 pr-4 font-semibold">Usuario</th>
-                                <th class="py-3 pr-4 font-semibold">Progreso</th>
-                                <th class="py-3 pr-4 font-semibold">Sellos</th>
-                                <th class="py-3 pr-4 font-semibold">Pasaportes</th>
-                                <th class="py-3 font-semibold">Completados</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-[#f3ebe4]">
-                            @forelse ($topUsuariosPasaporte as $usuario)
-                                <tr class="align-top">
-                                    <td class="py-4 pr-4">
-                                        <p class="font-semibold text-[#201815]">{{ $usuario['nombre'] }}</p>
-                                        <p class="mt-1 text-xs text-[#7d6870]">{{ $usuario['email'] ?: 'Sin correo registrado' }}</p>
-                                    </td>
-                                    <td class="py-4 pr-4">
-                                        <span class="inline-flex rounded-full bg-[#fff5f8] px-3 py-1 text-xs font-semibold text-[#611232]">
-                                            {{ number_format($usuario['progreso'], 1) }}%
-                                        </span>
-                                    </td>
-                                    <td class="py-4 pr-4 text-[#201815]">
-                                        {{ number_format($usuario['sellos']) }} / {{ number_format($usuario['sellos_posibles']) }}
-                                    </td>
-                                    <td class="py-4 pr-4 text-[#201815]">{{ number_format($usuario['pasaportes']) }}</td>
-                                    <td class="py-4 text-[#201815]">{{ number_format($usuario['pasaportes_completados']) }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="py-8 text-center text-sm text-[#7d6870]">
-                                        Aún no hay suficiente actividad para construir este ranking.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </article>
-
-            <article class="rounded-[28px] border border-[#efe6dd] bg-white p-6 shadow-[0_18px_42px_rgba(32,24,21,0.08)]">
-                <div class="flex items-end justify-between gap-4">
-                    <div>
-                        <h3 class="text-xl font-semibold text-[#201815]">Top comercios que más sellos generan</h3>
-                        <p class="mt-1 text-sm text-[#6d5a62]">
-                            Comercios con mayor tracción dentro del flujo del pasaporte.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="mt-5 space-y-3">
-                    @forelse ($topComerciosPasaporte as $comercio)
-                        <div class="rounded-[22px] border border-[#f0e6de] bg-[#fffdfa] px-4 py-4">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="font-semibold text-[#201815]">{{ $comercio['nombre'] }}</p>
-                                    <p class="mt-1 text-xs text-[#7d6870]">{{ $comercio['tipo'] }}</p>
+                <div class="mt-4 space-y-3">
+                    @forelse ($topUsuariosPasaporte as $usuario)
+                        @php $progressWidth = min(100, max(0, $usuario['progreso'])); @endphp
+                        <div class="rounded-[18px] border border-[#f2e8df] bg-[#fffdfa] p-4">
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="min-w-0">
+                                    <p class="truncate font-semibold text-[#201815]">{{ $usuario['nombre'] }}</p>
+                                    <p class="mt-1 truncate text-xs text-[#8b6f79]">{{ $usuario['email'] ?: 'Sin correo registrado' }}</p>
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-2xl font-bold text-[#63102a]">{{ number_format($comercio['sellos']) }}</p>
-                                    <p class="text-[11px] uppercase tracking-[0.16em] text-[#8b6f79]">sellos</p>
+                                <div class="flex items-center gap-3">
+                                    <span class="rounded-full bg-[#fff5f8] px-3 py-1 text-xs font-semibold text-[#63102a]">{{ number_format($usuario['sellos']) }} sellos</span>
+                                    <span class="text-sm font-semibold text-[#201815]">{{ number_format($usuario['progreso'], 1) }}%</span>
                                 </div>
                             </div>
-                            <div class="mt-3 flex gap-2 text-xs">
-                                <span class="inline-flex rounded-full px-2.5 py-1 font-semibold {{ $comercio['visible'] ? 'bg-[#f2fbf4] text-[#166534]' : 'bg-[#fff1f2] text-[#be123c]' }}">
-                                    {{ $comercio['visible'] ? 'Visible' : 'Oculto' }}
-                                </span>
-                                <span class="inline-flex rounded-full px-2.5 py-1 font-semibold {{ $comercio['activo'] ? 'bg-[#eff6ff] text-[#1d4ed8]' : 'bg-[#fff7ed] text-[#c2410c]' }}">
-                                    {{ $comercio['activo'] ? 'Activo' : 'Incompleto' }}
-                                </span>
+                            <div class="mt-3 h-2 rounded-full bg-[#f3ebe4]">
+                                <div class="h-2 rounded-full bg-[#63102a]" style="width: {{ $progressWidth }}%"></div>
                             </div>
-                            <p class="mt-3 text-xs leading-5 text-[#7d6870]">Este ranking muestra qué comercios generan más sellos dentro del pasaporte.</p>
+                            <div class="mt-2 flex justify-between text-xs text-[#8b6f79]">
+                                <span>{{ number_format($usuario['sellos']) }} / {{ number_format($usuario['sellos_posibles']) }} sellos posibles</span>
+                                <span>{{ number_format($usuario['pasaportes_completados']) }} completados</span>
+                            </div>
                         </div>
                     @empty
-                        <div class="rounded-[22px] border border-[#f0e6de] bg-[#fffdfa] px-4 py-8 text-center text-sm text-[#7d6870]">
-                            Aún no hay sellos suficientes para mostrar un top de comercios.
+                        <div class="rounded-[18px] border border-[#f2e8df] bg-[#fffdfa] px-4 py-8 text-center text-sm text-[#8b6f79]">
+                            Aun no hay suficiente actividad para construir este ranking.
+                        </div>
+                    @endforelse
+                </div>
+            </article>
+
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-semibold text-[#201815]">Comercios con mas sellos</h2>
+                    <span class="rounded-full border border-[#63102a]/25 px-3 py-1 text-xs font-semibold text-[#63102a]">Top</span>
+                </div>
+                <p class="mt-2 text-xs leading-5 text-[#8b6f79]">Este listado muestra donde se estan generando mas validaciones. Ayuda a ubicar comercios con mejor traccion en las rutas.</p>
+
+                <div class="mt-4 space-y-3">
+                    @forelse ($topComerciosPasaporte as $comercio)
+                        <div class="flex items-center gap-3 rounded-[18px] bg-[#fffdfa] p-3">
+                            <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#f2cf91]/35 text-sm font-semibold text-[#63102a]">
+                                {{ substr($comercio['nombre'], 0, 1) }}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-semibold text-[#201815]">{{ $comercio['nombre'] }}</p>
+                                <p class="truncate text-xs text-[#8b6f79]">{{ $comercio['tipo'] }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-lg font-semibold text-[#63102a]">{{ number_format($comercio['sellos']) }}</p>
+                                <p class="text-[11px] text-[#8b6f79]">sellos</p>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="rounded-[18px] border border-[#f2e8df] bg-[#fffdfa] px-4 py-8 text-center text-sm text-[#8b6f79]">
+                            Aun no hay sellos suficientes para mostrar un top de comercios.
                         </div>
                     @endforelse
                 </div>

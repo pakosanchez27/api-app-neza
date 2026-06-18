@@ -25,6 +25,7 @@ class StorePublicPreregistroRequest extends FormRequest
             'numero' => trim((string) $this->input('numero', '')),
             'colonia' => trim((string) $this->input('colonia', '')),
             'codigo_postal' => trim((string) $this->input('codigo_postal', '')),
+            'mercado' => trim((string) $this->input('mercado', '')),
             'aviso_privacidad' => filter_var($this->input('aviso_privacidad'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
                 ?? in_array((string) $this->input('aviso_privacidad'), ['1', 'on', 'yes'], true),
         ]);
@@ -59,6 +60,7 @@ class StorePublicPreregistroRequest extends FormRequest
             'numero' => ['nullable', 'string', 'max:30'],
             'colonia' => ['nullable', 'string', 'max:150'],
             'codigo_postal' => ['nullable', 'string', 'max:10'],
+            'mercado' => ['nullable', 'string', 'max:150'],
             'latitud_us' => ['nullable', 'numeric', 'between:-90,90'],
             'longitud_us' => ['nullable', 'numeric', 'between:-180,180'],
             'aviso_privacidad' => ['accepted'],

@@ -190,6 +190,7 @@ class AprobarComerciosController extends Controller
                 'cp' => $preregistro->codigo_postal,
                 'latitud' => $preregistro->latitud,
                 'longitud' => $preregistro->longitud,
+                'referencias' => $preregistro->mercado,
             ],
             'documentos' => [
                 'ine' => $preregistro->ine,

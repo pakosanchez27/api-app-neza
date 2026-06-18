@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AmenidadController;
+use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\CuponController;
 use App\Http\Controllers\Api\EventoController;
 use App\Http\Controllers\Api\HistoriaController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Api\PuntoMapaController;
 use App\Http\Controllers\Api\RutaController;
 use App\Http\Controllers\Api\TimelineController;
 use App\Http\Controllers\Api\Auth\CommerceAdminAuthController;
+use App\Http\Controllers\Api\Auth\CommerceChatController;
 use App\Http\Controllers\Api\Auth\CommerceCouponController;
 use App\Http\Controllers\Api\Auth\CommerceGalleryController;
 use App\Http\Controllers\Api\Auth\CommercePassportController;
@@ -34,6 +36,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/translate', [TranslateController::class, 'translate']);
+Route::post('/chat', [ChatController::class, 'store']);
 
 Route::get('/roles', [RoleController::class, 'index']);
 Route::get('/tipos', [TipoController::class, 'index']);
@@ -74,6 +77,7 @@ Route::prefix('auth/comercios')->group(function () {
         Route::post('/user-profile', [CommerceAdminAuthController::class, 'updateUserProfile']);
         Route::put('/visibility', [CommerceAdminAuthController::class, 'updateVisibility']);
         Route::post('/registro-establecimiento', [CommerceRegistrationController::class, 'save']);
+        Route::post('/chat', [CommerceChatController::class, 'store']);
         Route::get('/pasaporte/qr', [CommercePassportController::class, 'qr']);
         Route::get('/pasaporte/sellos', [CommercePassportController::class, 'stamps']);
         Route::get('/cupones', [CommerceCouponController::class, 'index']);

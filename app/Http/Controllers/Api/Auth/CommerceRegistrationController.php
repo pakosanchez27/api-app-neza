@@ -120,6 +120,7 @@ class CommerceRegistrationController extends Controller
                 'codigoPostal' => ['nullable', 'digits:5'],
                 'latitud' => ['required', 'numeric', 'between:-90,90'],
                 'longitud' => ['required', 'numeric', 'between:-180,180'],
+                'mercado' => ['nullable', 'string', 'max:150'],
             ],
             4 => [
                 'telefonoNegocio' => ['required', 'string', 'min:10', 'max:20'],
@@ -266,6 +267,7 @@ class CommerceRegistrationController extends Controller
                 'longitud' => $payload['longitud'] ?? null,
                 'x' => $payload['longitud'] ?? null,
                 'y' => $payload['latitud'] ?? null,
+                'referencias' => $payload['mercado'] ?? null,
             ]
         );
     }

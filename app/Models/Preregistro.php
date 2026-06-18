@@ -35,6 +35,7 @@ class Preregistro extends Model
         'numero',
         'colonia',
         'codigo_postal',
+        'mercado',
         'lic_fun',
         'ine',
         'latitud',

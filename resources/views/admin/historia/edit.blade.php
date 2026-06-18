@@ -90,6 +90,12 @@
                     @enderror
                 </div>
 
+                @include('admin.partials.content-quality-agent', [
+                    'contentType' => 'historia',
+                    'titleField' => 'titulo',
+                    'bodyField' => 'resumen_corto',
+                ])
+
                 <div class="md:col-span-2">
                     <label for="periodo" class="mb-1 block text-sm font-medium text-[#3e2d31]">Periodo</label>
                     <input type="text" id="periodo" name="periodo" value="{{ old('periodo', $historia->periodo) }}"

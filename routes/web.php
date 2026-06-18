@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Admin\AdminAssistantController;
+use App\Http\Controllers\Admin\ContentQualityAgentController;
+use App\Http\Controllers\Admin\MetricsAgentController;
 use App\Http\Controllers\AprobarComerciosController;
 use App\Http\Controllers\CatalogosController;
 use App\Http\Controllers\ComerciosController;
@@ -52,6 +55,9 @@ Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('adm
 
 Route::middleware(['admin.app'])->group(function () {
     Route::get('/admin', [HomeController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/asistente', [AdminAssistantController::class, 'store'])->name('admin.asistente');
+    Route::post('/admin/metricas/agente', [MetricsAgentController::class, 'store'])->name('admin.metricas.agente');
+    Route::post('/admin/contenido/agente-calidad', [ContentQualityAgentController::class, 'store'])->name('admin.contenido.agente-calidad');
     Route::get('/admin/historia', [HistoriaController::class, 'index'])->name('admin.historia');
     Route::get('/admin/historia/create', [HistoriaController::class, 'create'])->name('admin.historia.create');
     Route::post('/admin/historia/store', [HistoriaController::class, 'store'])->name('admin.historia.store');

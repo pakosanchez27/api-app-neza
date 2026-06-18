@@ -110,6 +110,13 @@
                     @enderror
                 </div>
 
+                @include('admin.partials.content-quality-agent', [
+                    'contentType' => 'noticia',
+                    'titleField' => 'titulo',
+                    'subtitleField' => 'subtitulo',
+                    'bodyField' => 'resumen',
+                ])
+
                 <div class="md:col-span-2">
                     <label for="galeria" class="mb-1 block text-sm font-medium text-[#3e2d31]">Galeria</label>
                     <input type="file" id="galeria" name="galeria[]" accept="image/*" multiple

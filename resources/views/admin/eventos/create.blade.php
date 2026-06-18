@@ -173,6 +173,12 @@
                     @enderror
                 </div>
 
+                @include('admin.partials.content-quality-agent', [
+                    'contentType' => 'evento',
+                    'titleField' => 'titulo',
+                    'bodyField' => 'acerca',
+                ])
+
                 <div>
                     <label for="estatus" class="mb-1 block text-sm font-medium text-[#3e2d31]">Estatus</label>
                     <select id="estatus" name="estatus"

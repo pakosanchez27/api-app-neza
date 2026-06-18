@@ -209,5 +209,161 @@
                 </div>
             </article>
         </section>
+
+        <section class="grid gap-3 xl:grid-cols-[0.9fr_1.1fr]">
+            <article class="rounded-[22px] border border-[#f0e6de] bg-white p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-base font-semibold text-[#201815]">Agente de metricas</h2>
+                        <p class="mt-1 text-xs leading-5 text-[#8b6f79]">
+                            Analiza las estadisticas actuales del dashboard y traduce los numeros en lectura operativa: que va bien, que podria requerir seguimiento y que acciones conviene priorizar.
+                        </p>
+                    </div>
+                    <span class="rounded-full bg-[#fff5f8] px-3 py-1 text-xs font-semibold text-[#63102a]">IA</span>
+                </div>
+
+                <form id="metrics-agent-form" class="mt-4 space-y-3">
+                    @csrf
+                    <textarea
+                        id="metrics-agent-question"
+                        name="question"
+                        rows="3"
+                        maxlength="1000"
+                        class="w-full resize-none rounded-[18px] border border-[#eadfd6] bg-[#fffdfa] px-4 py-3 text-sm text-[#201815] outline-none transition placeholder:text-[#b0a19a] focus:border-[#63102a]/55 focus:ring-4 focus:ring-[#63102a]/8"
+                        placeholder="Ej. Que me dicen los sellos y pasaportes de la actividad actual?"
+                    ></textarea>
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" data-agent-question="Que lectura general tienen las metricas de hoy?" class="metrics-agent-prompt rounded-full border border-[#63102a]/25 px-3 py-1.5 text-xs font-semibold text-[#63102a] transition hover:bg-[#fff5f8]">
+                            Lectura general
+                        </button>
+                        <button type="button" data-agent-question="Que debo revisar en pasaporte y sellos?" class="metrics-agent-prompt rounded-full border border-[#63102a]/25 px-3 py-1.5 text-xs font-semibold text-[#63102a] transition hover:bg-[#fff5f8]">
+                            Pasaporte
+                        </button>
+                        <button type="button" data-agent-question="Como van los comercios visibles e incompletos?" class="metrics-agent-prompt rounded-full border border-[#63102a]/25 px-3 py-1.5 text-xs font-semibold text-[#63102a] transition hover:bg-[#fff5f8]">
+                            Comercios
+                        </button>
+                    </div>
+                    <button type="submit" class="inline-flex w-full items-center justify-center rounded-full bg-[#63102a] px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(99,16,42,0.18)] transition hover:bg-[#4f0c22] sm:w-auto">
+                        Analizar metricas
+                    </button>
+                </form>
+            </article>
+
+            <article class="rounded-[22px] border border-[#f0e6de] bg-[#fffdfa] p-5 shadow-[0_16px_34px_rgba(32,24,21,0.07)]">
+                <div class="flex items-center justify-between gap-4">
+                    <h2 class="text-base font-semibold text-[#201815]">Respuesta del agente</h2>
+                    <span id="metrics-agent-engine" class="hidden rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#8b6f79]"></span>
+                </div>
+
+                <div id="metrics-agent-empty" class="mt-5 rounded-[18px] border border-dashed border-[#d8c7bd] bg-white px-4 py-8 text-center text-sm leading-6 text-[#8b6f79]">
+                    Escribe una pregunta o usa una sugerencia para recibir una lectura operativa de las estadisticas.
+                </div>
+
+                <div id="metrics-agent-result" class="mt-4 hidden space-y-4">
+                    <p id="metrics-agent-text" class="text-sm leading-6 text-[#201815]"></p>
+
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.14em] text-[#bc955c]">Datos clave</p>
+                        <ul id="metrics-agent-highlights" class="mt-2 space-y-2 text-sm text-[#6d5a62]"></ul>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.14em] text-[#bc955c]">Recomendaciones</p>
+                        <ul id="metrics-agent-recommendations" class="mt-2 space-y-2 text-sm text-[#6d5a62]"></ul>
+                    </div>
+                </div>
+            </article>
+        </section>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('metrics-agent-form');
+            const question = document.getElementById('metrics-agent-question');
+            const emptyState = document.getElementById('metrics-agent-empty');
+            const result = document.getElementById('metrics-agent-result');
+            const text = document.getElementById('metrics-agent-text');
+            const highlights = document.getElementById('metrics-agent-highlights');
+            const recommendations = document.getElementById('metrics-agent-recommendations');
+            const engine = document.getElementById('metrics-agent-engine');
+            const submit = form?.querySelector('button[type="submit"]');
+
+            if (!form || !question || !submit) {
+                return;
+            }
+
+            const renderList = (target, items) => {
+                target.innerHTML = '';
+                (items || []).forEach((item) => {
+                    const li = document.createElement('li');
+                    li.className = 'rounded-[14px] bg-white px-3 py-2';
+                    li.textContent = item;
+                    target.appendChild(li);
+                });
+            };
+
+            document.querySelectorAll('.metrics-agent-prompt').forEach((button) => {
+                button.addEventListener('click', () => {
+                    question.value = button.dataset.agentQuestion || '';
+                    question.focus();
+                });
+            });
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const value = question.value.trim();
+
+                if (!value) {
+                    question.focus();
+                    return;
+                }
+
+                submit.disabled = true;
+                submit.textContent = 'Analizando...';
+                emptyState.classList.add('hidden');
+                result.classList.remove('hidden');
+                text.textContent = 'Revisando las metricas del dashboard...';
+                highlights.innerHTML = '';
+                recommendations.innerHTML = '';
+                engine.classList.add('hidden');
+
+                try {
+                    const response = await fetch(@json(route('admin.metricas.agente')), {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                        },
+                        body: JSON.stringify({ question: value }),
+                    });
+
+                    const payload = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(payload.message || 'No fue posible consultar el agente.');
+                    }
+
+                    text.textContent = payload.text || 'No se genero una lectura para esta pregunta.';
+                    renderList(highlights, payload.highlights || []);
+                    renderList(recommendations, payload.recommendations || []);
+
+                    if (payload.engine) {
+                        engine.textContent = payload.engine === 'openai' ? 'OpenAI' : 'Reglas';
+                        engine.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    text.textContent = error.message || 'No fue posible consultar el agente.';
+                    renderList(highlights, []);
+                    renderList(recommendations, ['Intenta de nuevo o revisa la configuracion del servicio de IA.']);
+                } finally {
+                    submit.disabled = false;
+                    submit.textContent = 'Analizar metricas';
+                }
+            });
+        });
+    </script>
+@endpush

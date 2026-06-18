@@ -66,6 +66,12 @@
                     @enderror
                 </div>
 
+                @include('admin.partials.content-quality-agent', [
+                    'contentType' => 'timeline',
+                    'titleField' => 'lugar_turistico',
+                    'bodyField' => 'descripcion',
+                ])
+
                 <div>
                     <label for="imagen_antes" class="mb-1 block text-sm font-medium text-[#3e2d31]">Imagen antes</label>
                     <input type="file" id="imagen_antes" name="imagen_antes" accept="image/*"

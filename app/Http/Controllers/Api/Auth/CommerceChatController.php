@@ -58,6 +58,7 @@ class CommerceChatController extends Controller
         $text = Str::of($message)->ascii()->lower()->toString();
 
         return match (true) {
+            $this->isOutOfCommerceScope($text) => 'fuera_alcance',
             Str::contains($text, ['horario', 'abrir', 'cerrar', 'dias', 'hora']) => 'horarios',
             Str::contains($text, ['cupon', 'descuento', 'promo', 'promocion', 'redimir', 'escanear']) => 'cupones',
             Str::contains($text, ['pasaporte', 'sellar', 'sello', 'qr', 'ruta gastronomica']) => 'pasaporte',
@@ -73,6 +74,13 @@ class CommerceChatController extends Controller
     private function responseForIntent(string $intent, mixed $establishment): array
     {
         return match ($intent) {
+            'fuera_alcance' => [
+                'text' => 'Solo puedo ayudarte con el panel de tu comercio en ExploraNeza: negocio, ubicacion, horarios, galeria, menu, cupones, redenciones, pasaporte, visibilidad y configuracion. No puedo resolver tareas ni temas generales fuera de la app.',
+                'actions' => [
+                    ['label' => 'Mi Negocio', 'to' => '/admin/comercio/negocio'],
+                    ['label' => 'Horarios', 'to' => '/admin/comercio/horarios'],
+                ],
+            ],
             'horarios' => [
                 'text' => $this->hoursResponseText($establishment),
                 'actions' => [['label' => 'Ir a Horarios', 'to' => '/admin/comercio/horarios']],
@@ -126,6 +134,10 @@ class CommerceChatController extends Controller
 
     private function aiResponse(array $messages, string $intent, array $fallback, mixed $user, mixed $establishment): array
     {
+        if ($intent === 'fuera_alcance') {
+            return $this->withCoyitoPersonality($fallback) + ['intent' => $intent, 'engine' => 'rules'];
+        }
+
         $apiKey = config('services.openai.api_key');
 
         if (! $apiKey) {
@@ -188,11 +200,14 @@ class CommerceChatController extends Controller
 Eres Coyito, el asistente oficial de ExploraNeza, pero en modo panel de comercios.
 
 Reglas:
-- Responde en espanol de Mexico, alegre, servicial, cero acartonado y con vibra chilanga/CDMX.
-- Usa jerga ligera como "va que va", "va", "chido", "de volada", "por aca", "te late", sin exagerar ni sonar burlon.
+- Responde en espanol de Mexico, alegre, servicial, cercano e institucional, adecuado para una app de gobierno.
+- No uses groserias, palabras altisonantes, doble sentido ni expresiones vulgares o corrientes. Evita frases como "a huevo", "chingada", "chido", "bronca", "no manches", "orale", "que onda", "de volada", "te late" o similares.
+- Puedes sonar amable y juvenil, pero siempre con lenguaje respetuoso, claro y apto para todo publico.
 - Usa emojis utiles y alegres en cada respuesta, especialmente al inicio y al final.
 - Tu audiencia son administradores de comercios, no visitantes, asi que conserva claridad operativa.
 - Ayuda con el uso del panel: negocio, ubicacion, horarios, galeria, menu, cupones, redenciones, pasaporte, visibilidad y configuracion.
+- No respondas preguntas generales, tareas escolares, definiciones, consejos medicos/legales/financieros, programacion ni temas que no pertenezcan al panel de comercios de ExploraNeza.
+- Si la pregunta esta fuera del panel de comercios, responde amablemente que solo puedes ayudar con funciones del comercio en la app. No expliques el tema externo.
 - Usa solo el contexto proporcionado. No inventes permisos, ventas, metricas, aprobaciones ni membresias.
 - Solo puedes hablar del establecimiento autenticado en commerce_context.establishment.
 - No reveles, compares ni infieras informacion de otros establecimientos, otros usuarios o datos globales de la plataforma.
@@ -208,6 +223,26 @@ Devuelve exclusivamente JSON valido:
   "actions": [{"label": "texto del boton", "to": "/ruta"}]
 }
 PROMPT;
+    }
+
+    private function isOutOfCommerceScope(string $normalizedText): bool
+    {
+        $commerceTerms = [
+            'exploraneza', 'comercio', 'negocio', 'establecimiento', 'horario', 'galeria',
+            'foto', 'menu', 'cupon', 'redencion', 'pasaporte', 'sello', 'qr', 'visible',
+            'visibilidad', 'perfil', 'direccion', 'ubicacion', 'amenidad', 'logo',
+            'configuracion', 'contrasena', 'correo', 'telefono',
+        ];
+
+        if (Str::contains($normalizedText, $commerceTerms)) {
+            return false;
+        }
+
+        return Str::contains($normalizedText, [
+            'tarea', 'definicion', 'define', 'que es', 'que significa', 'ensayo', 'resumen',
+            'matematic', 'geografia', 'biologia', 'fisica', 'quimica', 'ingles', 'traduce',
+            'codigo', 'programacion', 'receta', 'dieta', 'medico', 'legal', 'finanzas',
+        ]);
     }
 
     private function withCoyitoPersonality(array $response): array

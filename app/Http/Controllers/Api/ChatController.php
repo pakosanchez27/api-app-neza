@@ -51,6 +51,7 @@ class ChatController extends Controller
         $text = Str::of($message)->ascii()->lower()->toString();
 
         return match (true) {
+            $this->isOutOfAppScope($text) => 'fuera_alcance',
             $this->looksLikePlaceLookup($text) => 'place_lookup',
             Str::contains($text, ['evento', 'agenda', 'concierto', 'actividad', 'que hay hoy']) => 'eventos',
             Str::contains($text, ['cupon', 'descuento', 'promo', 'promocion', 'oferta']) => 'cupones',
@@ -83,6 +84,7 @@ class ChatController extends Controller
     private function responseForIntent(string $intent, string $message, ?array $userLocation = null): array
     {
         return match ($intent) {
+            'fuera_alcance' => $this->outOfScopeResponse(),
             'eventos' => $this->eventosResponse(),
             'cupones' => $this->cuponesResponse(),
             'pasaporte' => $this->pasaporteResponse(),
@@ -101,7 +103,7 @@ class ChatController extends Controller
 
     private function looksLikePlaceLookup(string $normalizedText): bool
     {
-        if (Str::contains($normalizedText, ['donde esta', 'donde queda', 'direccion de', 'ubicacion de', 'como llego a', 'como llegar a'])) {
+        if (Str::contains($normalizedText, ['donde esta', 'donde queda', 'direccion de', 'ubicacion de', 'como llego a', 'como llegar a', 'com llego'])) {
             return true;
         }
 
@@ -112,9 +114,28 @@ class ChatController extends Controller
         return false;
     }
 
+    private function isOutOfAppScope(string $normalizedText): bool
+    {
+        $appTerms = [
+            'neza', 'nezahualcoyotl', 'exploraneza', 'evento', 'agenda', 'cupon', 'pasaporte',
+            'sello', 'mapa', 'ruta', 'gastronom', 'comercio', 'establecimiento', 'tianguis',
+            'historia de neza', 'punto', 'transporte', 'mercado', 'hospital', 'clinica',
+        ];
+
+        if (Str::contains($normalizedText, $appTerms)) {
+            return false;
+        }
+
+        return Str::contains($normalizedText, [
+            'tarea', 'definicion', 'define', 'que es', 'que significa', 'ensayo', 'resumen',
+            'matematic', 'geografia', 'biologia', 'fisica', 'quimica', 'ingles', 'traduce',
+            'codigo', 'programacion', 'receta', 'dieta', 'medico', 'legal', 'finanzas',
+        ]);
+    }
+
     private function aiResponse(array $messages, string $intent, array $fallback, ?array $userLocation): array
     {
-        if ($intent === 'place_lookup') {
+        if (in_array($intent, ['place_lookup', 'fuera_alcance'], true)) {
             return $this->withCoyitoPersonality($fallback) + ['engine' => 'rules'];
         }
 
@@ -189,16 +210,20 @@ class ChatController extends Controller
 Eres Coyito, el asistente oficial de ExploraNeza, una PWA turistica y comercial de Nezahualcoyotl.
 
 Reglas:
-- Responde en espanol de Mexico, alegre, servicial, cero acartonado y con vibra chilanga/CDMX.
-- Usa jerga ligera como "va que va", "va", "chido", "de volada", "por acá", "te late", sin exagerar ni sonar burlón.
+- Responde en espanol de Mexico, alegre, servicial, cercano e institucional, adecuado para una app de gobierno.
+- No uses groserias, palabras altisonantes, doble sentido ni expresiones vulgares o corrientes. Evita frases como "a huevo", "chingada", "chido", "bronca", "no manches", "orale", "que onda", "de volada", "te late" o similares.
+- Puedes sonar amable y juvenil, pero siempre con lenguaje respetuoso, claro y apto para todo publico.
 - Usa muchos emojis en cada respuesta, especialmente al inicio y al final. Manténlos útiles y alegres: 😄✨📍🚶‍♂️🗺️🙌🌮🎟️.
 - Usa solo el contexto proporcionado. No inventes eventos, horarios, cupones, comercios ni ubicaciones.
+- No respondas preguntas generales, tareas escolares, definiciones, consejos medicos/legales/financieros, programacion ni temas que no pertenezcan a ExploraNeza.
+- Si la pregunta esta fuera de ExploraNeza, responde amablemente que solo puedes ayudar con la app y redirige a funciones disponibles. No expliques el tema externo.
 - Para recomendar comida, usa establecimientos activos y visibles del contexto. Si hay distancia, menciona los mas cercanos.
 - Para mercados, hospitales, clinicas, policia, bomberos, proteccion civil o emergencias, usa puntos_mapa del contexto. Si hay una accion de Google Maps en fallback_response, incluyela.
 - Si falta un dato, dilo y manda a la seccion adecuada de la app.
 - Da recomendaciones practicas, maximo 2 parrafos cortos.
 - Puedes devolver botones usando solo las acciones permitidas.
 - No prometas compras, reservaciones, beneficios, premios ni disponibilidad si no esta en el contexto.
+- No te salgas de tu rol de asistente de la app, no ofrezcas ayuda fuera de ella ni digas que puedes hacer cosas que no sean responder preguntas o dar recomendaciones basadas en el contexto.
 
 Devuelve exclusivamente JSON valido con esta forma:
 {
@@ -546,10 +571,8 @@ PROMPT;
 
     private function extractPlaceQuery(string $message): string
     {
-        $query = Str::of($message)->ascii()->lower()->toString();
-
-        $query = preg_replace('/\b(donde|dónde|esta|está|queda|quedan|ubicacion|ubicación|direccion|dirección|como|cómo|llego|llegar|al|a|la|el|del|de)\b/u', ' ', $query) ?? $query;
-        $query = preg_replace('/[^a-z0-9\s]/u', ' ', $query) ?? $query;
+        $query = $this->normalizePlaceText($message);
+        $query = preg_replace('/\b(donde|esta|queda|quedan|ubicacion|direccion|como|com|llego|llegar|al|a|la|el|del|de|para|ir|voy|puedo)\b/u', ' ', $query) ?? $query;
 
         return trim(preg_replace('/\s+/', ' ', $query) ?? $query);
     }
@@ -579,6 +602,12 @@ PROMPT;
     private function mapPointForLookup(PuntoMapa $punto, string $query, ?array $userLocation): array
     {
         $distance = $this->distanceInKm($userLocation, $punto->latitud, $punto->longitud);
+        $searchText = collect([
+            $punto->nombre_punto,
+            $punto->categoria?->tipo,
+            $punto->calle,
+            $punto->colonia,
+        ])->filter()->implode(' ');
 
         return [
             'source' => 'punto_mapa',
@@ -591,7 +620,7 @@ PROMPT;
             'latitud' => $punto->latitud !== null ? (float) $punto->latitud : null,
             'longitud' => $punto->longitud !== null ? (float) $punto->longitud : null,
             'distance_text' => $distance !== null ? number_format($distance, 1) . ' km' : null,
-            'score' => $this->placeMatchScore($query, (string) $punto->nombre_punto),
+            'score' => $this->placeMatchScore($query, $searchText),
         ];
     }
 
@@ -600,6 +629,13 @@ PROMPT;
         $latitud = $establecimiento->domicilio?->latitud;
         $longitud = $establecimiento->domicilio?->longitud;
         $distance = $this->distanceInKm($userLocation, $latitud, $longitud);
+
+        $searchText = collect([
+            $establecimiento->nombre_est,
+            $establecimiento->tipo?->nombre,
+            $establecimiento->domicilio?->calle,
+            $establecimiento->domicilio?->colonia,
+        ])->filter()->implode(' ');
 
         return [
             'source' => 'establecimiento',
@@ -612,33 +648,54 @@ PROMPT;
             'latitud' => $latitud !== null ? (float) $latitud : null,
             'longitud' => $longitud !== null ? (float) $longitud : null,
             'distance_text' => $distance !== null ? number_format($distance, 1) . ' km' : null,
-            'score' => $this->placeMatchScore($query, (string) $establecimiento->nombre_est),
+            'score' => $this->placeMatchScore($query, $searchText),
         ];
     }
 
-    private function placeMatchScore(string $query, string $name): int
+    private function placeMatchScore(string $query, string $searchText): int
     {
-        $normalizedName = Str::of($name)->ascii()->lower()->toString();
-        $normalizedName = trim(preg_replace('/[^a-z0-9\s]/u', ' ', $normalizedName) ?? $normalizedName);
-        $normalizedName = trim(preg_replace('/\s+/', ' ', $normalizedName) ?? $normalizedName);
+        $normalizedSearchText = $this->normalizePlaceText($searchText);
 
-        if ($query === '' || $normalizedName === '') {
+        if ($query === '' || $normalizedSearchText === '') {
             return 0;
         }
 
-        if ($query === $normalizedName) {
+        if ($query === $normalizedSearchText) {
             return 1000;
         }
 
-        if (Str::contains($normalizedName, $query) || Str::contains($query, $normalizedName)) {
+        if (Str::contains($normalizedSearchText, $query) || Str::contains($query, $normalizedSearchText)) {
             return 800;
         }
 
-        $queryTokens = collect(explode(' ', $query))->filter(fn (string $token) => strlen($token) >= 3)->values();
-        $nameTokens = collect(explode(' ', $normalizedName))->filter(fn (string $token) => strlen($token) >= 2)->values();
-        $matches = $queryTokens->filter(fn (string $token) => $nameTokens->contains($token))->count();
+        $queryTokens = collect(explode(' ', $query))
+            ->filter(fn (string $token) => strlen($token) >= 3 || ctype_digit($token))
+            ->unique()
+            ->values();
+        $searchTokens = collect(explode(' ', $normalizedSearchText))
+            ->filter(fn (string $token) => strlen($token) >= 3 || ctype_digit($token))
+            ->unique()
+            ->values();
 
-        return $matches >= 2 ? 400 + ($matches * 50) : 0;
+        $matches = $queryTokens->filter(function (string $token) use ($searchTokens) {
+            return $searchTokens->contains($token)
+                || $searchTokens->contains(fn (string $candidate) => levenshtein($token, $candidate) <= 1);
+        })->count();
+
+        $requiredMatches = $queryTokens->count() >= 3 ? 2 : 1;
+
+        return $matches >= $requiredMatches ? 400 + ($matches * 80) : 0;
+    }
+
+    private function normalizePlaceText(string $value): string
+    {
+        $normalized = Str::of($value)->ascii()->lower()->toString();
+        $normalized = preg_replace('/\b(primero|primer)\b/u', '1', $normalized) ?? $normalized;
+        $normalized = preg_replace('/\b(segundo)\b/u', '2', $normalized) ?? $normalized;
+        $normalized = preg_replace('/\b(tercero|tercer)\b/u', '3', $normalized) ?? $normalized;
+        $normalized = preg_replace('/[^a-z0-9\s]/u', ' ', $normalized) ?? $normalized;
+
+        return trim(preg_replace('/\s+/', ' ', $normalized) ?? $normalized);
     }
 
     private function detectPointCategoryGroup(string $message): array
@@ -1045,6 +1102,19 @@ PROMPT;
                 ['label' => 'Mapa', 'to' => '/mapa'],
                 ['label' => 'Eventos', 'to' => '/eventos'],
                 ['label' => 'Cuponera', 'to' => '/cuponera'],
+            ],
+        ];
+    }
+
+    private function outOfScopeResponse(): array
+    {
+        return [
+            'intent' => 'fuera_alcance',
+            'text' => 'Soy Coyito y solo puedo ayudarte con ExploraNeza: eventos, mapa, lugares, ruta gastronomica, cupones, pasaporte, historia local, tianguis, transporte o registro de comercios. No puedo resolver tareas ni temas generales fuera de la app.',
+            'actions' => [
+                ['label' => 'Mapa', 'to' => '/mapa'],
+                ['label' => 'Eventos', 'to' => '/eventos'],
+                ['label' => 'Historia de Neza', 'to' => '/historia-de-nezahualcoyotl'],
             ],
         ];
     }

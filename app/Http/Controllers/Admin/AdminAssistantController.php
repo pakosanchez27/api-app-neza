@@ -38,6 +38,7 @@ class AdminAssistantController extends Controller
         $text = Str::of($question . ' ' . $context)->ascii()->lower()->toString();
 
         return match (true) {
+            $this->isOutOfAdminScope($text) => 'fuera_alcance',
             Str::contains($text, ['crear evento', 'nuevo evento', 'agregar evento', 'publicar evento', 'alta evento']) => 'eventos_crear',
             Str::contains($text, ['editar evento', 'modificar evento', 'borrar evento', 'eliminar evento', 'eventos']) => 'eventos',
             Str::contains($text, ['aprobar comercio', 'aprobar comercios', 'preregistro', 'pre registro', 'rechazar comercio', 'correccion']) => 'aprobar_comercios',
@@ -56,6 +57,14 @@ class AdminAssistantController extends Controller
     private function responseForIntent(string $intent): array
     {
         return match ($intent) {
+            'fuera_alcance' => [
+                'text' => 'Solo puedo ayudarte con el panel de administracion de ExploraNeza: dashboard, eventos, noticias, usuarios, comercios, aprobacion de preregistros, puntos del mapa, catalogos, historia y timeline. No puedo resolver tareas ni temas generales fuera de la app.',
+                'actions' => [
+                    ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'permission' => 'dashboard.ver'],
+                    ['label' => 'Eventos', 'route' => 'admin.eventos', 'permission' => 'eventos.ver'],
+                    ['label' => 'Aprobar comercios', 'route' => 'admin.aprobar-comercios', 'permission' => 'aprobar.ver'],
+                ],
+            ],
             'eventos_crear' => [
                 'text' => 'Para crear un evento entra a Eventos, presiona "Crear" o "Nuevo evento", llena titulo, categoria, fecha, horario, ubicacion, descripcion e imagen. Antes de guardar revisa que la fecha y la direccion sean correctas, porque eso impacta lo que ve el usuario en la app.',
                 'actions' => [
@@ -161,6 +170,14 @@ class AdminAssistantController extends Controller
 
     private function aiResponse(string $question, string $intent, array $fallback, array $actions, string $context): array
     {
+        if ($intent === 'fuera_alcance') {
+            return [
+                'text' => $this->withCoyitoPersonality($fallback['text']),
+                'actions' => $actions,
+                'engine' => 'rules',
+            ];
+        }
+
         $apiKey = config('services.openai.api_key');
 
         if (! $apiKey) {
@@ -246,11 +263,14 @@ class AdminAssistantController extends Controller
 Eres Coyito, el asistente oficial de ExploraNeza, en modo administrador.
 
 Reglas:
-- Responde en espanol de Mexico, alegre, servicial, cero acartonado y con vibra chilanga/CDMX.
-- Usa jerga ligera como "va que va", "va", "chido", "de volada", "por aca", "te late", sin exagerar ni sonar burlon.
+- Responde en espanol de Mexico, alegre, servicial, cercano e institucional, adecuado para una app de gobierno.
+- No uses groserias, palabras altisonantes, doble sentido ni expresiones vulgares o corrientes. Evita frases como "a huevo", "chingada", "chido", "bronca", "no manches", "orale", "que onda", "de volada", "te late" o similares.
+- Puedes sonar amable y juvenil, pero siempre con lenguaje respetuoso, claro y apto para todo publico.
 - Usa emojis utiles y alegres en cada respuesta, especialmente al inicio y al final.
 - Tu audiencia son administradores de la app, asi que conserva claridad operativa.
 - Ayuda a navegar y usar el panel: dashboard, noticias, eventos, comercios, usuarios, aprobar comercios, puntos mapa, catalogos, historia y timeline.
+- No respondas preguntas generales, tareas escolares, definiciones, consejos medicos/legales/financieros, programacion ni temas que no pertenezcan al panel de administracion de ExploraNeza.
+- Si la pregunta esta fuera del panel de administracion, responde amablemente que solo puedes ayudar con funciones administrativas de la app. No expliques el tema externo.
 - Usa solo la informacion del contexto. No inventes permisos, datos, metricas, usuarios, comercios, eventos ni rutas.
 - No prometas ejecutar acciones ni modificar datos. Tu trabajo es explicar pasos y mandar a la ruta correcta.
 - Si el usuario pide crear, editar, aprobar o revisar algo, explica el proceso en pasos breves y conserva los botones permitidos.
@@ -263,6 +283,26 @@ Devuelve exclusivamente JSON valido:
   "actions": [{"label": "texto del boton", "url": "url permitida"}]
 }
 PROMPT;
+    }
+
+    private function isOutOfAdminScope(string $normalizedText): bool
+    {
+        $adminTerms = [
+            'exploraneza', 'admin', 'administrador', 'panel', 'dashboard', 'metrica',
+            'evento', 'noticia', 'usuario', 'comercio', 'preregistro', 'aprobar',
+            'rechazar', 'correccion', 'punto mapa', 'mapa', 'catalogo', 'categoria',
+            'tipo de negocio', 'historia', 'timeline', 'antes y despues',
+        ];
+
+        if (Str::contains($normalizedText, $adminTerms)) {
+            return false;
+        }
+
+        return Str::contains($normalizedText, [
+            'tarea', 'definicion', 'define', 'que es', 'que significa', 'ensayo', 'resumen',
+            'matematic', 'geografia', 'biologia', 'fisica', 'quimica', 'ingles', 'traduce',
+            'codigo', 'programacion', 'receta', 'dieta', 'medico', 'legal', 'finanzas',
+        ]);
     }
 
     private function withCoyitoPersonality(string $text): string

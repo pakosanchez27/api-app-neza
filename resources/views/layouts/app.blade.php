@@ -15,6 +15,7 @@
     class="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(99,16,42,0.14),transparent_30%),radial-gradient(circle_at_top_right,rgba(188,149,92,0.18),transparent_28%),linear-gradient(180deg,#fffdfa_0%,#fbf5eb_100%)] font-sans text-[#201815]">
     @php
         $isDashboard = request()->routeIs('admin.dashboard');
+        $isPerfil = request()->routeIs('admin.perfil.*');
         $isNoticias = request()->routeIs('admin.noticias*');
         $isEventos = request()->routeIs('admin.eventos*');
         $isHistoria = request()->routeIs('admin.historia*');
@@ -219,6 +220,10 @@
                 <span>Puntos Mapa</span>
             </a>
             @endif
+            <a href="{{ route('admin.perfil.edit') }}" class="{{ $navItemClasses($isPerfil) }}">
+                <span class="{{ $navDotClasses($isPerfil) }}">-</span>
+                <span>Perfil</span>
+            </a>
         </nav>
 
         <div class="mt-auto pt-6">
@@ -355,6 +360,10 @@
                         <span>Puntos Mapa</span>
                     </a>
                     @endif
+                    <a href="{{ route('admin.perfil.edit') }}" class="{{ $navItemClasses($isPerfil) }}">
+                        <span class="{{ $navDotClasses($isPerfil) }}">-</span>
+                        <span>Perfil</span>
+                    </a>
                 </nav>
 
                 <div class="mt-auto pt-6">

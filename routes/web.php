@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\Admin\AdminAssistantController;
 use App\Http\Controllers\Admin\ContentQualityAgentController;
 use App\Http\Controllers\Admin\MetricsAgentController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AprobarComerciosController;
 use App\Http\Controllers\CatalogosController;
 use App\Http\Controllers\ComerciosController;
@@ -16,7 +17,6 @@ use App\Http\Controllers\TimelineModelController;
 use App\Http\Controllers\UsuariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 
 if ($adminDomain = env('ADMIN_APP_DOMAIN')) {
     Route::domain($adminDomain)->group(function () {
@@ -51,10 +51,11 @@ Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.
 Route::post('/admin/login', [AdminAuthController::class, 'store'])->name('admin.login.store');
 Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
 
-
-
 Route::middleware(['admin.app'])->group(function () {
     Route::get('/admin', [HomeController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/perfil', [ProfileController::class, 'edit'])->name('admin.perfil.edit');
+    Route::put('/admin/perfil', [ProfileController::class, 'update'])->name('admin.perfil.update');
+    Route::put('/admin/perfil/password', [ProfileController::class, 'updatePassword'])->name('admin.perfil.password');
     Route::post('/admin/asistente', [AdminAssistantController::class, 'store'])->name('admin.asistente');
     Route::post('/admin/metricas/agente', [MetricsAgentController::class, 'store'])->name('admin.metricas.agente');
     Route::post('/admin/contenido/agente-calidad', [ContentQualityAgentController::class, 'store'])->name('admin.contenido.agente-calidad');
